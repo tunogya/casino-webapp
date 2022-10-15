@@ -2,8 +2,12 @@ import {ConnectButton} from '@rainbow-me/rainbowkit';
 import type {NextPage} from 'next';
 import Head from 'next/head';
 import {Button, Heading, Spacer, Stack, Text} from "@chakra-ui/react";
+import {useAccount, useEnsName} from "wagmi";
 
 const Home: NextPage = () => {
+  const { address } = useAccount()
+  const { data: ensName } = useEnsName({ address })
+
   return (
     <Stack h={'100vh'} spacing={0}>
       <Head>
@@ -26,6 +30,7 @@ const Home: NextPage = () => {
           <Button>USDT</Button>
         </Stack>
         <Stack w={'full'} h={'full'} py={40} alignItems={"center"}>
+          <div>{ensName ? `${ensName}` : address}</div>
           <Stack textAlign={"center"} w={'100px'} bg={"gray"} py={1} mt={'300px'}>
             <Text color={'white'}>RP: 20</Text>
           </Stack>

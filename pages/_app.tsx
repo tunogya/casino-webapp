@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import type {AppProps} from 'next/app';
-import {RainbowKitProvider, connectorsForWallets} from '@rainbow-me/rainbowkit';
+import {RainbowKitProvider, connectorsForWallets, DisclaimerComponent} from '@rainbow-me/rainbowkit';
 import {chain, configureChains, createClient, WagmiConfig} from 'wagmi';
 import {infuraProvider} from 'wagmi/providers/infura';
 import {publicProvider} from 'wagmi/providers/public';
@@ -30,7 +30,7 @@ const {chains, provider, webSocketProvider} = configureChains(
   [
     chain.mainnet,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
-      ? [chain.goerli]
+      ? [chain.goerli, chain.hardhat]
       : []),
   ],
   [
@@ -72,11 +72,23 @@ const wagmiClient = createClient({
   webSocketProvider,
 });
 
+const Disclaimer: DisclaimerComponent = ({ Text, Link }) => (
+  <Text>
+    By connecting your wallet, you agree to the{' '}
+    <Link href="https://wizardingpay.com">Terms of Service</Link> and
+    acknowledge you have read and understand the protocol{' '}
+    <Link href="https://wizardingpay.com">WizardingPay</Link>
+  </Text>
+);
+
 function MyApp({Component, pageProps}: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider chains={chains}>
+        <RainbowKitProvider coolMode chains={chains} appInfo={{
+          appName: 'Playground',
+          disclaimer: Disclaimer,
+        }}>
           <Component {...pageProps} />
         </RainbowKitProvider>
       </WagmiConfig>

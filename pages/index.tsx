@@ -8,6 +8,7 @@ const Home: NextPage = () => {
     <Layout>
       <Stack h={'full'} alignItems={"center"} justify={"center"}>
         <Link href={'/create'}>Create Pool</Link>
+        <Link href={'/pools/0'}>Pool</Link>
       </Stack>
     </Layout>
   );

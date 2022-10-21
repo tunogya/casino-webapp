@@ -33,8 +33,7 @@ const Prize: FC<PrizeProps> = ({address, value}) => {
 
   return (
     <Stack>
-      <Text fontSize={'md'}>{data?.[0]}</Text>
-      <Text fontSize={'xs'}>{ Number(ethers.utils.formatUnits(value, data?.[2])) }</Text>
+      <Text fontSize={'md'}>{data?.[0]} x{ Number(ethers.utils.formatUnits(value, data?.[2])) }</Text>
     </Stack>
   )
 }

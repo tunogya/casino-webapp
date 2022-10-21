@@ -1,4 +1,4 @@
-import Layout from "../../components/layout";
+import Layout from "../../../components/layout";
 import {
   Button, Divider,
   FormControl,
@@ -10,8 +10,8 @@ import {
 } from "@chakra-ui/react";
 import {useMemo, useState} from "react";
 import {useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
-import {SNATCH_ADDRESS} from "../../constant/address";
-import SNATCH_ABI from "../../abis/Snatch.json";
+import {SNATCH_ADDRESS} from "../../../constant/address";
+import SNATCH_ABI from "../../../abis/Snatch.json";
 import {ethers} from "ethers";
 
 type Config = {

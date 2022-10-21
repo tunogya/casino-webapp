@@ -2,36 +2,28 @@ import { defineStyleConfig } from '@chakra-ui/react'
 
 const Button = defineStyleConfig({
   baseStyle: {
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    borderRadius: 'base',
-  },
-  sizes: {
-    sm: {
-      fontSize: 'sm',
-      px: 4,
-      py: 3,
-    },
-    md: {
-      fontSize: 'md',
-      px: 6,
-      py: 4,
-    },
+    fontWeight: 700,
+    borderRadius: '12px',
   },
   variants: {
     outline: {
       border: '2px solid',
-      borderColor: 'purple.500',
-      color: 'purple.500',
+      borderColor: 'gold',
+      color: 'black',
+      _active: null,
     },
     solid: {
-      bg: 'purple.500',
-      color: 'white',
+      bg: 'gold',
+      color: 'black',
+      _hover: {
+        bg: 'gold',
+      },
+      _active: null,
     },
   },
   defaultProps: {
     size: 'md',
-    variant: 'outline',
+    variant: 'solid',
   },
 })
 

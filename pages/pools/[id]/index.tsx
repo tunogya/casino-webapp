@@ -1,5 +1,5 @@
 import Layout from "../../../components/layout";
-import {Button, Spacer, Stack, Text} from "@chakra-ui/react";
+import {Badge, Button, HStack, Spacer, Stack, Text} from "@chakra-ui/react";
 import {useAccount, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite, erc20ABI} from "wagmi";
 import {SNATCH_ADDRESS} from "../../../constant/address";
 import SNATCH_ABI from "../../../abis/Snatch.json";
@@ -7,6 +7,9 @@ import {useRouter} from "next/router";
 import {ethers} from "ethers";
 import {useMemo} from "react";
 import Prize from "../../../components/prize";
+import PoolSetting from "../../../components/poolSetting";
+import {AddIcon} from "@chakra-ui/icons";
+import TokenBalance from "../../../components/tokenBalance";
 
 const Pool = () => {
   const {address} = useAccount()
@@ -35,6 +38,10 @@ const Pool = () => {
         ...SnatchContract,
         functionName: 'nextPoolId',
       },
+      {
+        ...SnatchContract,
+        functionName: 'owner',
+      }
     ]
   })
   const {config: drawConfig} = usePrepareContractWrite({
@@ -99,7 +106,7 @@ const Pool = () => {
         ...PaymentTokenContract,
         functionName: 'allowance',
         args: [address, SNATCH_ADDRESS[chain?.id || 5]],
-      },
+      }
     ]
   })
   const singleDrawPrice = useMemo(() => {
@@ -151,10 +158,33 @@ const Pool = () => {
               }}
             >{item}</Button>
           ))}
+          <Spacer/>
+          {data?.[3] === address && (
+            <HStack>
+              <Button
+                leftIcon={<AddIcon/>}
+                onClick={async () => {
+                  await router.push('/pools/create')
+                }}
+              >
+                Pool
+              </Button>
+              <PoolSetting/>
+            </HStack>
+          )}
         </Stack>
-        <Stack w={'full'} h={'full'} py={40} alignItems={"center"}>
-          <Stack textAlign={"center"} w={'100px'} bg={"gray"} py={1} mt={'300px'}>
-            <Text color={'white'}>RP: {rp}</Text>
+        <Stack w={'full'} h={'full'} alignItems={"center"} p={'20px'}>
+          <HStack w={'full'} justify={"end"} spacing={'20px'}>
+            {address && poolConfig && (
+              <TokenBalance token={poolConfig.paymentToken} address={address}/>
+            ) }
+            {address && poolConfig && (
+              <TokenBalance token={poolConfig.rarePrizeToken} address={address} />
+            )}
+          </HStack>
+          <Spacer/>
+          <Stack textAlign={"center"} w={'100px'}>
+            <Badge p={2} borderRadius={'12px'} fontSize={'sm'}>RP: {rp}</Badge>
           </Stack>
           <Spacer/>
           <Stack direction={"row"} justify={"space-around"} w={'50%'}>
@@ -176,7 +206,7 @@ const Pool = () => {
                 isLoading={isDrawLoading}
                 loadingText={'Pending...'}
               >
-                {singleDrawPrice} {paymentTokenData?.[1]}, 1 X
+                {singleDrawPrice} {paymentTokenData?.[1]} 1X
               </Button>
             )}
             {(allowance && batchDrawPrice) && (allowance < batchDrawPrice) ? (
@@ -197,10 +227,11 @@ const Pool = () => {
                 isLoading={isBatchDrawLoading}
                 loadingText={'Pending...'}
               >
-                {batchDrawPrice} {paymentTokenData?.[1]}, {poolConfig?.batchDrawSize.toString()} X
+                {batchDrawPrice} {paymentTokenData?.[1]} {poolConfig?.batchDrawSize.toString()}X
               </Button>
             )}
           </Stack>
+          <Spacer/>
         </Stack>
         <Stack minW={60} alignItems={"end"} h={'full'}>
           <Stack w={40} justify={"space-around"} h={'full'} pr={4}>
@@ -220,7 +251,7 @@ const Pool = () => {
             >
               Bonus
             </Button>
-            <Stack spacing={4} bg={"gray"} p={4} minH={'60%'}>
+            <Stack spacing={4} bg={"gray"} p={4} minH={'60%'} borderRadius={'12px'}>
               {poolConfig && (
                 <Prize address={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue}/>
               )}

@@ -22,6 +22,7 @@ import {useState} from "react";
 import {SNATCH_ADDRESS} from "../../constant/address";
 import {useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
 import SNATCH_ABI from "../../abis/Snatch.json";
+import {SettingsIcon} from "@chakra-ui/icons";
 
 const PoolSetting = () => {
   const {chain} = useNetwork()
@@ -42,7 +43,10 @@ const PoolSetting = () => {
 
   return (
     <>
-      <Button onClick={onOpen}>QRNG Providers Setting</Button>
+      <Button
+        leftIcon={<SettingsIcon/>}
+        onClick={onOpen}
+      >Setting</Button>
       <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
         <ModalOverlay />
         <ModalContent>

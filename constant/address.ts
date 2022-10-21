@@ -1,5 +1,5 @@
 import {chain} from 'wagmi';
 
 export const SNATCH_ADDRESS = {
-  [chain.goerli.id]: "0xD873C6Dc27E89D3210E7Dd3d7102c6079b8101b5",
+  [chain.goerli.id]: "0x28fAc63FCF28311F0abc1A6E64a601F6086657fE",
 }

@@ -198,7 +198,7 @@ const Create = () => {
         </HStack>
         {normalPrizeList.map((item, index) => (
           <Stack key={index} direction={"row"}>
-            <Text># {index + 1}</Text>
+            <Text>#{index + 1}</Text>
             <Text>{item.token}</Text>
             <Text>{item.value}</Text>
             <Text>{item.rate}</Text>

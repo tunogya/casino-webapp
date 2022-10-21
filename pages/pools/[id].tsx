@@ -29,6 +29,10 @@ const Pool = () => {
         ...SnatchContract,
         functionName: 'rpOf',
         args: [address, id],
+      },
+      {
+        ...SnatchContract,
+        functionName: 'owner',
       }
     ]
   })
@@ -37,12 +41,18 @@ const Pool = () => {
     contractInterface: SNATCH_ABI,
     functionName: 'draw',
     args: [id],
+    overrides: {
+      gasLimit: 1000000,
+    }
   })
   const {config: batchDrawConfig} = usePrepareContractWrite({
     addressOrName: SNATCH_ADDRESS[chain?.id || 5],
     contractInterface: SNATCH_ABI,
     functionName: 'batchDraw',
     args: [id],
+    overrides: {
+      gasLimit: 1000000,
+    }
   })
   const {
     data: drawData,
@@ -183,6 +193,11 @@ const Pool = () => {
             <Button size={'lg'}>
               Bonus
             </Button>
+            { data?.[2]?.toLowerCase() === address?.toLowerCase() && (
+              <Button size={'lg'}>
+                Setting
+              </Button>
+            )}
             <Stack spacing={4} bg={"gray"} p={4} minH={'60%'}>
               {normalPrizes && normalPrizes.map((prize: any, index: number) => (
                 <Button size={'lg'} key={index}>

@@ -42,7 +42,7 @@ const PoolSetting = () => {
 
   return (
     <>
-      <Button onClick={onOpen} size={'lg'}>QRNG Providers Setting</Button>
+      <Button onClick={onOpen}>QRNG Providers Setting</Button>
       <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
         <ModalOverlay />
         <ModalContent>

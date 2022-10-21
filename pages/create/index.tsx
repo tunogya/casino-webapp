@@ -79,7 +79,7 @@ const Create = () => {
       normalPrizesRate: config.normalPrizesRate.map(r => ethers.utils.parseEther(r)),
     },
   })
-  const {data, isLoading, isSuccess, write} = useContractWrite(createConfig)
+  const {isLoading, write} = useContractWrite(createConfig)
 
   return (
     <Layout>

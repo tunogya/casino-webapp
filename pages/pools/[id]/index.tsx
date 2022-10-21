@@ -31,6 +31,10 @@ const Pool = () => {
         functionName: 'rpOf',
         args: [address, id],
       },
+      {
+        ...SnatchContract,
+        functionName: 'nextPoolId',
+      },
     ]
   })
   const {config: drawConfig} = usePrepareContractWrite({
@@ -123,12 +127,30 @@ const Pool = () => {
     args: [SNATCH_ADDRESS[chain?.id || 5], ethers.constants.MaxUint256.toString()],
   })
   const { write: approveWrite, isLoading: isApproveLoading, } = useContractWrite(approveConfig);
+  const poolIds = useMemo(() => {
+    if (data?.[2]) {
+      const nextPoolId = data?.[2].toNumber()
+      const ids = []
+      for (let i = 0; i < nextPoolId; i++) {
+        ids.push(i)
+      }
+      return ids
+    }
+    return [0]
+  }, [data])
 
   return (
     <Layout>
       <Stack direction={"row"} h={'full'} w={'full'}>
         <Stack minW={60} bg={"blackAlpha.600"} p={4} spacing={5} overflow={"scroll"}>
-          <Button>ETH</Button>
+          { poolIds.map((item) => (
+            <Button
+              key={item}
+              onClick={async () => {
+                await router.push(`/pools/${item}`)
+              }}
+            >{item}</Button>
+          )) }
         </Stack>
         <Stack w={'full'} h={'full'} py={40} alignItems={"center"}>
           <Stack textAlign={"center"} w={'100px'} bg={"gray"} py={1} mt={'300px'}>

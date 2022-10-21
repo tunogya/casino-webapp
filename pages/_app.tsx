@@ -5,7 +5,7 @@ import {RainbowKitProvider, connectorsForWallets, DisclaimerComponent} from '@ra
 import {chain, configureChains, createClient, WagmiConfig} from 'wagmi';
 import {infuraProvider} from 'wagmi/providers/infura';
 import {publicProvider} from 'wagmi/providers/public';
-import {ChakraProvider, extendTheme} from "@chakra-ui/react";
+import {ChakraProvider} from "@chakra-ui/react";
 import {
   argentWallet,
   braveWallet,
@@ -15,16 +15,7 @@ import {
   rainbowWallet, trustWallet,
   walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets";
-
-const colors = {
-  brand: {
-    900: '#1a365d',
-    800: '#153e75',
-    700: '#2a69ac',
-  },
-}
-
-const theme = extendTheme({ colors })
+import theme from "../theme";
 
 const {chains, provider, webSocketProvider} = configureChains(
   [

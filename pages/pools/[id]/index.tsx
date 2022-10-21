@@ -120,13 +120,13 @@ const Pool = () => {
     }
     return undefined
   }, [paymentTokenData])
-  const { config: approveConfig } = usePrepareContractWrite({
+  const {config: approveConfig} = usePrepareContractWrite({
     addressOrName: poolConfig?.paymentToken,
     contractInterface: erc20ABI,
     functionName: 'approve',
     args: [SNATCH_ADDRESS[chain?.id || 5], ethers.constants.MaxUint256.toString()],
   })
-  const { write: approveWrite, isLoading: isApproveLoading, } = useContractWrite(approveConfig);
+  const {write: approveWrite, isLoading: isApproveLoading,} = useContractWrite(approveConfig);
   const poolIds = useMemo(() => {
     if (data?.[2]) {
       const nextPoolId = data?.[2].toNumber()
@@ -143,14 +143,14 @@ const Pool = () => {
     <Layout>
       <Stack direction={"row"} h={'full'} w={'full'}>
         <Stack minW={60} bg={"blackAlpha.600"} p={4} spacing={5} overflow={"scroll"}>
-          { poolIds.map((item) => (
+          {poolIds.map((item) => (
             <Button
               key={item}
               onClick={async () => {
                 await router.push(`/pools/${item}`)
               }}
             >{item}</Button>
-          )) }
+          ))}
         </Stack>
         <Stack w={'full'} h={'full'} py={40} alignItems={"center"}>
           <Stack textAlign={"center"} w={'100px'} bg={"gray"} py={1} mt={'300px'}>
@@ -158,7 +158,7 @@ const Pool = () => {
           </Stack>
           <Spacer/>
           <Stack direction={"row"} justify={"space-around"} w={'50%'}>
-            { (allowance && singleDrawPrice) && (allowance < singleDrawPrice) ? (
+            {(allowance && singleDrawPrice) && (allowance < singleDrawPrice) ? (
               <Button
                 bg={'gold'}
                 loadingText={'Pending...'}
@@ -166,7 +166,7 @@ const Pool = () => {
                 onClick={() => approveWrite?.()}
                 isLoading={isApproveLoading}
               >
-                Approve { paymentTokenData?.[1] }
+                Approve {paymentTokenData?.[1]}
               </Button>
             ) : (
               <Button
@@ -178,8 +178,8 @@ const Pool = () => {
               >
                 {singleDrawPrice} {paymentTokenData?.[1]}, 1 X
               </Button>
-            ) }
-            { (allowance && batchDrawPrice) && (allowance < batchDrawPrice) ? (
+            )}
+            {(allowance && batchDrawPrice) && (allowance < batchDrawPrice) ? (
               <Button
                 bg={'gold'}
                 loadingText={'Pending...'}
@@ -187,7 +187,7 @@ const Pool = () => {
                 disabled={!approveWrite}
                 isLoading={isApproveLoading}
               >
-                Approve { paymentTokenData?.[1] }
+                Approve {paymentTokenData?.[1]}
               </Button>
             ) : (
               <Button
@@ -199,23 +199,33 @@ const Pool = () => {
               >
                 {batchDrawPrice} {paymentTokenData?.[1]}, {poolConfig?.batchDrawSize.toString()} X
               </Button>
-            ) }
+            )}
           </Stack>
         </Stack>
         <Stack minW={60} alignItems={"end"} h={'full'}>
           <Stack w={40} justify={"space-around"} h={'full'} pr={4}>
-            <Button size={'lg'}>
+            <Button
+              onClick={async () => {
+                await router.push(`/pools/${id}/store`)
+              }}
+              size={'lg'}
+            >
               Store
             </Button>
-            <Button size={'lg'}>
+            <Button
+              onClick={async () => {
+                await router.push(`/pools/${id}/bonus`)
+              }}
+              size={'lg'}
+            >
               Bonus
             </Button>
             <Stack spacing={4} bg={"gray"} p={4} minH={'60%'}>
-              { poolConfig && (
-                <Prize address={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue} />
-              ) }
+              {poolConfig && (
+                <Prize address={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue}/>
+              )}
               {normalPrizes && normalPrizes.map((prize: any, index: number) => (
-                <Prize key={index} address={prize.address} value={prize.value} />
+                <Prize key={index} address={prize.address} value={prize.value}/>
               ))}
             </Stack>
           </Stack>

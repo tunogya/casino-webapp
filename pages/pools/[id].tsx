@@ -1,15 +1,17 @@
 import Layout from "../../components/layout";
 import {Button, Spacer, Stack, Text} from "@chakra-ui/react";
-import {useAccount, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
+import {useAccount, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite, erc20ABI} from "wagmi";
 import {SNATCH_ADDRESS} from "../../constant/address";
 import SNATCH_ABI from "../../abis/Snatch.json";
 import {useRouter} from "next/router";
+import {ethers} from "ethers";
+import {useMemo} from "react";
 
 const Pool = () => {
   const {address} = useAccount()
   const {chain} = useNetwork()
   const router = useRouter()
-  const { id } = router.query
+  const {id} = router.query
 
   const SnatchContract = {
     addressOrName: SNATCH_ADDRESS[chain?.id || 5],
@@ -21,41 +23,101 @@ const Pool = () => {
       {
         ...SnatchContract,
         functionName: 'poolConfigOf',
-        args: [0],
+        args: [id],
       },
       {
         ...SnatchContract,
         functionName: 'rpOf',
-        args: [address, 0],
+        args: [address, id],
       }
     ]
   })
-
-  const { config: drawConfig } = usePrepareContractWrite({
+  const {config: drawConfig} = usePrepareContractWrite({
     addressOrName: SNATCH_ADDRESS[chain?.id || 5],
     contractInterface: SNATCH_ABI,
     functionName: 'draw',
     args: [id],
   })
-  const { config: batchDrawConfig } = usePrepareContractWrite({
+  const {config: batchDrawConfig} = usePrepareContractWrite({
     addressOrName: SNATCH_ADDRESS[chain?.id || 5],
     contractInterface: SNATCH_ABI,
     functionName: 'batchDraw',
     args: [id],
   })
-  const {data: drawData, isLoading: isDrawLoading, isSuccess: isDrawSuccess, write: drawWrite} = useContractWrite(drawConfig);
-  const {data: batchDrawData, isLoading: isBatchDrawLoading, isSuccess: isBatchDrawSuccess, write: batchDrawWrite} = useContractWrite(batchDrawConfig);
-
+  const {
+    data: drawData,
+    isLoading: isDrawLoading,
+    isSuccess: isDrawSuccess,
+    write: drawWrite,
+  } = useContractWrite(drawConfig);
+  const {
+    data: batchDrawData,
+    isLoading: isBatchDrawLoading,
+    isSuccess: isBatchDrawSuccess,
+    write: batchDrawWrite
+  } = useContractWrite(batchDrawConfig);
   const poolConfig = data?.[0]
-  const rp = data?.[1]
-
-  const normalPrizes = poolConfig?.normalPrizesToken.map((prize: string, index: number) => {
-    return {
-      token: prize,
-      value: poolConfig?.normalPrizesValue[index],
-      rate: poolConfig?.normalPrizesRate[index],
-    }
+  const rp = data?.[1]?.toString() || '...'
+  const normalPrizes = useMemo(() => {
+    return poolConfig?.normalPrizesToken.map((prize: string, index: number) => {
+      return {
+        token: prize,
+        value: poolConfig?.normalPrizesValue[index],
+        rate: poolConfig?.normalPrizesRate[index],
+      }
+    })
+  }, [poolConfig?.normalPrizesRate, poolConfig?.normalPrizesToken, poolConfig?.normalPrizesValue])
+  const PaymentTokenContract = {
+    addressOrName: poolConfig?.paymentToken,
+    contractInterface: erc20ABI,
+  }
+  const {data: paymentTokenData} = useContractReads({
+    contracts: [
+      {
+        ...PaymentTokenContract,
+        functionName: 'balanceOf',
+        args: [address],
+      },
+      {
+        ...PaymentTokenContract,
+        functionName: 'symbol',
+      },
+      {
+        ...PaymentTokenContract,
+        functionName: 'decimals',
+      },
+      {
+        ...PaymentTokenContract,
+        functionName: 'allowance',
+        args: [address, SNATCH_ADDRESS[chain?.id || 5]],
+      },
+    ]
   })
+  const singleDrawPrice = useMemo(() => {
+    if (poolConfig?.singleDrawPrice && paymentTokenData) {
+      return ethers.utils.formatUnits(poolConfig?.singleDrawPrice, paymentTokenData?.[2])
+    }
+    return '...'
+  }, [paymentTokenData, poolConfig?.singleDrawPrice])
+  const batchDrawPrice = useMemo(() => {
+    if (poolConfig?.batchDrawPrice && paymentTokenData) {
+      return ethers.utils.formatUnits(poolConfig?.batchDrawPrice, paymentTokenData?.[2])
+    }
+    return '...'
+  }, [paymentTokenData, poolConfig?.batchDrawPrice])
+  const allowance = useMemo(() => {
+    if (paymentTokenData?.[3] && paymentTokenData?.[2]) {
+      return ethers.utils.formatUnits(paymentTokenData?.[3], paymentTokenData?.[2])
+    }
+    return "0"
+  }, [paymentTokenData])
+  const { config: approveConfig } = usePrepareContractWrite({
+    addressOrName: poolConfig?.paymentToken,
+    contractInterface: erc20ABI,
+    functionName: 'approve',
+    args: [SNATCH_ADDRESS[chain?.id || 5], ethers.constants.MaxUint256.toString()],
+  })
+  const { data: approveData, write: approveWrite, isLoading: isApproveLoading, isSuccess: isApproveSuccess } = useContractWrite(approveConfig);
 
   return (
     <Layout>
@@ -65,28 +127,52 @@ const Pool = () => {
         </Stack>
         <Stack w={'full'} h={'full'} py={40} alignItems={"center"}>
           <Stack textAlign={"center"} w={'100px'} bg={"gray"} py={1} mt={'300px'}>
-            <Text color={'white'}>RP</Text>
+            <Text color={'white'}>RP: {rp}</Text>
           </Stack>
           <Spacer/>
           <Stack direction={"row"} justify={"space-around"} w={'50%'}>
-            <Button
-              bg={'gold'}
-              disabled={!drawWrite}
-              onClick={() => drawWrite?.()}
-              isLoading={isDrawLoading}
-              loadingText={'Pending...'}
-            >
-              { isDrawSuccess ? "Success" : `${(Number(poolConfig?.singleDrawPrice)/1e18).toFixed(0)}, 1 draw` }
-            </Button>
-            <Button
-              bg={'gold'}
-              disabled={!batchDrawWrite}
-              onClick={() => batchDrawWrite?.()}
-              isLoading={isBatchDrawLoading}
-              loadingText={'Pending...'}
-            >
-              { isBatchDrawSuccess ? "Success" : `${(Number(poolConfig?.batchDrawPrice)/1e18).toFixed(0)}, ${poolConfig?.batchDrawSize} draws` }
-            </Button>
+            { Number(allowance) < Number(singleDrawPrice) ? (
+              <Button
+                bg={'gold'}
+                loadingText={'Pending...'}
+                disabled={!approveWrite}
+                onClick={() => approveWrite?.()}
+                isLoading={isApproveLoading}
+              >
+                Approve { paymentTokenData?.[1] }
+              </Button>
+            ) : (
+              <Button
+                bg={'gold'}
+                disabled={!drawWrite}
+                onClick={() => drawWrite?.()}
+                isLoading={isDrawLoading}
+                loadingText={'Pending...'}
+              >
+                {singleDrawPrice} {paymentTokenData?.[1]}, 1 draw
+              </Button>
+            ) }
+            { Number(allowance) < Number(batchDrawPrice) ? (
+              <Button
+                bg={'gold'}
+                loadingText={'Pending...'}
+                onClick={() => approveWrite?.()}
+                disabled={!approveWrite}
+                isLoading={isApproveLoading}
+              >
+                Approve { paymentTokenData?.[1] }
+              </Button>
+            ) : (
+              <Button
+                bg={'gold'}
+                disabled={!batchDrawWrite}
+                onClick={() => batchDrawWrite?.()}
+                isLoading={isBatchDrawLoading}
+                loadingText={'Pending...'}
+              >
+                {batchDrawPrice} {paymentTokenData?.[1]}, {poolConfig?.batchDrawSize.toString()} draws
+              </Button>
+            ) }
           </Stack>
         </Stack>
         <Stack minW={60} alignItems={"end"} h={'full'}>
@@ -98,11 +184,11 @@ const Pool = () => {
               Bonus
             </Button>
             <Stack spacing={4} bg={"gray"} p={4} minH={'60%'}>
-              { normalPrizes && normalPrizes.map((prize: any, index: number) => (
+              {normalPrizes && normalPrizes.map((prize: any, index: number) => (
                 <Button size={'lg'} key={index}>
                   {prize.token}
                 </Button>
-              )) }
+              ))}
             </Stack>
           </Stack>
         </Stack>

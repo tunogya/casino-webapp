@@ -212,7 +212,7 @@ const Create = () => {
             loadingText={"Pending..."}
             onClick={() => write?.()}
           >
-            { isSuccess ? "Success" : "Create Pool"}
+            Create Pool
           </Button>
         </HStack>
         <Text>

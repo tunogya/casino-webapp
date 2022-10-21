@@ -1,11 +1,12 @@
-import Layout from "../../components/layout";
+import Layout from "../../../components/layout";
 import {Button, Spacer, Stack, Text} from "@chakra-ui/react";
 import {useAccount, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite, erc20ABI} from "wagmi";
-import {SNATCH_ADDRESS} from "../../constant/address";
-import SNATCH_ABI from "../../abis/Snatch.json";
+import {SNATCH_ADDRESS} from "../../../constant/address";
+import SNATCH_ABI from "../../../abis/Snatch.json";
 import {useRouter} from "next/router";
 import {ethers} from "ethers";
 import {useMemo} from "react";
+import Prize from "../../../components/prize";
 
 const Pool = () => {
   const {address} = useAccount()
@@ -18,7 +19,7 @@ const Pool = () => {
     contractInterface: SNATCH_ABI,
   }
 
-  const {data, isError, isLoading} = useContractReads({
+  const {data} = useContractReads({
     contracts: [
       {
         ...SnatchContract,
@@ -30,10 +31,6 @@ const Pool = () => {
         functionName: 'rpOf',
         args: [address, id],
       },
-      {
-        ...SnatchContract,
-        functionName: 'owner',
-      }
     ]
   })
   const {config: drawConfig} = usePrepareContractWrite({
@@ -55,19 +52,17 @@ const Pool = () => {
     }
   })
   const {
-    data: drawData,
     isLoading: isDrawLoading,
-    isSuccess: isDrawSuccess,
     write: drawWrite,
   } = useContractWrite(drawConfig);
   const {
-    data: batchDrawData,
     isLoading: isBatchDrawLoading,
-    isSuccess: isBatchDrawSuccess,
     write: batchDrawWrite
   } = useContractWrite(batchDrawConfig);
-  const poolConfig = data?.[0]
-  const rp = data?.[1]?.toString() || '...'
+  const poolConfig = useMemo(() => {
+    return data?.[0]
+  }, [data])
+  const rp = data?.[1]?.toString() || undefined
   const normalPrizes = useMemo(() => {
     return poolConfig?.normalPrizesToken.map((prize: string, index: number) => {
       return {
@@ -105,21 +100,21 @@ const Pool = () => {
   })
   const singleDrawPrice = useMemo(() => {
     if (poolConfig?.singleDrawPrice && paymentTokenData) {
-      return ethers.utils.formatUnits(poolConfig?.singleDrawPrice, paymentTokenData?.[2])
+      return Number(ethers.utils.formatUnits(poolConfig?.singleDrawPrice, paymentTokenData?.[2]))
     }
-    return '...'
+    return undefined
   }, [paymentTokenData, poolConfig?.singleDrawPrice])
   const batchDrawPrice = useMemo(() => {
     if (poolConfig?.batchDrawPrice && paymentTokenData) {
-      return ethers.utils.formatUnits(poolConfig?.batchDrawPrice, paymentTokenData?.[2])
+      return Number(ethers.utils.formatUnits(poolConfig?.batchDrawPrice, paymentTokenData?.[2]))
     }
-    return '...'
+    return undefined
   }, [paymentTokenData, poolConfig?.batchDrawPrice])
   const allowance = useMemo(() => {
     if (paymentTokenData?.[3] && paymentTokenData?.[2]) {
-      return ethers.utils.formatUnits(paymentTokenData?.[3], paymentTokenData?.[2])
+      return Number(ethers.utils.formatUnits(paymentTokenData?.[3], paymentTokenData?.[2]))
     }
-    return "0"
+    return undefined
   }, [paymentTokenData])
   const { config: approveConfig } = usePrepareContractWrite({
     addressOrName: poolConfig?.paymentToken,
@@ -127,7 +122,7 @@ const Pool = () => {
     functionName: 'approve',
     args: [SNATCH_ADDRESS[chain?.id || 5], ethers.constants.MaxUint256.toString()],
   })
-  const { data: approveData, write: approveWrite, isLoading: isApproveLoading, isSuccess: isApproveSuccess } = useContractWrite(approveConfig);
+  const { write: approveWrite, isLoading: isApproveLoading, } = useContractWrite(approveConfig);
 
   return (
     <Layout>
@@ -141,7 +136,7 @@ const Pool = () => {
           </Stack>
           <Spacer/>
           <Stack direction={"row"} justify={"space-around"} w={'50%'}>
-            { Number(allowance) < Number(singleDrawPrice) ? (
+            { (allowance && singleDrawPrice) && (allowance < singleDrawPrice) ? (
               <Button
                 bg={'gold'}
                 loadingText={'Pending...'}
@@ -159,10 +154,10 @@ const Pool = () => {
                 isLoading={isDrawLoading}
                 loadingText={'Pending...'}
               >
-                {singleDrawPrice} {paymentTokenData?.[1]}, 1 draw
+                {singleDrawPrice} {paymentTokenData?.[1]}, 1 X
               </Button>
             ) }
-            { Number(allowance) < Number(batchDrawPrice) ? (
+            { (allowance && batchDrawPrice) && (allowance < batchDrawPrice) ? (
               <Button
                 bg={'gold'}
                 loadingText={'Pending...'}
@@ -180,7 +175,7 @@ const Pool = () => {
                 isLoading={isBatchDrawLoading}
                 loadingText={'Pending...'}
               >
-                {batchDrawPrice} {paymentTokenData?.[1]}, {poolConfig?.batchDrawSize.toString()} draws
+                {batchDrawPrice} {paymentTokenData?.[1]}, {poolConfig?.batchDrawSize.toString()} X
               </Button>
             ) }
           </Stack>
@@ -193,16 +188,12 @@ const Pool = () => {
             <Button size={'lg'}>
               Bonus
             </Button>
-            { data?.[2]?.toLowerCase() === address?.toLowerCase() && (
-              <Button size={'lg'}>
-                Setting
-              </Button>
-            )}
             <Stack spacing={4} bg={"gray"} p={4} minH={'60%'}>
+              { poolConfig && (
+                <Prize address={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue} />
+              ) }
               {normalPrizes && normalPrizes.map((prize: any, index: number) => (
-                <Button size={'lg'} key={index}>
-                  {prize.token}
-                </Button>
+                <Prize key={index} address={prize.address} value={prize.value} />
               ))}
             </Stack>
           </Stack>

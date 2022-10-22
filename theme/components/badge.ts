@@ -1,23 +1,24 @@
 import { defineStyleConfig } from '@chakra-ui/react'
 
-const Button = defineStyleConfig({
+const Badge = defineStyleConfig({
   baseStyle: {
     fontWeight: 700,
     borderRadius: '12px',
     fontFamily: 'Syncopate',
+    padding: '8px',
   },
   variants: {
     outline: {
-      border: '2px solid',
+      border: '1px solid',
       borderColor: 'yellow.900',
-      bg: "white",
-      color: "yellow.900",
+      color: 'yellow.900',
+      bg: 'white',
       _active: null,
       _hover: null,
     },
     solid: {
-      bg: 'red.400',
-      color: 'white',
+      bg: 'teal.200',
+      color: 'yellow.900',
       border: '2px solid',
       borderColor: 'yellow.900',
       _hover: null,
@@ -30,4 +31,4 @@ const Button = defineStyleConfig({
   },
 })
 
-export default Button
+export default Badge

@@ -33,7 +33,7 @@ const TokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
 
   if (data && address) {
     return (
-      <Badge p={2} borderRadius={'12px'}>{ ethers.utils.formatUnits(data?.[0], data?.[2]) } { data?.[1] }</Badge>
+      <Badge variant={"outline"}>{ ethers.utils.formatUnits(data?.[0], data?.[2]) } { data?.[1] }</Badge>
     )
   } else {
     return (

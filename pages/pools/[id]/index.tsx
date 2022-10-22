@@ -149,19 +149,21 @@ const Pool = () => {
   return (
     <Layout>
       <Stack direction={"row"} h={'full'} w={'full'}>
-        <Stack minW={60} bg={"blackAlpha.600"} p={4} spacing={5} overflow={"scroll"}>
+        <Stack minW={60} p={4} spacing={3} overflow={"scroll"}>
           {poolIds.map((item) => (
             <Button
               key={item}
+              variant={ Number(id) === item ? "solid" : "outline"}
               onClick={async () => {
                 await router.push(`/pools/${item}`)
               }}
-            >{item}</Button>
+            >#{item} Pool</Button>
           ))}
           <Spacer/>
           {data?.[3] === address && (
             <HStack>
               <Button
+                variant={"outline"}
                 leftIcon={<AddIcon/>}
                 onClick={async () => {
                   await router.push('/pools/create')
@@ -184,13 +186,13 @@ const Pool = () => {
           </HStack>
           <Spacer/>
           <Stack textAlign={"center"} w={'100px'}>
-            <Badge p={2} borderRadius={'12px'} fontSize={'sm'}>RP: {rp}</Badge>
+            <Badge borderRadius={'12px'} fontSize={'sm'}>RP: {rp}</Badge>
           </Stack>
           <Spacer/>
           <Stack direction={"row"} justify={"space-around"} w={'50%'}>
             {(allowance && singleDrawPrice) && (allowance < singleDrawPrice) ? (
               <Button
-                bg={'gold'}
+                size={'lg'}
                 loadingText={'Pending...'}
                 disabled={!approveWrite}
                 onClick={() => approveWrite?.()}
@@ -200,7 +202,7 @@ const Pool = () => {
               </Button>
             ) : (
               <Button
-                bg={'gold'}
+                size={'lg'}
                 disabled={!drawWrite}
                 onClick={() => drawWrite?.()}
                 isLoading={isDrawLoading}
@@ -211,7 +213,7 @@ const Pool = () => {
             )}
             {(allowance && batchDrawPrice) && (allowance < batchDrawPrice) ? (
               <Button
-                bg={'gold'}
+                size={'lg'}
                 loadingText={'Pending...'}
                 onClick={() => approveWrite?.()}
                 disabled={!approveWrite}
@@ -221,7 +223,7 @@ const Pool = () => {
               </Button>
             ) : (
               <Button
-                bg={'gold'}
+                size={'lg'}
                 disabled={!batchDrawWrite}
                 onClick={() => batchDrawWrite?.()}
                 isLoading={isBatchDrawLoading}
@@ -236,6 +238,7 @@ const Pool = () => {
         <Stack minW={60} alignItems={"end"} h={'full'}>
           <Stack w={40} justify={"space-around"} h={'full'} pr={4}>
             <Button
+              variant={"outline"}
               onClick={async () => {
                 await router.push(`/pools/${id}/store`)
               }}
@@ -244,6 +247,7 @@ const Pool = () => {
               Store
             </Button>
             <Button
+              variant={"outline"}
               onClick={async () => {
                 await router.push(`/pools/${id}/bonus`)
               }}
@@ -251,7 +255,7 @@ const Pool = () => {
             >
               Bonus
             </Button>
-            <Stack spacing={4} bg={"gray"} p={4} minH={'60%'} borderRadius={'12px'}>
+            <Stack spacing={4} bg={"teal.200"} border={"2px solid"} borderColor={'yellow.900'} p={4} minH={'60%'} borderRadius={'12px'}>
               {poolConfig && (
                 <Prize address={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue}/>
               )}

@@ -13,6 +13,7 @@ import {useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
 import {SNATCH_ADDRESS} from "../../../constant/address";
 import SNATCH_ABI from "../../../abis/Snatch.json";
 import {ethers} from "ethers";
+import {AddIcon} from "@chakra-ui/icons";
 
 type Config = {
   paymentToken: string | undefined,
@@ -178,6 +179,8 @@ const Create = () => {
         </HStack>
         <HStack justify={"end"}>
           <Button
+            leftIcon={<AddIcon/>}
+            variant={"outline"}
             isDisabled={normalConfig.normalPrizesToken === "" || normalConfig.normalPrizesValue === "" || normalConfig.normalPrizesRate === ""}
             onClick={() => {
               setConfig({
@@ -193,7 +196,7 @@ const Create = () => {
               })
             }}
           >
-            + Normal Prize
+            Normal Prize
           </Button>
         </HStack>
         {normalPrizeList.map((item, index) => (
@@ -215,9 +218,6 @@ const Create = () => {
             Create Pool
           </Button>
         </HStack>
-        <Text>
-          {JSON.stringify(config)}
-        </Text>
       </Stack>
     </Layout>
   )

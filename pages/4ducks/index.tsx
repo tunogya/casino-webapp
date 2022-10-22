@@ -1,13 +1,16 @@
 import Layout from "../../components/layout";
 import {Button, Heading, HStack, Stack, Text} from "@chakra-ui/react";
 import ChakraBox from "../../components/chakraBox";
+import {useAccount} from "wagmi";
 
 const _4Ducks = () => {
+  const {address} = useAccount()
+
   return (
     <Layout>
       <HStack w={'full'} h={'full'} alignItems={"start"}>
         <Stack p={'24px'} w={'full'} alignItems={"center"} spacing={'48px'}>
-          <HStack w={'full'}>
+          <HStack w={'full'} spacing={'24px'}>
             <Heading fontWeight={'bold'}>4 Ducks</Heading>
           </HStack>
           <HStack justify={"space-around"} w={'full'}>
@@ -19,7 +22,7 @@ const _4Ducks = () => {
               borderColor={"yellow.900"}
               w={'600px'} h={'600px'} bg={"gold"} borderRadius={'full'}
               animate={{
-                scale: [1, 0.818, 1, 0.818, 1],
+                scale: [1, 0.918, 1, 0.918, 1],
               }}
               // @ts-ignore
               transition={{

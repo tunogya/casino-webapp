@@ -19,6 +19,7 @@ import {
   walletConnectWallet
 } from "@rainbow-me/rainbowkit/wallets";
 import theme from "../theme";
+import {RecoilRoot} from "recoil";
 
 const {chains, provider, webSocketProvider} = configureChains(
   [
@@ -38,22 +39,22 @@ const connectors = connectorsForWallets([
   {
     groupName: 'Recommended',
     wallets: [
-      injectedWallet({ chains }),
-      metaMaskWallet({ chains }),
-      walletConnectWallet({ chains }),
-      coinbaseWallet({ chains, appName: 'Playground' }),
+      injectedWallet({chains}),
+      metaMaskWallet({chains}),
+      walletConnectWallet({chains}),
+      coinbaseWallet({chains, appName: 'Playground'}),
     ],
   },
   {
     groupName: 'Others',
     wallets: [
-      rainbowWallet({ chains }),
-      trustWallet({ chains }),
-      ledgerWallet({ chains }),
-      imTokenWallet({ chains }),
-      omniWallet({ chains }),
-      argentWallet({ chains }),
-      braveWallet({ chains }),
+      rainbowWallet({chains}),
+      trustWallet({chains}),
+      ledgerWallet({chains}),
+      imTokenWallet({chains}),
+      omniWallet({chains}),
+      argentWallet({chains}),
+      braveWallet({chains}),
     ],
   },
 ])
@@ -65,7 +66,7 @@ const wagmiClient = createClient({
   webSocketProvider,
 });
 
-const Disclaimer: DisclaimerComponent = ({ Text, Link }) => (
+const Disclaimer: DisclaimerComponent = ({Text, Link}) => (
   <Text>
     By connecting your wallet, you agree to the{' '}
     <Link href="https://wizardingpay.com">Terms of Service</Link> and
@@ -76,16 +77,18 @@ const Disclaimer: DisclaimerComponent = ({ Text, Link }) => (
 
 function MyApp({Component, pageProps}: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
-      <WagmiConfig client={wagmiClient}>
-        <RainbowKitProvider coolMode chains={chains} appInfo={{
-          appName: 'Playground',
-          disclaimer: Disclaimer,
-        }}>
-          <Component {...pageProps} />
-        </RainbowKitProvider>
-      </WagmiConfig>
-    </ChakraProvider>
+    <RecoilRoot>
+      <ChakraProvider theme={theme}>
+        <WagmiConfig client={wagmiClient}>
+          <RainbowKitProvider coolMode chains={chains} appInfo={{
+            appName: 'Playground',
+            disclaimer: Disclaimer,
+          }}>
+            <Component {...pageProps} />
+          </RainbowKitProvider>
+        </WagmiConfig>
+      </ChakraProvider>
+    </RecoilRoot>
   );
 }
 

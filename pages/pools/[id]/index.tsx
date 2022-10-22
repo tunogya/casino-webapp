@@ -5,11 +5,13 @@ import {SNATCH_ADDRESS} from "../../../constant/address";
 import SNATCH_ABI from "../../../abis/Snatch.json";
 import {useRouter} from "next/router";
 import {ethers} from "ethers";
-import {useMemo} from "react";
+import {useEffect, useMemo} from "react";
 import Prize from "../../../components/prize";
 import PoolSetting from "../../../components/poolSetting";
 import {AddIcon} from "@chakra-ui/icons";
 import TokenBalance from "../../../components/tokenBalance";
+import {useRecoilState} from "recoil";
+import {poolIdsAtom} from "../index";
 
 const Pool = () => {
   const {address} = useAccount()
@@ -134,17 +136,18 @@ const Pool = () => {
     args: [SNATCH_ADDRESS[chain?.id || 5], ethers.constants.MaxUint256.toString()],
   })
   const {write: approveWrite, isLoading: isApproveLoading,} = useContractWrite(approveConfig);
-  const poolIds = useMemo(() => {
+  const [poolIds, setPoolIds] = useRecoilState(poolIdsAtom);
+
+  useEffect(() => {
     if (data?.[2]) {
       const nextPoolId = data?.[2].toNumber()
       const ids = []
       for (let i = 0; i < nextPoolId; i++) {
         ids.push(i)
       }
-      return ids
+      setPoolIds(ids)
     }
-    return [0]
-  }, [data])
+  }, [data, setPoolIds])
 
   return (
     <Layout>

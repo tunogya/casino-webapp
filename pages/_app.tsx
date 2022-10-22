@@ -8,7 +8,6 @@ import type {AppProps} from 'next/app';
 import {RainbowKitProvider, connectorsForWallets, DisclaimerComponent} from '@rainbow-me/rainbowkit';
 import {chain, configureChains, createClient, WagmiConfig} from 'wagmi';
 import {infuraProvider} from 'wagmi/providers/infura';
-import {publicProvider} from 'wagmi/providers/public';
 import {ChakraProvider} from "@chakra-ui/react";
 import {
   argentWallet,
@@ -25,14 +24,13 @@ const {chains, provider, webSocketProvider} = configureChains(
   [
     chain.mainnet,
     ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
-      ? [chain.goerli, chain.hardhat]
+      ? [chain.goerli]
       : []),
   ],
   [
     infuraProvider({
       apiKey: process.env.INFURA_KEY,
-    }),
-    publicProvider(),
+    })
   ]
 );
 

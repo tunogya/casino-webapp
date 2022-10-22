@@ -1,5 +1,5 @@
 import Head from "next/head";
-import {Heading, HStack, Link, Spacer, Stack, Text} from "@chakra-ui/react";
+import {Heading, Spacer, Stack} from "@chakra-ui/react";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
 import {useRouter} from "next/router";
 
@@ -17,7 +17,7 @@ const Layout = ({children}) => {
         <link rel="icon" href="/favicon.ico"/>
       </Head>
       <Stack direction={"row"} px={4} py={2} align={"center"} bg={'gold'} w={'full'} borderBottom={"2px solid #400000"}>
-        <Heading fontSize={'md'}>
+        <Stack spacing={0}>
           <Heading fontSize={'xx-small'} fontWeight={'normal'}>WizardingPay</Heading>
           <Heading
             fontSize={"md"}
@@ -28,7 +28,7 @@ const Layout = ({children}) => {
           >
             Casino
           </Heading>
-        </Heading>
+        </Stack>
         <Spacer/>
         <ConnectButton/>
       </Stack>

@@ -1,12 +1,12 @@
 import type {NextPage} from 'next';
-import {Stack, Wrap, WrapItem, Heading} from "@chakra-ui/react";
+import {Stack, Wrap, WrapItem, Heading, useConst} from "@chakra-ui/react";
 import Layout from "../components/layout";
 import {useRouter} from "next/router";
 
 const Home: NextPage = () => {
   const router = useRouter()
 
-  const games = [
+  const games = useConst([
     {
       id: 1,
       name: 'Snatch Pool',
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
       name: '4 Ducks',
       path: '/4ducks',
     }
-  ]
+  ])
 
   return (
     <Layout>

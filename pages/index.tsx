@@ -10,7 +10,7 @@ const Home: NextPage = () => {
     {
       id: 1,
       name: 'Snatch Pool',
-      path: '/pools/1',
+      path: '/pools/0',
     },
     {
       id: 2,

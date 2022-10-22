@@ -45,7 +45,7 @@ const _4Ducks = () => {
           </HStack>
         </Stack>
         <Stack minW={'300px'} h={'full'} bg={"gray.50"} p={'12px'}>
-          <Text>History</Text>
+          <Text>Users</Text>
         </Stack>
       </HStack>
     </Layout>

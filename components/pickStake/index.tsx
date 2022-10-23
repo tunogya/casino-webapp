@@ -58,6 +58,10 @@ const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
     contractInterface: FOUR_DUCKS_API,
     functionName: 'stake',
     args: [poolId, token, parseAmount],
+    overrides: {
+      value: token === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE" ? parseAmount : "0",
+      gasLimit: 1000000,
+    }
   })
   const {isLoading: isStakeLoading, write: stakeWrite} = useContractWrite(stakeConfig)
   const { config: approveConfig } = usePrepareContractWrite({

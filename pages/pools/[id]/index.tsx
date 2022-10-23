@@ -64,6 +64,7 @@ const Pool = () => {
     functionName: 'draw',
     args: [id],
     overrides: {
+      value: data?.[0].paymentToken === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE' ? data?.[0].singleDrawPrice : '0',
       gasLimit: 1000000,
     }
   })
@@ -73,6 +74,7 @@ const Pool = () => {
     functionName: 'batchDraw',
     args: [id],
     overrides: {
+      value: data?.[0].paymentToken === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE' ? data?.[0].batchDrawPrice : '0',
       gasLimit: 1000000,
     }
   })

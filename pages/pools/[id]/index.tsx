@@ -222,7 +222,7 @@ const Pool = () => {
           </Stack>
           <Spacer/>
           <Stack direction={"row"} justify={"space-around"} w={'50%'}>
-            {(allowance && singleDrawPrice) && (allowance < singleDrawPrice) ? (
+            {(allowance !== undefined && singleDrawPrice !== undefined) && (allowance < singleDrawPrice) ? (
               <Button
                 size={'lg'}
                 loadingText={'Pending...'}
@@ -243,7 +243,7 @@ const Pool = () => {
                 {singleDrawPrice} {paymentTokenData?.[1]} 1X
               </Button>
             )}
-            {(allowance && batchDrawPrice) && (allowance < batchDrawPrice) ? (
+            {(allowance !== undefined && batchDrawPrice !== undefined) && (allowance < batchDrawPrice) ? (
               <Button
                 size={'lg'}
                 loadingText={'Pending...'}

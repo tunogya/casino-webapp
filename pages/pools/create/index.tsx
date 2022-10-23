@@ -9,25 +9,25 @@ import {
   Text
 } from "@chakra-ui/react";
 import {useMemo, useState} from "react";
-import {useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
+import {erc20ABI, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
 import {SNATCH_ADDRESS} from "../../../constant/address";
 import SNATCH_ABI from "../../../abis/Snatch.json";
 import {ethers} from "ethers";
 import {AddIcon} from "@chakra-ui/icons";
 
 type Config = {
-  paymentToken: string | undefined,
-  singleDrawPrice: string | undefined,
-  batchDrawPrice: string | undefined,
-  batchDrawSize: string | undefined,
-  rarePrizeToken: string | undefined,
-  rarePrizeInitRate: string | undefined,
-  rarePrizeRateD: string | undefined,
-  rarePrizeValue: string | undefined,
-  rarePrizeMaxRP: string | undefined,
-  normalPrizesToken: string[] | [],
-  normalPrizesValue: string[] | [],
-  normalPrizesRate: string[] | [],
+  paymentToken: string,
+  singleDrawPrice: string,
+  batchDrawPrice: string,
+  batchDrawSize: string,
+  rarePrizeToken: string,
+  rarePrizeInitRate: string,
+  rarePrizeRateD: string,
+  rarePrizeValue: string,
+  rarePrizeMaxRP: string,
+  normalPrizesToken: string[],
+  normalPrizesValue: string[],
+  normalPrizesRate: string[],
 }
 
 const Create = () => {
@@ -53,13 +53,30 @@ const Create = () => {
   })
   const normalPrizeList = useMemo(() => {
     return config.normalPrizesToken.map((token, index) => {
+      // todo, get token decimals
       return {
         token,
-        value: config.normalPrizesValue[index],
-        rate: config.normalPrizesRate[index],
+        value: ethers.utils.parseUnits(config.normalPrizesValue[index], 18),
+        rate: ethers.utils.parseEther(config.normalPrizesRate[index]),
+        formatValue: config.normalPrizesValue[index],
+        formatRate: config.normalPrizesRate[index],
       }
     })
   }, [config])
+  const {data} = useContractReads({
+    contracts: [
+      {
+        addressOrName: config.paymentToken,
+        contractInterface: erc20ABI,
+        functionName: 'decimals',
+      },
+      {
+        addressOrName: config.rarePrizeToken,
+        contractInterface: erc20ABI,
+        functionName: 'decimals',
+      },
+    ]
+  })
 
   const {config: createConfig} = usePrepareContractWrite({
     addressOrName: SNATCH_ADDRESS[chain?.id || 5],
@@ -67,17 +84,18 @@ const Create = () => {
     functionName: 'createPool',
     args: {
       paymentToken: config.paymentToken,
-      singleDrawPrice: ethers.utils.parseEther(config.singleDrawPrice || "0"),
-      batchDrawPrice: ethers.utils.parseEther(config.batchDrawPrice || "0"),
+      // todo, decimal
+      singleDrawPrice: ethers.utils.parseUnits(config.singleDrawPrice || "0", data?.[0] || 18),
+      batchDrawPrice: ethers.utils.parseUnits(config.batchDrawPrice || "0", data?.[0] || 18),
       batchDrawSize: config.batchDrawSize,
       rarePrizeToken: config.rarePrizeToken,
       rarePrizeInitRate: ethers.utils.parseEther(config.rarePrizeInitRate || "0"),
       rarePrizeRateD: ethers.utils.parseEther(config.rarePrizeRateD || "0"),
-      rarePrizeValue: ethers.utils.parseEther(config.rarePrizeValue || "0"),
+      rarePrizeValue: ethers.utils.parseUnits(config.rarePrizeValue || "0", data?.[1] || 18),
       rarePrizeMaxRP: config.rarePrizeMaxRP,
-      normalPrizesToken: config.normalPrizesToken,
-      normalPrizesValue: config.normalPrizesValue.map(v => ethers.utils.parseEther(v)),
-      normalPrizesRate: config.normalPrizesRate.map(r => ethers.utils.parseEther(r)),
+      normalPrizesToken: normalPrizeList.map(t => t.token),
+      normalPrizesValue: normalPrizeList.map(v => v.value),
+      normalPrizesRate: normalPrizeList.map(r => r.rate),
     },
   })
   const {isLoading, write} = useContractWrite(createConfig)
@@ -204,8 +222,8 @@ const Create = () => {
             <Stack key={index} direction={"row"}>
               <Text>#{index + 1}</Text>
               <Text>{item.token}</Text>
-              <Text>{item.value}</Text>
-              <Text>{item.rate}</Text>
+              <Text>{item.formatValue}</Text>
+              <Text>{item.formatRate}</Text>
             </Stack>
           ))}
           <Divider/>

@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import ChakraBox from "../../../components/chakraBox";
 import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import PickStake from "../../../components/pickStake";
 import FourDucksSetting from "../../../components/fourDucksSetting";
 import {FOUR_DUCKS_ADDRESS} from "../../../constant/address";
@@ -88,7 +88,7 @@ const _4Ducks = () => {
             }
           </HStack>
           <HStack justify={"space-around"} w={'full'}>
-            <PickStake label={"Yes"} poolId={poolId}/>
+            <PickStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
 
             <ChakraBox
               border={"2px solid"}
@@ -106,7 +106,7 @@ const _4Ducks = () => {
             >
             </ChakraBox>
 
-            <PickStake label={"No"} poolId={poolId}/>
+            <PickStake label={"No"} poolId={poolId} isOptimistic={false}/>
           </HStack>
         </Stack>
         <Stack minW={'300px'} h={'full'} bg={"gray.50"} p={'12px'}>

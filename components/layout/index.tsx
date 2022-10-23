@@ -9,12 +9,12 @@ const Layout = ({children}) => {
   return (
     <Stack h={'100vh'} spacing={0} align={"center"} bg={'yellow.100'}>
       <Head>
-        <title>Casino | WizardingPays</title>
+        <title>Casino | WizardingPay</title>
         <meta
           name="description"
           content="WizardingPay Casino"
         />
-        <link rel="icon" href="/favicon.ico"/>
+        <link rel="icon" href="/favicon.svg"/>
       </Head>
       <Stack direction={"row"} px={4} py={2} align={"center"} bg={'gold'} w={'full'} borderBottom={"2px solid #400000"}>
         <Stack spacing={0}>

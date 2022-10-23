@@ -14,11 +14,14 @@ import FourDucksSetting from "../../components/fourDucksSetting";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {ethers} from "ethers";
+import {useRouter} from "next/router";
+import {isAddress} from "ethers/lib/utils";
 
 const _4Ducks = () => {
-  const [poolId, setPoolId] = useState<string>("")
+  const [poolId, setPoolId] = useState("")
   const {address} = useAccount()
   const {chain} = useNetwork()
+  const router = useRouter()
   const {data: poolEnsName} = useEnsName({
     address: poolId
   })
@@ -35,6 +38,11 @@ const _4Ducks = () => {
       {
         ...FourDucksContract,
         functionName: 'sponsorWallet',
+      },
+      {
+        ...FourDucksContract,
+        functionName: 'poolConfigOf',
+        args: [poolId],
       }
     ]
   })
@@ -50,10 +58,15 @@ const _4Ducks = () => {
   }, [data])
 
   useEffect(() => {
-    if (address) {
-      setPoolId(address)
+    if (router.query.id && isAddress(router.query.id.toString())) {
+      setPoolId(router.query.id.toString())
+    } else {
+      if (address) {
+        setPoolId(address)
+        router.push('/4ducks/')
+      }
     }
-  }, [address])
+  }, [address, router])
 
   return (
     <Layout>

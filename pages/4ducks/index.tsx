@@ -63,7 +63,6 @@ const _4Ducks = () => {
     } else {
       if (address) {
         setPoolId(address)
-        router.push('/4ducks/')
       }
     }
   }, [address, router])

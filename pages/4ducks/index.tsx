@@ -1,10 +1,21 @@
 import Layout from "../../components/layout";
 import {Button, Heading, HStack, Stack, Text} from "@chakra-ui/react";
 import ChakraBox from "../../components/chakraBox";
-import {useAccount} from "wagmi";
+import {useAccount, useEnsName} from "wagmi";
+import {useEffect, useState} from "react";
 
 const _4Ducks = () => {
+  const [poolId, setPoolId] = useState<string | undefined>(undefined)
   const {address} = useAccount()
+  const { data: poolEnsName } = useEnsName({
+    address: poolId
+  })
+
+  useEffect(() => {
+    if (address) {
+      setPoolId(address)
+    }
+  }, [address])
 
   return (
     <Layout>
@@ -12,6 +23,7 @@ const _4Ducks = () => {
         <Stack p={'24px'} w={'full'} alignItems={"center"} spacing={'48px'}>
           <HStack w={'full'} spacing={'24px'}>
             <Heading fontWeight={'bold'}>4 Ducks</Heading>
+            <Text>The Pool: {poolEnsName ? poolEnsName : poolId}</Text>
           </HStack>
           <HStack justify={"space-around"} w={'full'}>
             <Button

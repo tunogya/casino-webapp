@@ -9,31 +9,31 @@ type TokenBalanceProps = {
 }
 
 const TokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
-  const PaymentTokenContract = {
+  const TokenContract = {
     addressOrName: token,
     contractInterface: erc20ABI,
   }
   const {data} = useContractReads({
     contracts: [
       {
-        ...PaymentTokenContract,
+        ...TokenContract,
         functionName: 'balanceOf',
         args: [address],
       },
       {
-        ...PaymentTokenContract,
+        ...TokenContract,
         functionName: 'symbol',
       },
       {
-        ...PaymentTokenContract,
+        ...TokenContract,
         functionName: 'decimals',
       },
     ]
   })
 
-  if (data && address) {
+  if (data?.[0] && data?.[2] && data?.[1]) {
     return (
-      <Badge variant={"outline"}>{ ethers.utils.formatUnits(data?.[0], data?.[2]) } { data?.[1] }</Badge>
+      <Badge variant={"outline"}>{ ethers.utils.formatUnits(data[0], data[2]) } { data[1] }</Badge>
     )
   } else {
     return (

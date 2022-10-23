@@ -1,11 +1,19 @@
 import Layout from "../../../components/layout";
 import {Badge, Button, HStack, Spacer, Stack, Text} from "@chakra-ui/react";
-import {useAccount, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite, erc20ABI} from "wagmi";
+import {
+  useAccount,
+  useContractReads,
+  useContractWrite,
+  useNetwork,
+  usePrepareContractWrite,
+  erc20ABI,
+  useBalance
+} from "wagmi";
 import {SNATCH_ADDRESS} from "../../../constant/address";
 import SNATCH_ABI from "../../../abis/Snatch.json";
 import {useRouter} from "next/router";
 import {ethers} from "ethers";
-import {useEffect, useMemo} from "react";
+import {useEffect, useMemo, useState} from "react";
 import Prize from "../../../components/prize";
 import PoolSetting from "../../../components/poolSetting";
 import {AddIcon} from "@chakra-ui/icons";
@@ -43,6 +51,10 @@ const Pool = () => {
       {
         ...SnatchContract,
         functionName: 'owner',
+      },
+      {
+        ...SnatchContract,
+        functionName: 'sponsorWallet',
       }
     ]
   })
@@ -137,6 +149,10 @@ const Pool = () => {
   })
   const {write: approveWrite, isLoading: isApproveLoading,} = useContractWrite(approveConfig);
   const [poolIds, setPoolIds] = useRecoilState(poolIdsAtom);
+  const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
+  const {data: sponsorWalletData } = useBalance({
+    addressOrName: sponsorWallet,
+  })
 
   useEffect(() => {
     if (data?.[2]) {
@@ -148,6 +164,12 @@ const Pool = () => {
       setPoolIds(ids)
     }
   }, [data, setPoolIds])
+
+  useEffect(() => {
+    if (data?.[4]) {
+      setSponsorWallet(data?.[4].toString())
+    }
+  }, [data])
 
   return (
     <Layout>
@@ -179,7 +201,14 @@ const Pool = () => {
           )}
         </Stack>
         <Stack w={'full'} h={'full'} alignItems={"center"} p={'20px'}>
-          <HStack w={'full'} justify={"end"} spacing={'20px'}>
+          <HStack w={'full'} spacing={'20px'}>
+            { sponsorWalletData && (
+              <Stack spacing={0}>
+                <Text fontSize={'xs'}>sponsor wallet: {sponsorWallet}</Text>
+                <Text fontSize={'sm'}>balance: {ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)} {sponsorWalletData.symbol}</Text>
+              </Stack>
+            ) }
+            <Spacer/>
             {address && poolConfig && (
               <TokenBalance token={poolConfig.paymentToken} address={address}/>
             ) }
@@ -260,10 +289,10 @@ const Pool = () => {
             </Button>
             <Stack spacing={4} bg={"teal.200"} border={"2px solid"} borderColor={'yellow.900'} p={4} minH={'60%'} borderRadius={'12px'}>
               {poolConfig && (
-                <Prize address={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue}/>
+                <Prize token={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue}/>
               )}
               {normalPrizes && normalPrizes.map((prize: any, index: number) => (
-                <Prize key={index} address={prize.address} value={prize.value}/>
+                <Prize key={index} token={prize.token} value={prize.value}/>
               ))}
             </Stack>
           </Stack>

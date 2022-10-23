@@ -4,14 +4,14 @@ import {Text} from "@chakra-ui/react";
 import {BigNumber, ethers} from "ethers";
 import {erc20ABI, useContractReads} from "wagmi";
 
-type PrizeProps = {
-  address: string,
+export type PrizeProps = {
+  token: string,
   value: BigNumber,
 }
 
-const Prize: FC<PrizeProps> = ({address, value}) => {
+const Prize: FC<PrizeProps> = ({token, value}) => {
   const PrizeTokenContract = {
-    addressOrName: address,
+    addressOrName: token,
     contractInterface: erc20ABI,
   }
   const {data} = useContractReads({
@@ -22,10 +22,6 @@ const Prize: FC<PrizeProps> = ({address, value}) => {
       },
       {
         ...PrizeTokenContract,
-        functionName: 'symbol',
-      },
-      {
-        ...PrizeTokenContract,
         functionName: 'decimals',
       },
     ]
@@ -33,7 +29,7 @@ const Prize: FC<PrizeProps> = ({address, value}) => {
 
   return (
     <Stack>
-      <Text fontSize={'sm'}>{data?.[0]} x{ Number(ethers.utils.formatUnits(value, data?.[2])) }</Text>
+      <Text fontSize={'sm'}>{data?.[0]} x{ Number(ethers.utils.formatUnits(value, data?.[1])) }</Text>
     </Stack>
   )
 }

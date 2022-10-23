@@ -1,15 +1,53 @@
 import Layout from "../../components/layout";
-import {Button, Heading, HStack, Stack, Text} from "@chakra-ui/react";
+import {
+  Heading,
+  HStack,
+  Spacer,
+  Stack,
+  Text
+} from "@chakra-ui/react";
 import ChakraBox from "../../components/chakraBox";
-import {useAccount, useEnsName} from "wagmi";
+import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useEffect, useState} from "react";
+import PickStake from "../../components/pickStake";
+import FourDucksSetting from "../../components/fourDucksSetting";
+import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
+import FOUR_DUCKS_API from "../../abis/FourDucks.json";
+import {ethers} from "ethers";
 
 const _4Ducks = () => {
-  const [poolId, setPoolId] = useState<string | undefined>(undefined)
+  const [poolId, setPoolId] = useState<string>("")
   const {address} = useAccount()
-  const { data: poolEnsName } = useEnsName({
+  const {chain} = useNetwork()
+  const {data: poolEnsName} = useEnsName({
     address: poolId
   })
+  const FourDucksContract = {
+    addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
+    contractInterface: FOUR_DUCKS_API,
+  }
+  const {data} = useContractReads({
+    contracts: [
+      {
+        ...FourDucksContract,
+        functionName: 'owner',
+      },
+      {
+        ...FourDucksContract,
+        functionName: 'sponsorWallet',
+      }
+    ]
+  })
+  const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
+  const {data: sponsorWalletData } = useBalance({
+    addressOrName: sponsorWallet,
+  })
+
+  useEffect(() => {
+    if (data?.[1]) {
+      setSponsorWallet(data?.[1].toString())
+    }
+  }, [data])
 
   useEffect(() => {
     if (address) {
@@ -23,18 +61,29 @@ const _4Ducks = () => {
         <Stack p={'24px'} w={'full'} alignItems={"center"} spacing={'48px'}>
           <HStack w={'full'} spacing={'24px'}>
             <Heading fontWeight={'bold'}>4 Ducks</Heading>
-            <Text>The Pool: {poolEnsName ? poolEnsName : poolId}</Text>
+            { sponsorWalletData && (
+              <Stack spacing={0}>
+                <Text fontSize={'xs'}>sponsor wallet: {sponsorWallet}</Text>
+                <Text fontSize={'sm'}>balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(2)} {sponsorWalletData.symbol}</Text>
+              </Stack>
+            ) }
+            <Spacer/>
+            <Text fontSize={'sm'}>The Pool: {poolEnsName ? poolEnsName : poolId}</Text>
+            {
+              data?.[0] === address && (
+                <FourDucksSetting/>
+              )
+            }
           </HStack>
           <HStack justify={"space-around"} w={'full'}>
-            <Button
-              size={'lg'}
-              colorScheme={'green'}>Yes</Button>
+            <PickStake label={"Yes"} poolId={poolId}/>
+
             <ChakraBox
               border={"2px solid"}
               borderColor={"yellow.900"}
               w={'600px'} h={'600px'} bg={"gold"} borderRadius={'full'}
               animate={{
-                scale: [1, 0.918, 1, 0.918, 1],
+                scale: [1, 0.96, 1, 0.96, 1],
               }}
               // @ts-ignore
               transition={{
@@ -44,23 +93,12 @@ const _4Ducks = () => {
               }}
             >
             </ChakraBox>
-            <Button
-              size={'lg'}
-              colorScheme={'green'}
-            >No</Button>
-          </HStack>
-          <HStack
-            pt={'24px'}
-            spacing={'12px'}>
-            <Button
-              size={'lg'}
-              minW={'160px'}>
-              Pay 2 ducks
-            </Button>
+
+            <PickStake label={"No"} poolId={poolId}/>
           </HStack>
         </Stack>
         <Stack minW={'300px'} h={'full'} bg={"gray.50"} p={'12px'}>
-          <Text>Users</Text>
+          <Text>Join other pools:</Text>
         </Stack>
       </HStack>
     </Layout>

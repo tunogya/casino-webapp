@@ -34,6 +34,12 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "address",
+        "name": "poolId",
+        "type": "address"
+      },
+      {
+        "indexed": true,
         "internalType": "bytes32",
         "name": "requestId",
         "type": "bytes32"
@@ -53,28 +59,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "bytes32",
-        "name": "requestId",
-        "type": "bytes32"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "response",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "ReceivedUint256Array",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "poolId",
-        "type": "uint256"
+        "type": "address"
       },
       {
         "indexed": true,
@@ -90,25 +77,44 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "uint256",
-        "name": "poolId",
+        "name": "value",
         "type": "uint256"
+      }
+    ],
+    "name": "SetFee",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "poolId",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "player",
+        "type": "address"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "size",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
       },
       {
-        "indexed": true,
-        "internalType": "bytes32",
-        "name": "requestId",
-        "type": "bytes32"
+        "indexed": false,
+        "internalType": "int256",
+        "name": "amount",
+        "type": "int256"
       }
     ],
-    "name": "RequestedUint256Array",
+    "name": "Stake",
     "type": "event"
   },
   {
@@ -151,149 +157,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_poolId",
-        "type": "uint256"
-      }
-    ],
-    "name": "batchDraw",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "paymentToken",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "singleDrawPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "batchDrawPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "batchDrawSize",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "rarePrizeToken",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeInitRate",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeRateD",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeValue",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeMaxRP",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "normalPrizesToken",
-            "type": "address[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "normalPrizesValue",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "normalPrizesRate",
-            "type": "uint256[]"
-          }
-        ],
-        "internalType": "struct ISnatch.PoolConfig",
-        "name": "config",
-        "type": "tuple"
-      }
-    ],
-    "name": "createPool",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "poolId",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_poolId",
-        "type": "uint256"
-      }
-    ],
-    "name": "draw",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "_requestId",
-        "type": "bytes32"
-      }
-    ],
-    "name": "drawRequestOf",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "requester",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "poolId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "isWaitingFulfill",
-            "type": "bool"
-          }
-        ],
-        "internalType": "struct ISnatch.DrawRequest",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "endpointIdUint256",
     "outputs": [
@@ -308,12 +171,12 @@
   },
   {
     "inputs": [],
-    "name": "endpointIdUint256Array",
+    "name": "fee",
     "outputs": [
       {
-        "internalType": "bytes32",
+        "internalType": "uint256",
         "name": "",
-        "type": "bytes32"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -338,37 +201,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "requestId",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "fulfillUint256Array",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "nextPoolId",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "poolId",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "owner",
     "outputs": [
@@ -384,9 +216,9 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "_poolId",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "name": "poolConfigOf",
@@ -394,67 +226,22 @@
       {
         "components": [
           {
-            "internalType": "address",
-            "name": "paymentToken",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "singleDrawPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "batchDrawPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "batchDrawSize",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "rarePrizeToken",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeInitRate",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeRateD",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeValue",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeMaxRP",
-            "type": "uint256"
-          },
-          {
             "internalType": "address[]",
-            "name": "normalPrizesToken",
+            "name": "players",
             "type": "address[]"
           },
           {
-            "internalType": "uint256[]",
-            "name": "normalPrizesValue",
-            "type": "uint256[]"
+            "internalType": "address[]",
+            "name": "tokens",
+            "type": "address[]"
           },
           {
-            "internalType": "uint256[]",
-            "name": "normalPrizesRate",
-            "type": "uint256[]"
+            "internalType": "int256[]",
+            "name": "amount",
+            "type": "int256[]"
           }
         ],
-        "internalType": "struct ISnatch.PoolConfig",
+        "internalType": "struct IFourDucks.PoolConfig",
         "name": "",
         "type": "tuple"
       }
@@ -472,103 +259,12 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "_user",
-        "type": "address"
-      },
-      {
         "internalType": "uint256",
-        "name": "_poolId",
+        "name": "_value",
         "type": "uint256"
       }
     ],
-    "name": "rpOf",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_poolId",
-        "type": "uint256"
-      },
-      {
-        "components": [
-          {
-            "internalType": "address",
-            "name": "paymentToken",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "singleDrawPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "batchDrawPrice",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "batchDrawSize",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
-            "name": "rarePrizeToken",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeInitRate",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeRateD",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeValue",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "rarePrizeMaxRP",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address[]",
-            "name": "normalPrizesToken",
-            "type": "address[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "normalPrizesValue",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "normalPrizesRate",
-            "type": "uint256[]"
-          }
-        ],
-        "internalType": "struct ISnatch.PoolConfig",
-        "name": "config",
-        "type": "tuple"
-      }
-    ],
-    "name": "setPoolConfig",
+    "name": "setFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -583,11 +279,6 @@
       {
         "internalType": "bytes32",
         "name": "_endpointIdUint256",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "bytes32",
-        "name": "_endpointIdUint256Array",
         "type": "bytes32"
       },
       {
@@ -618,6 +309,60 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_poolId",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "int256",
+        "name": "_amount",
+        "type": "int256"
+      }
+    ],
+    "name": "stake",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "requestId",
+        "type": "bytes32"
+      }
+    ],
+    "name": "stakeRequestOf",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "poolId",
+            "type": "address"
+          },
+          {
+            "internalType": "bool",
+            "name": "isWaitingFulfill",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct IFourDucks.StakeRequest",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "newOwner",
         "type": "address"
       }
@@ -631,12 +376,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "token",
+        "name": "_token",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "_amount",
         "type": "uint256"
       }
     ],
@@ -649,7 +394,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "_amount",
         "type": "uint256"
       }
     ],

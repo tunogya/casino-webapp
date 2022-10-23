@@ -205,7 +205,7 @@ const Pool = () => {
             { sponsorWalletData && (
               <Stack spacing={0}>
                 <Text fontSize={'xs'}>sponsor wallet: {sponsorWallet}</Text>
-                <Text fontSize={'sm'}>balance: {ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)} {sponsorWalletData.symbol}</Text>
+                <Text fontSize={'sm'}>balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(2)} {sponsorWalletData.symbol}</Text>
               </Stack>
             ) }
             <Spacer/>

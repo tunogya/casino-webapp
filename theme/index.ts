@@ -3,6 +3,7 @@ import Button from './components/button'
 import Text from './components/text'
 import Heading from "./components/heading";
 import Badge from "./components/badge";
+import Input from "./components/input";
 
 const overrides = {
   components: {
@@ -10,6 +11,7 @@ const overrides = {
     Text,
     Heading,
     Badge,
+    Input,
   },
 }
 

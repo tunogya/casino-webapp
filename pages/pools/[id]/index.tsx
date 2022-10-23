@@ -150,7 +150,7 @@ const Pool = () => {
   const {write: approveWrite, isLoading: isApproveLoading,} = useContractWrite(approveConfig);
   const [poolIds, setPoolIds] = useRecoilState(poolIdsAtom);
   const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
-  const {data: sponsorWalletData } = useBalance({
+  const {data: sponsorWalletData} = useBalance({
     addressOrName: sponsorWallet,
   })
 
@@ -178,7 +178,7 @@ const Pool = () => {
           {poolIds.map((item) => (
             <Button
               key={item}
-              variant={ Number(id) === item ? "solid" : "outline"}
+              variant={Number(id) === item ? "solid" : "outline"}
               onClick={async () => {
                 await router.push(`/pools/${item}`)
               }}
@@ -202,18 +202,18 @@ const Pool = () => {
         </Stack>
         <Stack w={'full'} h={'full'} alignItems={"center"} p={'20px'}>
           <HStack w={'full'} spacing={'20px'}>
-            { sponsorWalletData && (
-              <Stack spacing={0}>
-                <Text fontSize={'xs'}>sponsor wallet: {sponsorWallet}</Text>
+            <Stack spacing={0}>
+              <Text fontSize={'xs'}>sponsor wallet: {sponsorWallet}</Text>
+              {sponsorWalletData && (
                 <Text fontSize={'sm'}>balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(2)} {sponsorWalletData.symbol}</Text>
-              </Stack>
-            ) }
+              )}
+            </Stack>
             <Spacer/>
             {address && poolConfig && (
               <TokenBalance token={poolConfig.paymentToken} address={address}/>
-            ) }
+            )}
             {address && poolConfig && (
-              <TokenBalance token={poolConfig.rarePrizeToken} address={address} />
+              <TokenBalance token={poolConfig.rarePrizeToken} address={address}/>
             )}
           </HStack>
           <Spacer/>
@@ -287,7 +287,8 @@ const Pool = () => {
             >
               Bonus
             </Button>
-            <Stack spacing={4} bg={"teal.200"} border={"2px solid"} borderColor={'yellow.900'} p={4} minH={'60%'} borderRadius={'12px'}>
+            <Stack spacing={4} bg={"teal.200"} border={"2px solid"} borderColor={'yellow.900'} p={4} minH={'60%'}
+                   borderRadius={'12px'}>
               {poolConfig && (
                 <Prize token={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue}/>
               )}

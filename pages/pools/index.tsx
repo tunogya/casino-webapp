@@ -55,7 +55,7 @@ const Pools = () => {
 
   return (
     <Layout>
-      Loading...
+      <div>loading...</div>
     </Layout>
   )
 }

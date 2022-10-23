@@ -1,4 +1,3 @@
-import {Stack} from "@chakra-ui/react";
 import {FC} from "react";
 import {Text} from "@chakra-ui/react";
 import {BigNumber, ethers} from "ethers";
@@ -28,9 +27,7 @@ const Prize: FC<PrizeProps> = ({token, value}) => {
   })
 
   return (
-    <Stack>
-      <Text fontSize={'sm'}>{data?.[0]} x{ Number(ethers.utils.formatUnits(value, data?.[1])) }</Text>
-    </Stack>
+    <Text fontSize={'xs'}>{data?.[0]} x{ Number(ethers.utils.formatUnits(value, data?.[1])) }</Text>
   )
 }
 

@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import ChakraBox from "../../../components/chakraBox";
 import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import PickStake from "../../../components/pickStake";
 import FourDucksSetting from "../../../components/fourDucksSetting";
 import {FOUR_DUCKS_ADDRESS} from "../../../constant/address";

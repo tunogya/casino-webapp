@@ -1,7 +1,7 @@
 import {FC} from "react";
-import {Badge, Stack, Text} from "@chakra-ui/react";
+import {Stack, Text} from "@chakra-ui/react";
 import {BigNumber, ethers} from "ethers";
-import {chain, erc20ABI, useContractReads, useNetwork} from "wagmi";
+import {erc20ABI, useContractReads, useNetwork} from "wagmi";
 import {SNATCH_ADDRESS} from "../../constant/address";
 
 export type PrizeProps = {

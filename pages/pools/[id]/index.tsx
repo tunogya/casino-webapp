@@ -12,7 +12,7 @@ import {
 import {NATIVE_CURRENCY_ADDRESS, SNATCH_ADDRESS} from "../../../constant/address";
 import SNATCH_ABI from "../../../abis/Snatch.json";
 import {useRouter} from "next/router";
-import {ethers} from "ethers";
+import {BigNumber, ethers} from "ethers";
 import {useEffect, useMemo, useState} from "react";
 import Prize from "../../../components/prize";
 import PoolSetting from "../../../components/poolSetting";
@@ -137,12 +137,6 @@ const Pool = () => {
     }
     return undefined
   }, [paymentTokenData, poolConfig?.batchDrawPrice])
-  const allowance = useMemo(() => {
-    if (paymentTokenData?.[3] && paymentTokenData?.[2]) {
-      return Number(ethers.utils.formatUnits(paymentTokenData?.[3], paymentTokenData?.[2]))
-    }
-    return undefined
-  }, [paymentTokenData])
   const {config: approveConfig} = usePrepareContractWrite({
     addressOrName: poolConfig?.paymentToken,
     contractInterface: erc20ABI,
@@ -224,7 +218,7 @@ const Pool = () => {
           </Stack>
           <Spacer/>
           <Stack direction={"row"} justify={"space-around"} w={'50%'}>
-            {(allowance !== undefined && singleDrawPrice !== undefined) && (allowance < singleDrawPrice) ? (
+            { BigNumber.from(paymentTokenData?.[3] || 0).lt(BigNumber.from(poolConfig?.singleDrawPrice || 0)) ? (
               <Button
                 size={'lg'}
                 loadingText={'Pending...'}
@@ -245,7 +239,7 @@ const Pool = () => {
                 {singleDrawPrice} {paymentTokenData?.[1]} 1X
               </Button>
             )}
-            {(allowance !== undefined && batchDrawPrice !== undefined) && (allowance < batchDrawPrice) ? (
+            { BigNumber.from(paymentTokenData?.[3] || 0).lt(BigNumber.from(poolConfig?.batchDrawPrice || 0)) ? (
               <Button
                 size={'lg'}
                 loadingText={'Pending...'}

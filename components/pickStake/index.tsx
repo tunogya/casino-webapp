@@ -9,7 +9,7 @@ import {FC, useMemo, useState} from "react";
 import {erc20ABI, useAccount, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
 import {FOUR_DUCKS_ADDRESS, NATIVE_CURRENCY_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
-import {ethers} from "ethers";
+import {BigNumber, ethers} from "ethers";
 
 type PickStakeProps = {
   label: string,
@@ -49,7 +49,7 @@ const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
     if (data && amount) {
       return ethers.utils.parseUnits(amount, data[0])
     } else {
-      return "0"
+      return BigNumber.from(0)
     }
   }, [amount, data])
 
@@ -59,7 +59,7 @@ const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
     functionName: 'stake',
     args: [poolId, token, parseAmount],
     overrides: {
-      value: token === NATIVE_CURRENCY_ADDRESS ? parseAmount : "0",
+      value: token === NATIVE_CURRENCY_ADDRESS ? parseAmount : BigNumber.from(0),
       gasLimit: 1000000,
     }
   })
@@ -71,12 +71,6 @@ const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
     args: [FOUR_DUCKS_ADDRESS[chain?.id || 5], ethers.constants.MaxUint256],
   })
   const {isLoading: isApproveLoading, write: approveWrite} = useContractWrite(approveConfig)
-  const allowance = useMemo(() => {
-    if (data?.[0] && data?.[2]) {
-      return Number(ethers.utils.formatUnits(data?.[2], data?.[0]))
-    }
-    return undefined
-  }, [data])
 
   return (
     <Popover>
@@ -106,7 +100,7 @@ const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
               >Amount</FormLabel>
               <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={'Token Amount'}/>
             </FormControl>
-            { (allowance !== undefined) && (allowance < Number(amount)) ? (
+            { (BigNumber.from(data?.[2] || 0).lt(parseAmount)) ? (
               <Button
                 disabled={!approveWrite}
                 onClick={() => approveWrite?.()}

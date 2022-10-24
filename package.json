@@ -16,12 +16,16 @@
     "@fontsource/readex-pro": "^4.5.11",
     "@fontsource/syncopate": "^4.5.8",
     "@rainbow-me/rainbowkit": "^0.7.1",
+    "@types/jest": "^29.2.0",
+    "@types/mocha": "^10.0.0",
+    "@types/ua-parser-js": "^0.7.36",
     "ethers": "^5.0.0",
     "framer-motion": "^6",
     "next": "^12.1.6",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "recoil": "^0.7.6",
+    "ua-parser-js": "^1.0.32",
     "wagmi": "^0.6.0"
   },
   "devDependencies": {

@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import {FC, useMemo, useState} from "react";
 import {erc20ABI, useAccount, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
-import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
+import {FOUR_DUCKS_ADDRESS, NATIVE_CURRENCY_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {ethers} from "ethers";
 
@@ -59,7 +59,7 @@ const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
     functionName: 'stake',
     args: [poolId, token, parseAmount],
     overrides: {
-      value: token === "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE" ? parseAmount : "0",
+      value: token === NATIVE_CURRENCY_ADDRESS ? parseAmount : "0",
       gasLimit: 1000000,
     }
   })

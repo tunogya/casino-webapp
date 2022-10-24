@@ -9,7 +9,7 @@ import {
   erc20ABI,
   useBalance
 } from "wagmi";
-import {SNATCH_ADDRESS} from "../../../constant/address";
+import {NATIVE_CURRENCY_ADDRESS, SNATCH_ADDRESS} from "../../../constant/address";
 import SNATCH_ABI from "../../../abis/Snatch.json";
 import {useRouter} from "next/router";
 import {ethers} from "ethers";
@@ -64,7 +64,7 @@ const Pool = () => {
     functionName: 'draw',
     args: [id],
     overrides: {
-      value: data?.[0]?.paymentToken === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE' ? data?.[0]?.singleDrawPrice : '0',
+      value: data?.[0]?.paymentToken === NATIVE_CURRENCY_ADDRESS ? data?.[0]?.singleDrawPrice : '0',
       gasLimit: 1000000,
     }
   })
@@ -74,7 +74,7 @@ const Pool = () => {
     functionName: 'batchDraw',
     args: [id],
     overrides: {
-      value: data?.[0]?.paymentToken === '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE' ? data?.[0]?.batchDrawPrice : '0',
+      value: data?.[0]?.paymentToken === NATIVE_CURRENCY_ADDRESS ? data?.[0]?.batchDrawPrice : '0',
       gasLimit: 1000000,
     }
   })

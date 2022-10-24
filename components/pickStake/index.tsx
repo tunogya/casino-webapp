@@ -106,7 +106,7 @@ const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
               >Amount</FormLabel>
               <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={'Token Amount'}/>
             </FormControl>
-            { (allowance !== undefined) && (allowance < Number(amount)) && (
+            { (allowance !== undefined) && (allowance < Number(amount)) ? (
               <Button
                 disabled={!approveWrite}
                 onClick={() => approveWrite?.()}
@@ -116,16 +116,17 @@ const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
               >
                 Approve
               </Button>
+            ) : (
+              <Button
+                disabled={!stakeWrite}
+                onClick={() => stakeWrite?.()}
+                isLoading={isStakeLoading}
+                loadingText={'Pending'}
+                size={'lg'}
+              >
+                Stake
+              </Button>
             ) }
-            <Button
-              disabled={!stakeWrite}
-              onClick={() => stakeWrite?.()}
-              isLoading={isStakeLoading}
-              loadingText={'Pending'}
-              size={'lg'}
-            >
-              Stake
-            </Button>
           </Stack>
         </PopoverBody>
       </PopoverContent>

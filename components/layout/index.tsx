@@ -17,14 +17,16 @@ const Layout = ({children}) => {
         <link rel="icon" href="/favicon.svg"/>
       </Head>
       <Stack direction={"row"} px={4} py={2} align={"center"} bg={'gold'} w={'full'} borderBottom={"2px solid #400000"}>
-        <Stack spacing={0}>
+        <Stack
+          spacing={0}
+          onClick={() => {
+            router.push('/')
+          }}
+          cursor={"pointer"}
+        >
           <Heading fontSize={'xx-small'} fontWeight={'normal'}>WizardingPay</Heading>
           <Heading
             fontSize={"md"}
-            onClick={() => {
-              router.push('/')
-            }}
-            cursor={"pointer"}
           >
             Casino
           </Heading>

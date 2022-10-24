@@ -19,24 +19,25 @@ import {
   useDisclosure
 } from "@chakra-ui/react";
 import {useState} from "react";
-import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
+import {SNATCH_ADDRESS} from "../../constant/address";
 import {useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
-import FOUR_DUCKS_API from "../../abis/FourDucks.json";
+import SNATCH_ABI from "../../abis/Snatch.json";
 import {SettingsIcon} from "@chakra-ui/icons";
 
-const FourDucksSetting = () => {
+const SnatchSetting = () => {
   const {chain} = useNetwork()
   const {isOpen, onOpen, onClose} = useDisclosure()
   const [requestParams, setRequestParams] = useState({
     _airnode: "0x9d3C147cA16DB954873A498e0af5852AB39139f2",
     _endpointIdUint256: "0xfb6d017bb87991b7495f563db3c8cf59ff87b09781947bb1e417006ad7f55a78",
+    _endpointIdUint256Array: "0x27cc2713e7f968e4e86ed274a051a5c8aaee9cca66946f23af6f29ecea9704c3",
     _sponsorWallet: "",
   })
   const {config} = usePrepareContractWrite({
-    addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
-    contractInterface: FOUR_DUCKS_API,
+    addressOrName: SNATCH_ADDRESS[chain?.id || 5],
+    contractInterface: SNATCH_ABI,
     functionName: 'setRequestParameters',
-    args: [requestParams._airnode, requestParams._endpointIdUint256, requestParams._sponsorWallet],
+    args: [requestParams._airnode, requestParams._endpointIdUint256, requestParams._endpointIdUint256Array, requestParams._sponsorWallet],
   })
   const {isLoading, isSuccess, write} = useContractWrite(config)
 
@@ -71,6 +72,11 @@ const FourDucksSetting = () => {
                        onChange={(e) => setRequestParams({...requestParams, _endpointIdUint256: e.target.value})}/>
               </FormControl>
               <FormControl>
+                <FormLabel>endpointIdUint256Array</FormLabel>
+                <Input value={requestParams._endpointIdUint256Array}
+                       onChange={(e) => setRequestParams({...requestParams, _endpointIdUint256Array: e.target.value})}/>
+              </FormControl>
+              <FormControl>
                 <FormLabel>sponsorWallet</FormLabel>
                 <Input value={requestParams._sponsorWallet}
                        onChange={(e) => setRequestParams({...requestParams, _sponsorWallet: e.target.value})}/>
@@ -80,7 +86,7 @@ const FourDucksSetting = () => {
                 --airnode-xpub
                 xpub6DXSDTZBd4aPVXnv6Q3SmnGUweFv6j24SK77W4qrSFuhGgi666awUiXakjXruUSCDQhhctVG7AQt67gMdaRAsDnDXv23bBRKsMWvRzo6kbf
                 --airnode-address 0x9d3C147cA16DB954873A498e0af5852AB39139f2
-                --sponsor-address {FOUR_DUCKS_ADDRESS[chain?.id || 5]}
+                --sponsor-address {SNATCH_ADDRESS[chain?.id || 5]}
               </Code>
             </Stack>
           </ModalBody>
@@ -105,4 +111,4 @@ const FourDucksSetting = () => {
   )
 }
 
-export default FourDucksSetting
+export default SnatchSetting

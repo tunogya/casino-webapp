@@ -14,10 +14,10 @@ import SNATCH_ABI from "../../../abis/Snatch.json";
 import {useRouter} from "next/router";
 import {BigNumber, ethers} from "ethers";
 import {useEffect, useMemo, useState} from "react";
-import Prize from "../../../components/prize";
-import PoolSetting from "../../../components/poolSetting";
+import SnatchPrizeInfo from "../../../components/SnatchPrizeInfo";
+import SnatchSetting from "../../../components/SnatchSetting";
 import {AddIcon} from "@chakra-ui/icons";
-import TokenBalance from "../../../components/tokenBalance";
+import SnatchTokenBalance from "../../../components/SnatchTokenBalance";
 import {useRecoilState} from "recoil";
 import {poolIdsAtom} from "../index";
 
@@ -192,7 +192,7 @@ const Pool = () => {
               >
                 Pool
               </Button>
-              <PoolSetting/>
+              <SnatchSetting/>
             </HStack>
           )}
         </Stack>
@@ -206,10 +206,10 @@ const Pool = () => {
             </Stack>
             <Spacer/>
             {address && poolConfig && (
-              <TokenBalance token={poolConfig.paymentToken} address={address}/>
+              <SnatchTokenBalance token={poolConfig.paymentToken} address={address}/>
             )}
             {address && poolConfig && (
-              <TokenBalance token={poolConfig.rarePrizeToken} address={address}/>
+              <SnatchTokenBalance token={poolConfig.rarePrizeToken} address={address}/>
             )}
           </HStack>
           <Spacer/>
@@ -286,10 +286,10 @@ const Pool = () => {
             <Stack spacing={4} bg={"teal.200"} border={"2px solid"} borderColor={'yellow.900'} p={4} minH={'60%'}
                    borderRadius={'12px'}>
               {poolConfig && (
-                <Prize token={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue}/>
+                <SnatchPrizeInfo token={poolConfig.rarePrizeToken} value={poolConfig.rarePrizeValue}/>
               )}
               {normalPrizes && normalPrizes.map((prize: any, index: number) => (
-                <Prize key={index} token={prize.token} value={prize.value}/>
+                <SnatchPrizeInfo key={index} token={prize.token} value={prize.value}/>
               ))}
             </Stack>
           </Stack>

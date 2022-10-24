@@ -8,7 +8,7 @@ type TokenBalanceProps = {
   address: string,
 }
 
-const TokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
+const SnatchTokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
   const TokenContract = {
     addressOrName: token,
     contractInterface: erc20ABI,
@@ -42,4 +42,4 @@ const TokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
   }
 }
 
-export default TokenBalance
+export default SnatchTokenBalance

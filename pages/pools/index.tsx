@@ -5,6 +5,7 @@ import {SNATCH_ADDRESS} from "../../constant/address";
 import SNATCH_ABI from "../../abis/Snatch.json";
 import {useContractReads, useNetwork} from "wagmi";
 import Layout from "../../components/layout";
+import {BigNumber} from "ethers";
 
 export const poolIdsAtom = atom({
   key: 'poolIds',
@@ -35,22 +36,20 @@ const Pools = () => {
   })
 
   useEffect(() => {
-    if (data?.[0].toNumber() > 0) {
+    if (BigNumber.from(data?.[0] || 0).gt(BigNumber.from(0))) {
       router.push('/pools/0')
-    } else if (data?.[0].toNumber() === 0) {
+    } else if (BigNumber.from(data?.[0] || 0).eq(BigNumber.from(0))) {
       router.push('/pools/create')
     }
   }, [data, router])
 
   useEffect(() => {
-    if (data?.[2]) {
-      const nextPoolId = data?.[2].toNumber()
-      const ids = []
-      for (let i = 0; i < nextPoolId; i++) {
-        ids.push(i)
-      }
-      setPoolIds(ids)
+    const nextPoolId = BigNumber.from(data?.[2] || 0).toNumber()
+    const ids = []
+    for (let i = 0; i < nextPoolId; i++) {
+      ids.push(i)
     }
+    setPoolIds(ids)
   }, [data, setPoolIds])
 
   return (

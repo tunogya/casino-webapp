@@ -17,7 +17,7 @@ type PickStakeProps = {
   isOptimistic: boolean,
 }
 
-const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
+const _4DucksStake: FC<PickStakeProps> = ({label, poolId}) => {
   const {chain} = useNetwork()
   const {address } = useAccount()
   const [token, setToken] = useState("")
@@ -128,4 +128,4 @@ const PickStake: FC<PickStakeProps> = ({label, poolId}) => {
   )
 }
 
-export default PickStake
+export default _4DucksStake

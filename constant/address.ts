@@ -1,11 +1,11 @@
 import {chain} from 'wagmi';
 
 export const SNATCH_ADDRESS = {
-  [chain.goerli.id]: "0x0286FD18bC8a3BcEB73722809eA548E3A887c00E",
+  [chain.goerli.id]: "0x39e55b5E450b4e18d993B446C83086423e2E93F0",
 }
 
 export const FOUR_DUCKS_ADDRESS = {
-  [chain.goerli.id]: "0x1eA6096f6D0F671DD5e86EE280B60468E1666F70"
+  [chain.goerli.id]: "0x98B6aA584fE05e2d9755fc87C6d26C68417abcAb"
 }
 
 export const NATIVE_CURRENCY_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"

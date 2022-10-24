@@ -9,7 +9,7 @@ export type PrizeProps = {
   value: BigNumber,
 }
 
-const snatchPrizeInfo: FC<PrizeProps> = ({token, value}) => {
+const SnatchPrizeInfo: FC<PrizeProps> = ({token, value}) => {
   const { chain } = useNetwork()
   const PrizeTokenContract = {
     addressOrName: token,
@@ -46,4 +46,4 @@ const snatchPrizeInfo: FC<PrizeProps> = ({token, value}) => {
   )
 }
 
-export default snatchPrizeInfo;
+export default SnatchPrizeInfo;

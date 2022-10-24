@@ -76,7 +76,7 @@ const _4Ducks = () => {
             { sponsorWalletData && (
               <Stack spacing={0}>
                 <Text fontSize={'xs'}>sponsor wallet: {sponsorWallet}</Text>
-                <Text fontSize={'sm'}>balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(2)} {sponsorWalletData.symbol}</Text>
+                <Text fontSize={'sm'}>balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(6)} {sponsorWalletData.symbol}</Text>
               </Stack>
             ) }
             <Spacer/>

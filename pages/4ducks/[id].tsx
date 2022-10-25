@@ -75,7 +75,7 @@ const _4Ducks = () => {
             <Heading fontWeight={'bold'}>4 Ducks</Heading>
             {sponsorWalletData && (
               <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor
-                balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(6)} {sponsorWalletData.symbol}</Link>
+                balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
             )}
             <Spacer/>
             <Text fontSize={'sm'}>The Pool: {poolEnsName ? poolEnsName : poolId}</Text>

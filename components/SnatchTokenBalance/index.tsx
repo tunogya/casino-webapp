@@ -36,7 +36,7 @@ const SnatchTokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
     return (
       <Badge variant={"outline"}>
         <Link href={`${chain?.blockExplorers?.etherscan?.url}/token/${token}/?a=${address}`} isExternal>
-          { ethers.utils.formatUnits(data[0], data[2]) } { data[1] }
+          { Number(ethers.utils.formatUnits(data[0], data[2])).toLocaleString() } { data[1] }
         </Link>
       </Badge>
     )

@@ -200,7 +200,7 @@ const Pool = () => {
           <HStack w={'full'} spacing={'20px'}>
             {sponsorWalletData && (
               <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor
-                balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(6)} {sponsorWalletData.symbol}</Link>
+                balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
             )}
             <Spacer/>
             {address && poolConfig && (

@@ -267,18 +267,12 @@ const Pool = () => {
           <Stack w={40} justify={"space-around"} h={'full'} pr={4}>
             <Button
               variant={"outline"}
-              onClick={async () => {
-                await router.push(`/pools/${id}/store`)
-              }}
               size={'lg'}
             >
               Store
             </Button>
             <Button
               variant={"outline"}
-              onClick={async () => {
-                await router.push(`/pools/${id}/bonus`)
-              }}
               size={'lg'}
             >
               Bonus

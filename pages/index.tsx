@@ -13,13 +13,13 @@ const Home: NextPage = () => {
     {
       id: 1,
       name: 'Snatch Pool',
-      path: '/pools',
+      path: '/snatchpools/0',
       contract: SNATCH_ADDRESS[chain?.id || 5],
     },
     {
       id: 2,
       name: '4 Ducks',
-      path: '/4ducks',
+      path: '/4ducks/',
       contract: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     }
   ])

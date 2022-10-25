@@ -1,4 +1,4 @@
-import Layout from "../../../components/layout";
+import Layout from "../../components/layout";
 import {
   Heading,
   HStack,
@@ -6,13 +6,13 @@ import {
   Stack,
   Text
 } from "@chakra-ui/react";
-import ChakraBox from "../../../components/ChakraBox";
+import ChakraBox from "../../components/ChakraBox";
 import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useEffect, useState} from "react";
-import _4DucksStake from "../../../components/_4DucksStake";
-import _4DucksSetting from "../../../components/_4DucksSetting";
-import {FOUR_DUCKS_ADDRESS} from "../../../constant/address";
-import FOUR_DUCKS_API from "../../../abis/FourDucks.json";
+import _4DucksStake from "../../components/_4DucksStake";
+import _4DucksSetting from "../../components/_4DucksSetting";
+import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
+import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {ethers} from "ethers";
 import {useRouter} from "next/router";
 import {isAddress} from "ethers/lib/utils";

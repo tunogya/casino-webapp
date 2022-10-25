@@ -1,4 +1,4 @@
-import Layout from "../../../components/layout";
+import Layout from "../../components/layout";
 import {Badge, Button, HStack, Spacer, Stack, Text} from "@chakra-ui/react";
 import {
   useAccount,
@@ -9,17 +9,17 @@ import {
   erc20ABI,
   useBalance
 } from "wagmi";
-import {NATIVE_CURRENCY_ADDRESS, SNATCH_ADDRESS} from "../../../constant/address";
-import SNATCH_ABI from "../../../abis/Snatch.json";
+import {NATIVE_CURRENCY_ADDRESS, SNATCH_ADDRESS} from "../../constant/address";
+import SNATCH_ABI from "../../abis/Snatch.json";
 import {useRouter} from "next/router";
 import {BigNumber, ethers} from "ethers";
 import {useEffect, useMemo, useState} from "react";
-import SnatchPrizeInfo from "../../../components/SnatchPrizeInfo";
-import SnatchSetting from "../../../components/SnatchSetting";
+import SnatchPrizeInfo from "../../components/SnatchPrizeInfo";
+import SnatchSetting from "../../components/SnatchSetting";
 import {AddIcon} from "@chakra-ui/icons";
-import SnatchTokenBalance from "../../../components/SnatchTokenBalance";
+import SnatchTokenBalance from "../../components/SnatchTokenBalance";
 import {useRecoilState} from "recoil";
-import {poolIdsAtom} from "../index";
+import {poolIdsAtom} from "../../state/snatchpools";
 
 const Pool = () => {
   const {address} = useAccount()

@@ -1,7 +1,7 @@
 import Layout from "../../components/layout";
 import {
   Heading,
-  HStack,
+  HStack, Link,
   Spacer,
   Stack,
   Text
@@ -73,12 +73,10 @@ const _4Ducks = () => {
         <Stack p={'24px'} w={'full'} alignItems={"center"} spacing={'48px'}>
           <HStack w={'full'} spacing={'24px'}>
             <Heading fontWeight={'bold'}>4 Ducks</Heading>
-            { sponsorWalletData && (
-              <Stack spacing={0}>
-                <Text fontSize={'xs'}>sponsor wallet: {sponsorWallet}</Text>
-                <Text fontSize={'sm'}>balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(6)} {sponsorWalletData.symbol}</Text>
-              </Stack>
-            ) }
+            {sponsorWalletData && (
+              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor
+                balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(6)} {sponsorWalletData.symbol}</Link>
+            )}
             <Spacer/>
             <Text fontSize={'sm'}>The Pool: {poolEnsName ? poolEnsName : poolId}</Text>
             {

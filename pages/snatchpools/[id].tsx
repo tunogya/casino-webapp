@@ -1,5 +1,5 @@
 import Layout from "../../components/layout";
-import {Badge, Button, HStack, Spacer, Stack, Text} from "@chakra-ui/react";
+import {Badge, Button, HStack, Link, Spacer, Stack, Text} from "@chakra-ui/react";
 import {
   useAccount,
   useContractReads,
@@ -198,12 +198,10 @@ const Pool = () => {
         </Stack>
         <Stack w={'full'} h={'full'} alignItems={"center"} p={'20px'}>
           <HStack w={'full'} spacing={'20px'}>
-            <Stack spacing={0}>
-              <Text fontSize={'xs'}>sponsor wallet: {sponsorWallet}</Text>
-              {sponsorWalletData && (
-                <Text fontSize={'sm'}>balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(6)} {sponsorWalletData.symbol}</Text>
-              )}
-            </Stack>
+            {sponsorWalletData && (
+              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor
+                balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toFixed(6)} {sponsorWalletData.symbol}</Link>
+            )}
             <Spacer/>
             {address && poolConfig && (
               <SnatchTokenBalance token={poolConfig.paymentToken} address={address}/>
@@ -218,7 +216,7 @@ const Pool = () => {
           </Stack>
           <Spacer/>
           <Stack direction={"row"} justify={"space-around"} w={'50%'}>
-            { BigNumber.from(paymentTokenData?.[3] || 0).lt(BigNumber.from(poolConfig?.singleDrawPrice || 0)) ? (
+            {BigNumber.from(paymentTokenData?.[3] || 0).lt(BigNumber.from(poolConfig?.singleDrawPrice || 0)) ? (
               <Button
                 size={'lg'}
                 loadingText={'Pending...'}
@@ -239,7 +237,7 @@ const Pool = () => {
                 {singleDrawPrice} {paymentTokenData?.[1]} 1X
               </Button>
             )}
-            { BigNumber.from(paymentTokenData?.[3] || 0).lt(BigNumber.from(poolConfig?.batchDrawPrice || 0)) ? (
+            {BigNumber.from(paymentTokenData?.[3] || 0).lt(BigNumber.from(poolConfig?.batchDrawPrice || 0)) ? (
               <Button
                 size={'lg'}
                 loadingText={'Pending...'}

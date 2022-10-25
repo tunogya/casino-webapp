@@ -1,7 +1,7 @@
-import {Badge} from "@chakra-ui/react";
+import {Badge, Link} from "@chakra-ui/react";
 import {ethers} from "ethers";
 import {FC} from "react";
-import {erc20ABI, useContractReads} from "wagmi";
+import {chain, erc20ABI, useContractReads, useNetwork} from "wagmi";
 
 type TokenBalanceProps = {
   token: string,
@@ -9,6 +9,7 @@ type TokenBalanceProps = {
 }
 
 const SnatchTokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
+  const { chain } = useNetwork()
   const TokenContract = {
     addressOrName: token,
     contractInterface: erc20ABI,
@@ -33,7 +34,11 @@ const SnatchTokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
 
   if (data?.[0] && data?.[2] && data?.[1]) {
     return (
-      <Badge variant={"outline"}>{ ethers.utils.formatUnits(data[0], data[2]) } { data[1] }</Badge>
+      <Badge variant={"outline"}>
+        <Link href={`${chain?.blockExplorers?.etherscan?.url}/token/${token}/?a=${address}`} isExternal>
+          { ethers.utils.formatUnits(data[0], data[2]) } { data[1] }
+        </Link>
+      </Badge>
     )
   } else {
     return (

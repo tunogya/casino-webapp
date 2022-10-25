@@ -231,7 +231,6 @@ const Create = () => {
             <Button
               disabled={!write}
               isLoading={isLoading}
-              loadingText={"Pending..."}
               onClick={() => write?.()}
             >
               Create Pool

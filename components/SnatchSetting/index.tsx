@@ -94,7 +94,6 @@ const SnatchSetting = () => {
             <Button
               disabled={!write}
               isLoading={isLoading}
-              loadingText={"Pending..."}
               onClick={async () => {
                 await write?.()
                 if (isSuccess) {

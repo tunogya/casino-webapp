@@ -1,5 +1,5 @@
 import Layout from "../../components/layout";
-import {Badge, Button, HStack, Link, Spacer, Stack, Text} from "@chakra-ui/react";
+import {Badge, Button, HStack, Link, Spacer, Stack} from "@chakra-ui/react";
 import {
   useAccount,
   useContractReads,
@@ -219,7 +219,6 @@ const Pool = () => {
             {BigNumber.from(paymentTokenData?.[3] || 0).lt(BigNumber.from(poolConfig?.singleDrawPrice || 0)) ? (
               <Button
                 size={'lg'}
-                loadingText={'Pending...'}
                 disabled={!approveWrite}
                 onClick={() => approveWrite?.()}
                 isLoading={isApproveLoading}
@@ -232,7 +231,6 @@ const Pool = () => {
                 disabled={!drawWrite}
                 onClick={() => drawWrite?.()}
                 isLoading={isDrawLoading}
-                loadingText={'Pending...'}
               >
                 {singleDrawPrice} {paymentTokenData?.[1]} 1X
               </Button>
@@ -240,7 +238,6 @@ const Pool = () => {
             {BigNumber.from(paymentTokenData?.[3] || 0).lt(BigNumber.from(poolConfig?.batchDrawPrice || 0)) ? (
               <Button
                 size={'lg'}
-                loadingText={'Pending...'}
                 onClick={() => approveWrite?.()}
                 disabled={!approveWrite}
                 isLoading={isApproveLoading}
@@ -253,7 +250,6 @@ const Pool = () => {
                 disabled={!batchDrawWrite}
                 onClick={() => batchDrawWrite?.()}
                 isLoading={isBatchDrawLoading}
-                loadingText={'Pending...'}
               >
                 {batchDrawPrice} {paymentTokenData?.[1]} {poolConfig?.batchDrawSize.toString()}X
               </Button>

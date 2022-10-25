@@ -139,7 +139,6 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId}) => {
                 disabled={!approveWrite}
                 onClick={() => approveWrite?.()}
                 isLoading={isApproveLoading}
-                loadingText={'Pending'}
                 size={'lg'}
               >
                 Approve
@@ -150,7 +149,6 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId}) => {
                   disabled={!soloStakeWrite}
                   onClick={() => soloStakeWrite?.()}
                   isLoading={isSoloStakeLoading}
-                  loadingText={'Pending'}
                   size={'lg'}
                 >
                   Solo
@@ -159,7 +157,6 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId}) => {
                   disabled={!poolStakeWrite}
                   onClick={() => poolStakeWrite?.()}
                   isLoading={isPooledStakeLoading}
-                  loadingText={'Pending'}
                   size={'lg'}
                 >
                   Pooled

@@ -47,7 +47,7 @@ const _4Ducks = () => {
     ]
   })
   const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
-  const {data: sponsorWalletData } = useBalance({
+  const {data: sponsorWalletData} = useBalance({
     addressOrName: sponsorWallet,
   })
 
@@ -73,12 +73,16 @@ const _4Ducks = () => {
         <Stack p={'24px'} w={'full'} alignItems={"center"} spacing={'48px'}>
           <HStack w={'full'} spacing={'24px'}>
             <Heading fontWeight={'bold'}>4 Ducks</Heading>
-            {sponsorWalletData && (
-              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor
+            {sponsorWalletData && chain && (
+              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${sponsorWallet}`} isExternal
+                    fontSize={'sm'}>sponsor
                 balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
             )}
             <Spacer/>
-            <Text fontSize={'sm'}>The Pool: {poolEnsName ? poolEnsName : poolId}</Text>
+            { chain && poolId && (
+              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
+                    isExternal fontSize={'sm'}>the pool: {poolEnsName ? poolEnsName : poolId}</Link>
+            ) }
             {
               data?.[0] === address && (
                 <FourDucksSetting/>

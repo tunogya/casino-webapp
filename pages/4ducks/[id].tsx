@@ -9,8 +9,8 @@ import {
 import ChakraBox from "../../components/ChakraBox";
 import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useEffect, useState} from "react";
-import _4DucksStake from "../../components/_4DucksStake";
-import _4DucksSetting from "../../components/_4DucksSetting";
+import FourDucksStake from "../../components/FourDucksStake";
+import FourDucksSetting from "../../components/FourDucksSetting";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {ethers} from "ethers";
@@ -81,12 +81,12 @@ const _4Ducks = () => {
             <Text fontSize={'sm'}>The Pool: {poolEnsName ? poolEnsName : poolId}</Text>
             {
               data?.[0] === address && (
-                <_4DucksSetting/>
+                <FourDucksSetting/>
               )
             }
           </HStack>
           <HStack justify={"space-around"} w={'full'}>
-            <_4DucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
+            <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
 
             <ChakraBox
               border={"2px solid"}
@@ -104,7 +104,7 @@ const _4Ducks = () => {
             >
             </ChakraBox>
 
-            <_4DucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
+            <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
           </HStack>
         </Stack>
         <Stack minW={'300px'} h={'full'} bg={"gray.50"} p={'12px'}>

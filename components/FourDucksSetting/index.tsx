@@ -24,7 +24,7 @@ import {useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {SettingsIcon} from "@chakra-ui/icons";
 
-const _4DucksSetting = () => {
+const FourDucksSetting = () => {
   const {chain} = useNetwork()
   const {isOpen, onOpen, onClose} = useDisclosure()
   const [requestParams, setRequestParams] = useState({
@@ -105,4 +105,4 @@ const _4DucksSetting = () => {
   )
 }
 
-export default _4DucksSetting
+export default FourDucksSetting

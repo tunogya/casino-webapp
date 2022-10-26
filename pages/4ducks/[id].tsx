@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import ChakraBox from "../../components/ChakraBox";
 import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
-import {useEffect, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import FourDucksStake from "../../components/FourDucksStake";
 import FourDucksSetting from "../../components/FourDucksSetting";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
@@ -20,7 +20,7 @@ import {isAddress} from "ethers/lib/utils";
 const _4Ducks = () => {
   const [poolId, setPoolId] = useState("")
   const {address} = useAccount()
-  const {chain} = useNetwork()
+  const {chain, chains} = useNetwork()
   const router = useRouter()
   const {data: poolEnsName} = useEnsName({
     address: poolId
@@ -67,22 +67,33 @@ const _4Ducks = () => {
     }
   }, [address, router])
 
+  const etherscanUrl = useMemo(() => {
+    if (chain) {
+      return chain?.blockExplorers?.etherscan?.url
+    }
+    if (chains) {
+      return chains?.[0]?.blockExplorers?.etherscan?.url
+    }
+  }, [chain, chains])
+
   return (
     <Layout>
       <HStack w={'full'} h={'full'} alignItems={"start"}>
         <Stack p={'24px'} w={'full'} alignItems={"center"} spacing={'48px'}>
           <HStack w={'full'} spacing={'24px'}>
-            <Heading fontWeight={'bold'}>4 Ducks</Heading>
-            {sponsorWalletData && chain && (
-              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${sponsorWallet}`} isExternal
+            <Heading fontWeight={'bold'} cursor={'pointer'} onClick={() => {
+              router.push('/4ducks/')
+            }}>4 Ducks</Heading>
+            {sponsorWalletData && (
+              <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal
                     fontSize={'sm'}>sponsor
                 balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
             )}
             <Spacer/>
-            { chain && poolId && (
+            {chain && poolId && (
               <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
                     isExternal fontSize={'sm'}>the pool: {poolEnsName ? poolEnsName : poolId}</Link>
-            ) }
+            )}
             {
               data?.[0] === address && (
                 <FourDucksSetting/>

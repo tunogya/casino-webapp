@@ -23,16 +23,19 @@ import {RecoilRoot} from "recoil";
 
 const {chains, provider, webSocketProvider} = configureChains(
   [
-    chain.mainnet,
-    ...(process.env.NEXT_PUBLIC_ENABLE_TESTNETS === 'true'
-      ? [chain.goerli]
-      : []),
+    chain.goerli
   ],
   [
     infuraProvider({
       apiKey: process.env.INFURA_KEY,
-    })
-  ]
+      priority: 0
+    }),
+  ],
+  {
+    pollingInterval: 10_000,
+    targetQuorum: 3,
+    stallTimeout: 5_000,
+  }
 );
 
 const connectors = connectorsForWallets([

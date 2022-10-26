@@ -101,7 +101,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId}) => {
 
   useEffect(() => {
     if (fourDucksData) {
-      setPlatformFee((Number(ethers.utils.formatEther(fourDucksData?.[0])) * 100).toString())
+      setPlatformFee((Number(ethers.utils.formatEther(fourDucksData?.[0] || '0')) * 100).toString())
       setSponsorFee(ethers.utils.formatEther(fourDucksData?.[1]))
     }
   }, [fourDucksData])

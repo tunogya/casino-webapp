@@ -23,7 +23,7 @@ import {poolIdsAtom} from "../../state/snatchpools";
 
 const Pool = () => {
   const {address} = useAccount()
-  const {chain} = useNetwork()
+  const {chain, chains} = useNetwork()
   const router = useRouter()
   const {id} = router.query
 
@@ -150,6 +150,15 @@ const Pool = () => {
     addressOrName: sponsorWallet,
   })
 
+  const etherscanUrl = useMemo(() => {
+    if (chain) {
+      return chain?.blockExplorers?.etherscan?.url
+    }
+    if (chains) {
+      return chains?.[0]?.blockExplorers?.etherscan?.url
+    }
+  }, [chain, chains])
+
   useEffect(() => {
     if (data?.[2]) {
       const nextPoolId = data?.[2].toNumber()
@@ -199,7 +208,7 @@ const Pool = () => {
         <Stack w={'full'} h={'full'} alignItems={"center"} p={'20px'}>
           <HStack w={'full'} spacing={'20px'}>
             {sponsorWalletData && (
-              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor
+              <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor
                 balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
             )}
             <Spacer/>

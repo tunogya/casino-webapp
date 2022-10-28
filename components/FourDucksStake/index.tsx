@@ -20,7 +20,7 @@ type PickStakeProps = {
 const FourDucksStake: FC<PickStakeProps> = ({label, poolId}) => {
   const {chain} = useNetwork()
   const {address} = useAccount()
-  const [token, setToken] = useState("")
+  const [token, setToken] = useState("0xDfcBBb16FeEB9dD9cE3870f6049bD11d28390FbF")
   const [amount, setAmount] = useState("")
   const TokenContract = {
     addressOrName: token,

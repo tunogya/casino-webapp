@@ -6,7 +6,7 @@ import {
   Stack,
   Text, chakra,
 } from "@chakra-ui/react";
-import {useAccount, useBalance, useContractEvent, useContractReads, useEnsName, useNetwork} from "wagmi";
+import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useEffect, useMemo, useState} from "react";
 import FourDucksStake from "../../components/FourDucksStake";
 import FourDucksSetting from "../../components/FourDucksSetting";
@@ -50,6 +50,7 @@ const _4Ducks = () => {
     addressOrName: sponsorWallet,
   })
   const [ducks, setDucks] = useState<any[]>([])
+  const [lastResponse, setLastResponse] = useState("81415023581736256717506170173319809171537625067389049239117631157841634410215")
 
   useEffect(() => {
     if (data?.[1]) {
@@ -77,17 +78,19 @@ const _4Ducks = () => {
   }, [chain, chains])
 
   useEffect(() => {
-    let response = BigNumber.from("0x6dc39940ec90861d7cf7ae34872eae08c3d204054bca24ac64f38f3fafa40ef7")
+    let response = BigNumber.from(lastResponse)
     let array = []
     for (let i = 0; i < 4; i++) {
       let arr = []
+      // 角度
       arr.push(response.and(BigNumber.from("0xffffffff")).toNumber() / BigNumber.from("0x100000000").toNumber())
       response = response.shr(32)
+      // 半径
       arr.push(response.and(BigNumber.from("0xffffffff")).toNumber() / BigNumber.from("0x100000000").toNumber())
       array.push(arr)
     }
     setDucks(array)
-  }, [])
+  }, [lastResponse])
 
   return (
     <Layout>
@@ -124,8 +127,8 @@ const _4Ducks = () => {
                     src={'/duck.svg'}
                     w={'44px'} h={'44px'}
                     position={"absolute"}
-                    top={`calc(50% - ${Math.sin(duck[1] * 2 * Math.PI)} * ${260 * duck[0]}px)`}
-                    left={`calc(50% - ${Math.cos(duck[1] * 2 * Math.PI)} * ${260 * duck[0]}px)`}
+                    top={`calc(50% - ${Math.sin(duck[0] * 2 * Math.PI)} * ${260 * duck[1]}px)`}
+                    left={`calc(50% - ${Math.cos(duck[0] * 2 * Math.PI)} * ${260 * duck[1]}px)`}
                     transform={'translate(-50%, -50%)'}
                   />
                 ))

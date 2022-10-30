@@ -4,9 +4,8 @@ import {
   HStack, Link,
   Spacer,
   Stack,
-  Text
+  Text, chakra,
 } from "@chakra-ui/react";
-import ChakraBox from "../../components/ChakraBox";
 import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useEffect, useMemo, useState} from "react";
 import FourDucksStake from "../../components/FourDucksStake";
@@ -50,6 +49,9 @@ const _4Ducks = () => {
   const {data: sponsorWalletData} = useBalance({
     addressOrName: sponsorWallet,
   })
+  const [ducks, setDucks] = useState([
+    [0, 1], [0.1, 1], [0.2, 1], [0.3, 1],
+  ])
 
   useEffect(() => {
     if (data?.[1]) {
@@ -102,23 +104,21 @@ const _4Ducks = () => {
           </HStack>
           <HStack justify={"space-around"} w={'full'}>
             <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
-
-            <ChakraBox
-              border={"2px solid"}
-              borderColor={"yellow.900"}
-              w={'600px'} h={'600px'} bg={"gold"} borderRadius={'full'}
-              animate={{
-                scale: [1, 0.96, 1, 0.96, 1],
-              }}
-              // @ts-ignore
-              transition={{
-                duration: 5,
-                ease: "easeInOut",
-                repeat: Infinity,
-              }}
-            >
-            </ChakraBox>
-
+            <Stack bgImage={'/pool.svg'} w={'600px'} h={'600px'} bgPosition={"center"} bgSize={'contain'} position={"relative"} spacing={0}>
+              {
+                ducks.map((duck, index) => (
+                  <chakra.img
+                    key={index}
+                    src={'/duck.svg'}
+                    w={'44px'} h={'44px'}
+                    position={"absolute"}
+                    top={`calc(50% - ${Math.sin(duck[0] * 2 * Math.PI)} * ${260 * duck[1]}px)`}
+                    left={`calc(50% - ${Math.cos(duck[0] * 2 * Math.PI)} * ${260 * duck[1]}px)`}
+                    transform={'translate(-50%, -50%)'}
+                  />
+                ))
+              }
+            </Stack>
             <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
           </HStack>
         </Stack>

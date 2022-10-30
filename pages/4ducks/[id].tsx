@@ -139,6 +139,8 @@ const _4Ducks = () => {
         </Stack>
         <Stack minW={'300px'} h={'full'} bg={"gray.50"} p={'12px'}>
           <Text>Join other pools:</Text>
+          {/* eslint-disable-next-line react/no-unescaped-entities */}
+          <Text>The pool's history:</Text>
         </Stack>
       </HStack>
     </Layout>

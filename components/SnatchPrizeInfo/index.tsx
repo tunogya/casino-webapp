@@ -30,7 +30,9 @@ const SnatchPrizeInfo: FC<PrizeProps> = ({token, value}) => {
         functionName: 'balanceOf',
         args: [SNATCH_ADDRESS[chain?.id || 5]],
       }
-    ]
+    ],
+    watch: true,
+    cacheTime: 3_000,
   })
 
   const etherscanUrl = useMemo(() => {

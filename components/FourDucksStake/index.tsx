@@ -17,7 +17,7 @@ type PickStakeProps = {
   isOptimistic: boolean,
 }
 
-const FourDucksStake: FC<PickStakeProps> = ({label, poolId}) => {
+const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
   const {chain} = useNetwork()
   const {address} = useAccount()
   const [token, setToken] = useState("0xDfcBBb16FeEB9dD9cE3870f6049bD11d28390FbF")
@@ -46,7 +46,9 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId}) => {
         functionName: 'allowance',
         args: [address, FOUR_DUCKS_ADDRESS[chain?.id || 5]],
       },
-    ]
+    ],
+    watch: true,
+    cacheTime: 3_000,
   })
   const {data: fourDucksData} = useContractReads({
     contracts: [
@@ -58,15 +60,17 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId}) => {
         ...FourDucksContract,
         functionName: 'sponsorFee',
       }
-    ]
+    ],
+    watch: true,
+    cacheTime: 3_000,
   })
   const parseAmount = useMemo(() => {
     if (data && amount) {
-      return ethers.utils.parseUnits(amount, data[0])
+      return ethers.utils.parseUnits(amount, data[0]).mul(isOptimistic ? BigNumber.from(1) : BigNumber.from(-1))
     } else {
       return BigNumber.from(0)
     }
-  }, [amount, data])
+  }, [amount, data, isOptimistic])
   const {config: pooledStakeConfig} = usePrepareContractWrite({
     addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     contractInterface: FOUR_DUCKS_API,

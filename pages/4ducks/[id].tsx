@@ -43,14 +43,16 @@ const _4Ducks = () => {
         functionName: 'poolConfigOf',
         args: [poolId],
       }
-    ]
+    ],
+    watch: true,
+    cacheTime: 3_000,
   })
   const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
   const {data: sponsorWalletData} = useBalance({
     addressOrName: sponsorWallet,
   })
   const [ducks, setDucks] = useState<any[]>([])
-  const [lastResponse, setLastResponse] = useState("81415023581736256717506170173319809171537625067389049239117631157841634410215")
+  const [lastResponse, setLastResponse] = useState("26955840703441389624835082035331230808537374664152711014219328769640287098500")
 
   useEffect(() => {
     if (data?.[1]) {

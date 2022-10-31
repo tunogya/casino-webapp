@@ -56,7 +56,9 @@ const Pool = () => {
         ...SnatchContract,
         functionName: 'sponsorWallet',
       }
-    ]
+    ],
+    watch: true,
+    cacheTime: 3_000,
   })
   const {config: drawConfig} = usePrepareContractWrite({
     addressOrName: SNATCH_ADDRESS[chain?.id || 5],
@@ -123,7 +125,9 @@ const Pool = () => {
         functionName: 'allowance',
         args: [address, SNATCH_ADDRESS[chain?.id || 5]],
       }
-    ]
+    ],
+    watch: true,
+    cacheTime: 3_000,
   })
   const singleDrawPrice = useMemo(() => {
     if (poolConfig?.singleDrawPrice && paymentTokenData) {

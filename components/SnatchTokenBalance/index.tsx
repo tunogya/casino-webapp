@@ -29,7 +29,9 @@ const SnatchTokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
         ...TokenContract,
         functionName: 'decimals',
       },
-    ]
+    ],
+    watch: true,
+    cacheTime: 3_000,
   })
 
   const etherscanUrl = useMemo(() => {

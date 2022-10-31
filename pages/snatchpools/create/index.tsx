@@ -75,7 +75,9 @@ const Create = () => {
         contractInterface: erc20ABI,
         functionName: 'decimals',
       },
-    ]
+    ],
+    watch: true,
+    cacheTime: 3_000,
   })
 
   const {config: createConfig} = usePrepareContractWrite({

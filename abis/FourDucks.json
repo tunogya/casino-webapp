@@ -253,6 +253,44 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "qrngUint256",
+        "type": "uint256"
+      }
+    ],
+    "name": "calculate",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "result",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "qrngUint256",
+        "type": "uint256"
+      }
+    ],
+    "name": "coordinatesOf",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "coordinates",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "endpointIdUint256",
     "outputs": [

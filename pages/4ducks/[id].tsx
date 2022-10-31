@@ -28,6 +28,7 @@ const _4Ducks = () => {
     addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     contractInterface: FOUR_DUCKS_API,
   }
+  const [lastResponse, setLastResponse] = useState("0xa0e3b3d07e6ef88fb7a40e13a6dcd92ca7d536e086ce497a446e07d468afd137")
   const {data} = useContractReads({
     contracts: [
       {
@@ -42,7 +43,17 @@ const _4Ducks = () => {
         ...FourDucksContract,
         functionName: 'poolConfigOf',
         args: [poolId],
-      }
+      },
+      {
+        ...FourDucksContract,
+        functionName: 'coordinatesOf',
+        args: [lastResponse],
+      },
+      {
+        ...FourDucksContract,
+        functionName: 'calculate',
+        args: [lastResponse],
+      },
     ],
     watch: true,
     cacheTime: 3_000,
@@ -51,8 +62,8 @@ const _4Ducks = () => {
   const {data: sponsorWalletData} = useBalance({
     addressOrName: sponsorWallet,
   })
-  const [ducks, setDucks] = useState<any[]>([])
-  const [lastResponse, setLastResponse] = useState("5872726601056580920427298694574798936031719423732249345148845938441974847895")
+  const [ducks, setDucks] = useState<{t: number, r: number}[]>([])
+
   useEffect(() => {
     if (data?.[1]) {
       setSponsorWallet(data?.[1].toString())
@@ -69,6 +80,17 @@ const _4Ducks = () => {
     }
   }, [address, router])
 
+  useEffect(() => {
+    if (data?.[3]) {
+      for (let i = 0; i < data?.[3].length; i += 2) {
+        setDucks((ducks) => [...ducks, {
+          t: BigNumber.from(data[3][i]).toNumber() / BigNumber.from('0x100000000').toNumber(),
+          r: BigNumber.from(data[3][i+1]).toNumber() / BigNumber.from('0x100000000').toNumber(),
+        }])
+      }
+    }
+  }, [data])
+
   const etherscanUrl = useMemo(() => {
     if (chain) {
       return chain?.blockExplorers?.etherscan?.url
@@ -77,21 +99,6 @@ const _4Ducks = () => {
       return chains?.[0]?.blockExplorers?.etherscan?.url
     }
   }, [chain, chains])
-
-  useEffect(() => {
-    let response = BigNumber.from(lastResponse)
-    let array = []
-    for (let i = 0; i < 4; i++) {
-      let arr = []
-      // 角度
-      arr.push(response.and(BigNumber.from("0xffffffff")).toNumber() / BigNumber.from("0x100000000").toNumber())
-      response = response.shr(32)
-      // 半径
-      arr.push(response.and(BigNumber.from("0xffffffff")).toNumber() / BigNumber.from("0x100000000").toNumber())
-      array.push(arr)
-    }
-    setDucks(array)
-  }, [lastResponse])
 
   // useContractEvent({
   //   ...FourDucksContract,
@@ -144,8 +151,8 @@ const _4Ducks = () => {
                     src={'/duck.svg'}
                     w={'44px'} h={'44px'}
                     position={"absolute"}
-                    top={`calc(50% - ${Math.sin(duck[0] * 2 * Math.PI)} * ${260 * duck[1]}px)`}
-                    left={`calc(50% - ${Math.cos(duck[0] * 2 * Math.PI)} * ${260 * duck[1]}px)`}
+                    top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${260 * duck.r}px)`}
+                    left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${260 * duck.r}px)`}
                     transform={'translate(-50%, -50%)'}
                   />
                 ))

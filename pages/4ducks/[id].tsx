@@ -6,8 +6,8 @@ import {
   Stack,
   Text, chakra,
 } from "@chakra-ui/react";
-import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
-import {useEffect, useMemo, useState} from "react";
+import {useAccount, useBalance, useContractEvent, useContractReads, useEnsName, useNetwork, useProvider} from "wagmi";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import FourDucksStake from "../../components/FourDucksStake";
 import FourDucksSetting from "../../components/FourDucksSetting";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
@@ -15,6 +15,21 @@ import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {BigNumber, ethers} from "ethers";
 import {useRouter} from "next/router";
 import {isAddress} from "ethers/lib/utils";
+import axios from "axios";
+import FourDucksLog from "../../components/FourDucksLog";
+
+export type LogType = {
+  address: string,
+  blockHash: string,
+  blockNumber: number,
+  data: string,
+  gasPrice: BigNumber,
+  logIndex: number,
+  timeStamp: number,
+  topics: string[],
+  transactionHash: string,
+  transactionIndex: number,
+}
 
 const _4Ducks = () => {
   const [poolId, setPoolId] = useState("")
@@ -28,7 +43,7 @@ const _4Ducks = () => {
     addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     contractInterface: FOUR_DUCKS_API,
   }
-  const [lastResponse, setLastResponse] = useState("0xa0e3b3d07e6ef88fb7a40e13a6dcd92ca7d536e086ce497a446e07d468afd137")
+  const [lastResponse, setLastResponse] = useState("")
   const {data} = useContractReads({
     contracts: [
       {
@@ -63,6 +78,7 @@ const _4Ducks = () => {
     addressOrName: sponsorWallet,
   })
   const [ducks, setDucks] = useState<{t: number, r: number}[]>([])
+  const [logs, setLogs] = useState<LogType[]>([])
 
   useEffect(() => {
     if (data?.[1]) {
@@ -100,21 +116,35 @@ const _4Ducks = () => {
     }
   }, [chain, chains])
 
-  // useContractEvent({
-  //   ...FourDucksContract,
-  //   eventName: 'ReceivedUint256',
-  //   listener(node, label, owner) {
-  //     console.log(node, label, owner)
-  //   },
-  // })
-  //
-  // useContractEvent({
-  //   ...FourDucksContract,
-  //   eventName: 'ReceivedUint256',
-  //   listener(node, label, owner) {
-  //     console.log(node, label, owner)
-  //   },
-  // })
+  const fetchLogs = useCallback(async () => {
+    if (!poolId) {
+      return
+    }
+    const topic0 = "0x754200201f11dd285de648ff60f1b2e399df9ae7964b9b0043c0cb50aca874db"
+    const topic1 = "0x000000000000000000000000" + poolId.replace("0x", "")
+    const apiKey = process.env.ETHERSCAN_API_KEY
+    const res = await axios({
+      url: `https://api-goerli.etherscan.io/api?module=logs&action=getLogs&fromBlock=0&toBlock=latest&topic0=${topic0}&topic0_1_opr=and&topic1=${topic1}&page=1&offset=1000&apikey=${apiKey}`,
+      method: 'GET',
+    })
+    console.log(res.data.result)
+    if (res.data?.result) {
+      setLogs(res.data.result)
+      setLastResponse(res.data.result[res.data.result.length - 1].topics[2])
+    }
+  }, [poolId])
+
+  useEffect(() => {
+    fetchLogs()
+  }, [fetchLogs])
+
+  useContractEvent({
+    ...FourDucksContract,
+    eventName: 'ReceivedUint256',
+    listener(node, label, owner) {
+      console.log(node, label, owner)
+    },
+  })
 
   return (
     <Layout>
@@ -165,6 +195,9 @@ const _4Ducks = () => {
           <Text>Join other pools:</Text>
           {/* eslint-disable-next-line react/no-unescaped-entities */}
           <Text>The pool's history:</Text>
+          {logs.map((item) => (
+            <FourDucksLog log={item} key={item.blockNumber}/>
+          )) }
         </Stack>
       </HStack>
     </Layout>

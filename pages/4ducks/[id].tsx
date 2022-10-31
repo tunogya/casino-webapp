@@ -52,8 +52,7 @@ const _4Ducks = () => {
     addressOrName: sponsorWallet,
   })
   const [ducks, setDucks] = useState<any[]>([])
-  const [lastResponse, setLastResponse] = useState("26955840703441389624835082035331230808537374664152711014219328769640287098500")
-
+  const [lastResponse, setLastResponse] = useState("5872726601056580920427298694574798936031719423732249345148845938441974847895")
   useEffect(() => {
     if (data?.[1]) {
       setSponsorWallet(data?.[1].toString())
@@ -93,6 +92,22 @@ const _4Ducks = () => {
     }
     setDucks(array)
   }, [lastResponse])
+
+  // useContractEvent({
+  //   ...FourDucksContract,
+  //   eventName: 'ReceivedUint256',
+  //   listener(node, label, owner) {
+  //     console.log(node, label, owner)
+  //   },
+  // })
+  //
+  // useContractEvent({
+  //   ...FourDucksContract,
+  //   eventName: 'ReceivedUint256',
+  //   listener(node, label, owner) {
+  //     console.log(node, label, owner)
+  //   },
+  // })
 
   return (
     <Layout>

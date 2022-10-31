@@ -7,7 +7,7 @@ import {
   useNetwork,
   usePrepareContractWrite,
   erc20ABI,
-  useBalance
+  useBalance, useWaitForTransaction
 } from "wagmi";
 import {NATIVE_CURRENCY_ADDRESS, SNATCH_ADDRESS} from "../../constant/address";
 import SNATCH_ABI from "../../abis/Snatch.json";
@@ -83,11 +83,19 @@ const Pool = () => {
   const {
     isLoading: isDrawLoading,
     write: drawWrite,
+    data: drawData,
   } = useContractWrite(drawConfig);
+  const {status: waitDrawStatus} = useWaitForTransaction({
+    wait: drawData?.wait
+  });
   const {
     isLoading: isBatchDrawLoading,
-    write: batchDrawWrite
+    write: batchDrawWrite,
+    data: batchDrawData,
   } = useContractWrite(batchDrawConfig);
+  const {status: waitBatchDrawStatus} = useWaitForTransaction({
+    wait: batchDrawData?.wait
+  });
   const poolConfig = useMemo(() => {
     return data?.[0]
   }, [data])
@@ -147,7 +155,10 @@ const Pool = () => {
     functionName: 'approve',
     args: [SNATCH_ADDRESS[chain?.id || 5], ethers.constants.MaxUint256.toString()],
   })
-  const {write: approveWrite, isLoading: isApproveLoading,} = useContractWrite(approveConfig);
+  const {write: approveWrite, isLoading: isApproveLoading, data: approveData} = useContractWrite(approveConfig);
+  const {status: waitApproveStatus} = useWaitForTransaction({
+    wait: approveData?.wait
+  })
   const [poolIds, setPoolIds] = useRecoilState(poolIdsAtom);
   const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
   const {data: sponsorWalletData} = useBalance({
@@ -234,7 +245,7 @@ const Pool = () => {
                 size={'lg'}
                 disabled={!approveWrite}
                 onClick={() => approveWrite?.()}
-                isLoading={isApproveLoading}
+                isLoading={isApproveLoading || waitApproveStatus === 'loading'}
               >
                 Approve {paymentTokenData?.[1]}
               </Button>
@@ -243,7 +254,7 @@ const Pool = () => {
                 size={'lg'}
                 disabled={!drawWrite}
                 onClick={() => drawWrite?.()}
-                isLoading={isDrawLoading}
+                isLoading={isDrawLoading || waitDrawStatus === 'loading'}
               >
                 {singleDrawPrice} {paymentTokenData?.[1]} 1X
               </Button>
@@ -253,7 +264,7 @@ const Pool = () => {
                 size={'lg'}
                 onClick={() => approveWrite?.()}
                 disabled={!approveWrite}
-                isLoading={isApproveLoading}
+                isLoading={isApproveLoading || waitApproveStatus === 'loading'}
               >
                 Approve {paymentTokenData?.[1]}
               </Button>
@@ -262,7 +273,7 @@ const Pool = () => {
                 size={'lg'}
                 disabled={!batchDrawWrite}
                 onClick={() => batchDrawWrite?.()}
-                isLoading={isBatchDrawLoading}
+                isLoading={isBatchDrawLoading || waitBatchDrawStatus === 'loading'}
               >
                 {batchDrawPrice} {paymentTokenData?.[1]} {poolConfig?.batchDrawSize.toString()}X
               </Button>

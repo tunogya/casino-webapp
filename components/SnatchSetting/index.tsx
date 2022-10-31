@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import {useState} from "react";
 import {SNATCH_ADDRESS} from "../../constant/address";
-import {useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
+import {useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction} from "wagmi";
 import SNATCH_ABI from "../../abis/Snatch.json";
 import {SettingsIcon} from "@chakra-ui/icons";
 
@@ -39,7 +39,10 @@ const SnatchSetting = () => {
     functionName: 'setRequestParameters',
     args: [requestParams._airnode, requestParams._endpointIdUint256, requestParams._endpointIdUint256Array, requestParams._sponsorWallet],
   })
-  const {isLoading, isSuccess, write} = useContractWrite(config)
+  const {isLoading, write, data} = useContractWrite(config)
+  const { status: waitStatus } = useWaitForTransaction({
+    wait: data?.wait
+  })
 
   return (
     <>
@@ -93,10 +96,10 @@ const SnatchSetting = () => {
           <ModalFooter>
             <Button
               disabled={!write}
-              isLoading={isLoading}
+              isLoading={isLoading || waitStatus === 'loading'}
               onClick={async () => {
                 await write?.()
-                if (isSuccess) {
+                if (waitStatus === 'success') {
                   onClose()
                 }
               }}

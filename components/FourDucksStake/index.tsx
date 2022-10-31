@@ -6,7 +6,15 @@ import {
   PopoverTrigger, Stack, Text
 } from "@chakra-ui/react";
 import {FC, useEffect, useMemo, useState} from "react";
-import {erc20ABI, useAccount, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
+import {
+  erc20ABI,
+  useAccount,
+  useContractReads,
+  useContractWrite,
+  useNetwork,
+  usePrepareContractWrite,
+  useWaitForTransaction
+} from "wagmi";
 import {FOUR_DUCKS_ADDRESS, NATIVE_CURRENCY_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {BigNumber, ethers} from "ethers";
@@ -83,7 +91,12 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
   })
   const [platformFee, setPlatformFee] = useState('0')
   const [sponsorFee, setSponsorFee] = useState("0")
-  const {isLoading: isPooledStakeLoading, write: poolStakeWrite} = useContractWrite(pooledStakeConfig)
+  const {isLoading: isPooledStakeLoading, write: poolStakeWrite, data: pooledStakeData} = useContractWrite(pooledStakeConfig)
+  const {
+      status: waitPooledStakeStatus
+  } = useWaitForTransaction({
+    wait: pooledStakeData?.wait
+  })
   const {config: soloStakeConfig} = usePrepareContractWrite({
     addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     contractInterface: FOUR_DUCKS_API,
@@ -94,19 +107,25 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
       gasLimit: 1000000,
     }
   })
-  const {isLoading: isSoloStakeLoading, write: soloStakeWrite} = useContractWrite(soloStakeConfig)
+  const {write: soloStakeWrite, data: soloStakeData, isLoading: isSoloStakeLoading} = useContractWrite(soloStakeConfig)
+  const {status: waitSoloStakeStatus} = useWaitForTransaction({
+    wait: soloStakeData?.wait
+  })
   const {config: approveConfig} = usePrepareContractWrite({
     addressOrName: token,
     contractInterface: erc20ABI,
     functionName: 'approve',
     args: [FOUR_DUCKS_ADDRESS[chain?.id || 5], ethers.constants.MaxUint256],
   })
-  const {isLoading: isApproveLoading, write: approveWrite} = useContractWrite(approveConfig)
+  const {write: approveWrite, data: approveData, isLoading: isApproveLoading} = useContractWrite(approveConfig)
+  const {status: waitApproveStatus} = useWaitForTransaction({
+    wait: approveData?.wait
+  })
 
   useEffect(() => {
     if (fourDucksData) {
       setPlatformFee((Number(ethers.utils.formatEther(fourDucksData?.[0] || '0')) * 100).toString())
-      setSponsorFee(ethers.utils.formatEther(fourDucksData?.[1]))
+      setSponsorFee(ethers.utils.formatEther(fourDucksData?.[1] || '0'))
     }
   }, [fourDucksData])
 
@@ -142,7 +161,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
               <Button
                 disabled={!approveWrite}
                 onClick={() => approveWrite?.()}
-                isLoading={isApproveLoading}
+                isLoading={isApproveLoading || waitApproveStatus === 'loading'}
                 size={'lg'}
               >
                 Approve
@@ -152,7 +171,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
                 <Button
                   disabled={!soloStakeWrite}
                   onClick={() => soloStakeWrite?.()}
-                  isLoading={isSoloStakeLoading}
+                  isLoading={isSoloStakeLoading || waitSoloStakeStatus === 'loading'}
                   size={'lg'}
                 >
                   Solo
@@ -160,7 +179,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
                 <Button
                   disabled={!poolStakeWrite}
                   onClick={() => poolStakeWrite?.()}
-                  isLoading={isPooledStakeLoading}
+                  isLoading={isPooledStakeLoading || waitPooledStakeStatus === 'loading'}
                   size={'lg'}
                 >
                   Pooled

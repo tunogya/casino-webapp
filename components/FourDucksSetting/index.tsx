@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import {useState} from "react";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
-import {useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
+import {useContractWrite, useNetwork, usePrepareContractWrite, useWaitForTransaction} from "wagmi";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {SettingsIcon} from "@chakra-ui/icons";
 
@@ -38,7 +38,10 @@ const FourDucksSetting = () => {
     functionName: 'setRequestParameters',
     args: [requestParams._airnode, requestParams._endpointIdUint256, requestParams._sponsorWallet],
   })
-  const {isLoading, isSuccess, write} = useContractWrite(config)
+  const {isLoading, write, data} = useContractWrite(config)
+  const { status: waitStatus } = useWaitForTransaction({
+    wait: data?.wait
+  })
 
   return (
     <>
@@ -87,10 +90,10 @@ const FourDucksSetting = () => {
           <ModalFooter>
             <Button
               disabled={!write}
-              isLoading={isLoading}
+              isLoading={isLoading || waitStatus === 'loading'}
               onClick={async () => {
                 await write?.()
-                if (isSuccess) {
+                if (waitStatus === 'success') {
                   onClose()
                 }
               }}

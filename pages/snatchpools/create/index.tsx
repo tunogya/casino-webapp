@@ -9,7 +9,14 @@ import {
   Text
 } from "@chakra-ui/react";
 import {useMemo, useState} from "react";
-import {erc20ABI, useContractReads, useContractWrite, useNetwork, usePrepareContractWrite} from "wagmi";
+import {
+  erc20ABI,
+  useContractReads,
+  useContractWrite,
+  useNetwork,
+  usePrepareContractWrite,
+  useWaitForTransaction
+} from "wagmi";
 import {SNATCH_ADDRESS} from "../../../constant/address";
 import SNATCH_ABI from "../../../abis/Snatch.json";
 import {ethers} from "ethers";
@@ -100,7 +107,11 @@ const Create = () => {
       normalPrizesRate: normalPrizeList.map(r => r.rate),
     },
   })
-  const {isLoading, write} = useContractWrite(createConfig)
+  const {write, data: createData, isLoading} = useContractWrite(createConfig)
+  const {status: waitStatus} = useWaitForTransaction({
+    confirmations: 1,
+    wait: createData?.wait
+  })
 
   return (
     <Layout>
@@ -232,7 +243,7 @@ const Create = () => {
           <HStack>
             <Button
               disabled={!write}
-              isLoading={isLoading}
+              isLoading={isLoading || waitStatus === 'loading'}
               onClick={() => write?.()}
             >
               Create Pool

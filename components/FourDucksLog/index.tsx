@@ -1,5 +1,5 @@
-import {Stack, Text} from "@chakra-ui/react";
-import {FC, useState} from "react";
+import {Badge, HStack, Link, Spacer, Text} from "@chakra-ui/react";
+import {FC} from "react";
 import {LogType} from "../../pages/4ducks/[id]";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
@@ -33,9 +33,17 @@ const FourDucksLog: FC<FourDucksLogProps> = ({log}) => {
   })
 
   return (
-    <Stack>
-      <Text>{data?.[1] ? 'Yes' : 'No'}</Text>
-    </Stack>
+    <HStack>
+      <Badge w={'60px'} p={'1'} textAlign={"center"} fontSize={'xs'}>{data?.[1] ? 'Yes' : 'No'}</Badge>
+      <Link fontSize={'xs'} isExternal
+            href={chain?.blockExplorers?.etherscan?.url + '/tx/' + log.transactionHash}>
+        TX: {log.transactionHash.slice(0, 6) + '...' + log.transactionHash.slice(-4)}
+      </Link>
+      <Spacer/>
+      <Text fontSize={'xs'} textAlign={"end"}>
+        {new Date(Number(log.timeStamp) * 1000).toLocaleString()}
+      </Text>
+    </HStack>
   )
 }
 

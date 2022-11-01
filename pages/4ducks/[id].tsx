@@ -6,7 +6,7 @@ import {
   Stack,
   Text, chakra,
 } from "@chakra-ui/react";
-import {useAccount, useBalance, useContractEvent, useContractReads, useEnsName, useNetwork, useProvider} from "wagmi";
+import {useAccount, useBalance, useContractEvent, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import FourDucksStake from "../../components/FourDucksStake";
 import FourDucksSetting from "../../components/FourDucksSetting";
@@ -127,10 +127,9 @@ const _4Ducks = () => {
       url: `https://api-goerli.etherscan.io/api?module=logs&action=getLogs&fromBlock=0&toBlock=latest&topic0=${topic0}&topic0_1_opr=and&topic1=${topic1}&page=1&offset=1000&apikey=${apiKey}`,
       method: 'GET',
     })
-    console.log(res.data.result)
     if (res.data?.result) {
-      setLogs(res.data.result)
-      setLastResponse(res.data.result[res.data.result.length - 1].topics[2])
+      setLogs(res.data.result.reverse())
+      setLastResponse(res.data.result[0].topics[2])
     }
   }, [poolId])
 
@@ -195,7 +194,7 @@ const _4Ducks = () => {
           <Text>Join other pools:</Text>
           {/* eslint-disable-next-line react/no-unescaped-entities */}
           <Text>The pool's history:</Text>
-          {logs.map((item) => (
+          {logs?.map((item) => (
             <FourDucksLog log={item} key={item.blockNumber}/>
           )) }
         </Stack>

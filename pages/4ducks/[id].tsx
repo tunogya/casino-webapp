@@ -128,7 +128,7 @@ const _4Ducks = () => {
       method: 'GET',
     })
     if (res.data?.result) {
-      setLogs(res.data.result.reverse())
+      setLogs(res.data.result?.reverse())
       setLastResponse(res.data.result[0].topics[2])
     }
   }, [poolId])
@@ -190,13 +190,17 @@ const _4Ducks = () => {
             <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
           </HStack>
         </Stack>
-        <Stack minW={'300px'} h={'full'} bg={"gray.50"} p={'12px'}>
-          <Text>Join other pools:</Text>
-          {/* eslint-disable-next-line react/no-unescaped-entities */}
-          <Text>The pool's history:</Text>
-          {logs?.map((item) => (
-            <FourDucksLog log={item} key={item.blockNumber}/>
-          )) }
+        <Stack p={'20px'} minW={'360px'}>
+          <Stack minH={'200px'} bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
+            <Text fontSize={'sm'} fontWeight={'bold'}>Join other pools:</Text>
+          </Stack>
+          <Stack bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
+            {/* eslint-disable-next-line react/no-unescaped-entities */}
+            <Text fontSize={'sm'} fontWeight={'bold'}>History of this pool:</Text>
+            {logs?.map((item) => (
+              <FourDucksLog log={item} key={item.blockNumber}/>
+            )) }
+          </Stack>
         </Stack>
       </HStack>
     </Layout>

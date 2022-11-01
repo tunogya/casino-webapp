@@ -133,6 +133,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
     <Popover>
       <PopoverTrigger>
         <Button
+          bg={isOptimistic ? 'green.400' : 'red.400'}
           size={'lg'}
         >{label}</Button>
       </PopoverTrigger>

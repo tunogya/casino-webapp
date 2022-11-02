@@ -4,7 +4,7 @@ import {
   HStack, Link,
   Spacer,
   Stack,
-  Text, chakra, Button,
+  Text, chakra, IconButton,
 } from "@chakra-ui/react";
 import {useAccount, useBalance, useContractEvent, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useCallback, useEffect, useMemo, useState} from "react";
@@ -17,6 +17,7 @@ import {useRouter} from "next/router";
 import {isAddress} from "ethers/lib/utils";
 import axios from "axios";
 import FourDucksLog from "../../components/FourDucksLog";
+import {CloseIcon} from "@chakra-ui/icons";
 
 export type LogType = {
   address: string,
@@ -186,17 +187,18 @@ const _4Ducks = () => {
             <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
             <Stack bgImage={'/pool.svg'} w={'600px'} h={'600px'} bgPosition={"center"} bgSize={'contain'}
                    position={"relative"} spacing={0}>
-              <Button
+              <IconButton
+                icon={<CloseIcon/>}
+                size={'lg'} zIndex={1} opacity={0.8}
+                aria-label={'Close'}
                 position={'absolute'} variant={"outline"} left={'50%'} top={'50%'}
                 transform={'translate(-50%, -50%)'}
-                hidden={!router.query.q}
                 isLoading={isQLoading}
                 onClick={() => {
                   router.push(`/4ducks/${poolId}`)
                 }}
               >
-                Clean
-              </Button>
+              </IconButton>
               {
                 ducks.map((duck, index) => (
                   <chakra.img

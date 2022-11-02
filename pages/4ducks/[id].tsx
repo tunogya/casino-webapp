@@ -98,13 +98,13 @@ const _4Ducks = () => {
   }, [address, router])
 
   useEffect(() => {
-    setDucks([])
     if (router.query.q) {
       setQ(router.query.q.toString())
     }
   }, [router])
 
   const fetchDucks = useCallback(() => {
+    setDucks([])
     if (qData?.[0]) {
       for (let i = 0; i < qData?.[0].length; i += 2) {
         setDucks((ducks) => [...ducks, {

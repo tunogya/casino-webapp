@@ -100,6 +100,8 @@ const _4Ducks = () => {
   useEffect(() => {
     if (router.query.q) {
       setQ(router.query.q.toString())
+    } else {
+      setDucks([])
     }
   }, [router])
 

@@ -4,7 +4,7 @@ import {
   HStack, Link,
   Spacer,
   Stack,
-  Text, chakra,
+  Text, chakra, Button,
 } from "@chakra-ui/react";
 import {useAccount, useBalance, useContractEvent, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useCallback, useEffect, useMemo, useState} from "react";
@@ -43,7 +43,7 @@ const _4Ducks = () => {
     addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     contractInterface: FOUR_DUCKS_API,
   }
-  const [lastResponse, setLastResponse] = useState("")
+  const [q, setQ] = useState("")
   const {data} = useContractReads({
     contracts: [
       {
@@ -58,17 +58,18 @@ const _4Ducks = () => {
         ...FourDucksContract,
         functionName: 'poolConfigOf',
         args: [poolId],
-      },
+      }
+    ],
+    watch: true,
+    cacheTime: 3_000,
+  })
+  const { data: qData, isLoading: isQLoading } = useContractReads({
+    contracts: [
       {
         ...FourDucksContract,
         functionName: 'coordinatesOf',
-        args: [lastResponse],
-      },
-      {
-        ...FourDucksContract,
-        functionName: 'calculate',
-        args: [lastResponse],
-      },
+        args: [q],
+      }
     ],
     watch: true,
     cacheTime: 3_000,
@@ -77,7 +78,7 @@ const _4Ducks = () => {
   const {data: sponsorWalletData} = useBalance({
     addressOrName: sponsorWallet,
   })
-  const [ducks, setDucks] = useState<{t: number, r: number}[]>([])
+  const [ducks, setDucks] = useState<{ t: number, r: number }[]>([])
   const [logs, setLogs] = useState<LogType[]>([])
 
   useEffect(() => {
@@ -97,15 +98,26 @@ const _4Ducks = () => {
   }, [address, router])
 
   useEffect(() => {
-    if (data?.[3]) {
-      for (let i = 0; i < data?.[3].length; i += 2) {
+    setDucks([])
+    if (router.query.q) {
+      setQ(router.query.q.toString())
+    }
+  }, [router])
+
+  const fetchDucks = useCallback(() => {
+    if (qData?.[0]) {
+      for (let i = 0; i < qData?.[0].length; i += 2) {
         setDucks((ducks) => [...ducks, {
-          t: BigNumber.from(data[3][i]).toNumber() / BigNumber.from('0x100000000').toNumber(),
-          r: BigNumber.from(data[3][i+1]).toNumber() / BigNumber.from('0x100000000').toNumber(),
+          t: BigNumber.from(qData[0][i]).toNumber() / BigNumber.from('0x100000000').toNumber(),
+          r: BigNumber.from(qData[0][i + 1]).toNumber() / BigNumber.from('0x100000000').toNumber(),
         }])
       }
     }
-  }, [data])
+  }, [qData])
+
+  useEffect(() => {
+    fetchDucks()
+  }, [fetchDucks])
 
   const etherscanUrl = useMemo(() => {
     if (chain) {
@@ -129,7 +141,6 @@ const _4Ducks = () => {
     })
     if (res.data?.result) {
       setLogs(res.data.result?.reverse())
-      setLastResponse(res.data.result[0].topics[2])
     }
   }, [poolId])
 
@@ -173,6 +184,17 @@ const _4Ducks = () => {
             <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
             <Stack bgImage={'/pool.svg'} w={'600px'} h={'600px'} bgPosition={"center"} bgSize={'contain'}
                    position={"relative"} spacing={0}>
+              <Button
+                position={'absolute'} variant={"outline"} left={'50%'} top={'50%'}
+                transform={'translate(-50%, -50%)'}
+                hidden={!router.query.q}
+                isLoading={isQLoading}
+                onClick={() => {
+                  router.push(`/4ducks/${poolId}`)
+                }}
+              >
+                Clean
+              </Button>
               {
                 ducks.map((duck, index) => (
                   <chakra.img
@@ -199,7 +221,7 @@ const _4Ducks = () => {
             <Text fontSize={'sm'} fontWeight={'bold'}>History of this pool:</Text>
             {logs?.map((item) => (
               <FourDucksLog log={item} key={item.blockNumber}/>
-            )) }
+            ))}
           </Stack>
         </Stack>
       </HStack>

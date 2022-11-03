@@ -22,12 +22,12 @@ const FourDucksLog: FC<FourDucksLogProps> = ({log}) => {
       {
         ...FourDucksContract,
         functionName: 'coordinatesOf',
-        args: [log.topics[2]],
+        args: [log.topics?.[3]],
       },
       {
         ...FourDucksContract,
         functionName: 'calculate',
-        args: [log.topics[2]],
+        args: [log.topics?.[3]],
       },
     ],
     watch: true,

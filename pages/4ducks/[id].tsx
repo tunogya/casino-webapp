@@ -143,7 +143,7 @@ const _4Ducks = () => {
       method: 'GET',
     })
     if (res.data?.result) {
-      setLogs(res.data.result?.reverse())
+      setLogs(res.data.result?.filter((item: any) => item.topics.length >= 4)?.reverse())
     }
   }, [poolId])
 

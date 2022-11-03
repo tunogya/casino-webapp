@@ -59,20 +59,16 @@ const _4Ducks = () => {
         functionName: 'poolConfigOf',
         args: [poolId],
       }
-    ],
-    watch: true,
-    cacheTime: 3_000,
+    ]
   })
-  const {data: qData, isLoading: isQLoading} = useContractReads({
+  const {data: qData} = useContractReads({
     contracts: [
       {
         ...FourDucksContract,
         functionName: 'coordinatesOf',
         args: [q],
       }
-    ],
-    watch: true,
-    cacheTime: 3_000,
+    ]
   })
   const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
   const {data: sponsorWalletData} = useBalance({
@@ -196,12 +192,13 @@ const _4Ducks = () => {
                 ))
               }
             </Stack>
+            <Text fontSize={'2xl'} fontWeight={'bold'}>Can 4 ducks swim halfway down the pool?</Text>
             <HStack spacing={'48px'} w={'full'} justify={"center"}>
               <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
               <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
             </HStack>
           </Stack>
-          <Stack p={'12px'} minW={['full', '360px']} w={['full', '360px']}>
+          <Stack py={'24px'} spacing={'24px'} minW={['full', '360px']} w={['full', '360px']}>
             <Stack minH={'120px'} bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
               <Text fontSize={'sm'} fontWeight={'bold'}>Join other pools:</Text>
             </Stack>

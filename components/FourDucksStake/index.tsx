@@ -1,5 +1,5 @@
 import {
-  Button, FormControl, FormLabel, HStack, Input,
+  Button, FormControl, FormHelperText, FormLabel, HStack, Input, Link,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -54,6 +54,19 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
         functionName: 'allowance',
         args: [address, FOUR_DUCKS_ADDRESS[chain?.id || 5]],
       },
+      {
+        ...TokenContract,
+        functionName: 'symbol',
+      },
+      {
+        ...TokenContract,
+        functionName: 'name',
+      },
+      {
+        ...TokenContract,
+        functionName: 'balanceOf',
+        args: [FOUR_DUCKS_ADDRESS[chain?.id || 5]],
+      }
     ],
     watch: true,
     cacheTime: 3_000,
@@ -91,9 +104,13 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
   })
   const [platformFee, setPlatformFee] = useState('0')
   const [sponsorFee, setSponsorFee] = useState("0")
-  const {isLoading: isPooledStakeLoading, write: poolStakeWrite, data: pooledStakeData} = useContractWrite(pooledStakeConfig)
   const {
-      status: waitPooledStakeStatus
+    isLoading: isPooledStakeLoading,
+    write: poolStakeWrite,
+    data: pooledStakeData
+  } = useContractWrite(pooledStakeConfig)
+  const {
+    status: waitPooledStakeStatus
   } = useWaitForTransaction({
     wait: pooledStakeData?.wait
   })
@@ -147,8 +164,19 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
                 color={'yellow.900'}
                 fontWeight={'bold'}
                 fontFamily={'Syncopate'}
-              >Token</FormLabel>
+              >Token: {data?.[4] || '...'}</FormLabel>
               <Input value={token} onChange={(e) => setToken(e.target.value)} placeholder={'Token Address'}/>
+              <FormHelperText
+                fontSize={'xs'}
+                color={'yellow.900'}
+                textAlign={"end"}
+              >
+                Query tokens in <Link href={chain?.blockExplorers?.etherscan?.url}
+                                      fontSize={'xs'}
+                                      color={'yellow.900'}
+                                      fontWeight={'bold'}
+                                      isExternal>{chain?.blockExplorers?.etherscan?.name}</Link>
+              </FormHelperText>
             </FormControl>
             <FormControl>
               <FormLabel
@@ -156,38 +184,56 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
                 color={'yellow.900'}
                 fontWeight={'bold'}
                 fontFamily={'Syncopate'}
-              >Amount</FormLabel>
+              >Amount:</FormLabel>
               <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={'Token Amount'}/>
-            </FormControl>
-            {(BigNumber.from(data?.[2] || 0).lt(parseAmount)) ? (
-              <Button
-                disabled={!approveWrite}
-                onClick={() => approveWrite?.()}
-                isLoading={isApproveLoading || waitApproveStatus === 'loading'}
-                size={'lg'}
+              <FormHelperText
+                fontSize={'xs'}
+                color={'yellow.900'}
+                textAlign={"end"}
               >
-                Approve
-              </Button>
-            ) : (
-              <HStack>
+                <Text
+                  color={Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()) < Number(amount) ? 'red.400' : ''}>My
+                  Balance: {Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()).toLocaleString()} {data?.[3] || '...'}<br/></Text>
+                <Text
+                  color={Number(ethers.utils.formatUnits(data?.[5] || '0', data?.[0]).toString()) < Number(amount) * 2 ? 'red.400' : ''}
+                >Pool
+                  Balance: {Number(ethers.utils.formatUnits(data?.[5] || '0', data?.[0]).toString()).toLocaleString()} {data?.[3] || '...'}</Text>
+              </FormHelperText>
+            </FormControl>
+            <Stack pt={'24px'}>
+              {(BigNumber.from(data?.[2] || 0).lt(parseAmount)) ? (
                 <Button
-                  disabled={!soloStakeWrite}
-                  onClick={() => soloStakeWrite?.()}
-                  isLoading={isSoloStakeLoading || waitSoloStakeStatus === 'loading'}
+                  bg={isOptimistic ? 'green.400' : 'red.400'}
+                  disabled={!approveWrite}
+                  onClick={() => approveWrite?.()}
+                  isLoading={isApproveLoading || waitApproveStatus === 'loading'}
                   size={'lg'}
                 >
-                  Solo
+                  Approve
                 </Button>
-                <Button
-                  disabled={!poolStakeWrite}
-                  onClick={() => poolStakeWrite?.()}
-                  isLoading={isPooledStakeLoading || waitPooledStakeStatus === 'loading'}
-                  size={'lg'}
-                >
-                  Pooled
-                </Button>
-              </HStack>
-            )}
+              ) : (
+                <HStack>
+                  <Button
+                    bg={isOptimistic ? 'green.400' : 'red.400'}
+                    disabled={!soloStakeWrite}
+                    onClick={() => soloStakeWrite?.()}
+                    isLoading={isSoloStakeLoading || waitSoloStakeStatus === 'loading'}
+                    size={'lg'}
+                  >
+                    Solo
+                  </Button>
+                  <Button
+                    bg={isOptimistic ? 'green.400' : 'red.400'}
+                    disabled={!poolStakeWrite}
+                    onClick={() => poolStakeWrite?.()}
+                    isLoading={isPooledStakeLoading || waitPooledStakeStatus === 'loading'}
+                    size={'lg'}
+                  >
+                    Pooled
+                  </Button>
+                </HStack>
+              )}
+            </Stack>
             <Stack spacing={0} fontSize={'xs'}>
               <Text>platform fee: {platformFee} %, sponsor fee: {sponsorFee} ETH</Text>
               <Text>Pooled stake without sponsor fee!</Text>

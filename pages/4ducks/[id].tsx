@@ -161,34 +161,34 @@ const _4Ducks = () => {
 
   return (
     <Layout>
-      <HStack w={'full'} h={'full'} alignItems={"start"}>
-        <Stack p={'24px'} w={'full'} alignItems={"center"} spacing={'48px'}>
-          <HStack w={'full'} spacing={'24px'}>
-            <Heading fontWeight={'bold'} cursor={'pointer'} onClick={() => {
-              router.push('/4ducks/')
-            }}>4 Ducks</Heading>
-            {sponsorWalletData && (
-              <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal
-                    fontSize={'sm'}>sponsor
-                balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
-            )}
-            <Spacer/>
-            {chain && poolId && (
-              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
-                    isExternal fontSize={'sm'}>the pool: {poolEnsName ? poolEnsName : poolId}</Link>
-            )}
-            {
-              data?.[0] === address && (
-                <FourDucksSetting/>
-              )
-            }
-          </HStack>
-          <HStack justify={"space-around"} w={'full'}>
-            <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
-            <Stack bgImage={'/pool.svg'} w={'600px'} h={'600px'} bgPosition={"center"} bgSize={'contain'}
-                   position={"relative"} spacing={0}>
+      <Stack w={'full'} p={['12px', '24px']}>
+        <HStack>
+          <Heading fontWeight={'bold'} cursor={'pointer'} onClick={() => {
+            router.push('/4ducks/')
+          }}>4 Ducks</Heading>
+          {sponsorWalletData && (
+            <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal
+                  fontSize={'sm'}>sponsor
+              balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
+          )}
+          <Spacer/>
+          {chain && poolId && (
+            <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
+                  isExternal fontSize={'sm'}>the pool: {poolEnsName ? poolEnsName : poolId}</Link>
+          )}
+          {
+            data?.[0] === address && (
+              <FourDucksSetting/>
+            )
+          }
+        </HStack>
+        <Stack direction={['column', 'row']} w={'full'} h={'full'} alignItems={"start"}>
+          <Stack w={'full'} alignItems={"center"} spacing={'48px'}>
+            <Stack bgImage={'/pool.svg'} w={['full', '600px']} h={['300px', '600px']} bgPosition={"center"} bgSize={'contain'}
+                   position={"relative"} bgRepeat={"no-repeat"} spacing={0}>
               <IconButton
                 icon={<CloseIcon/>}
+                borderRadius={'full'}
                 size={'lg'} zIndex={1} opacity={0.8}
                 aria-label={'Close'}
                 position={'absolute'} variant={"outline"} left={'50%'} top={'50%'}
@@ -204,7 +204,7 @@ const _4Ducks = () => {
                   <chakra.img
                     key={index}
                     src={'/duck.svg'}
-                    w={'44px'} h={'44px'}
+                    w={['22px', '44px']} h={['22px', '44px']}
                     position={"absolute"}
                     top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${260 * duck.r}px)`}
                     left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${260 * duck.r}px)`}
@@ -213,22 +213,25 @@ const _4Ducks = () => {
                 ))
               }
             </Stack>
-            <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
-          </HStack>
-        </Stack>
-        <Stack p={'20px'} minW={'360px'}>
-          <Stack minH={'200px'} bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
-            <Text fontSize={'sm'} fontWeight={'bold'}>Join other pools:</Text>
+            <HStack spacing={'48px'}>
+              <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
+              <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
+            </HStack>
           </Stack>
-          <Stack bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
-            {/* eslint-disable-next-line react/no-unescaped-entities */}
-            <Text fontSize={'sm'} fontWeight={'bold'}>History of this pool:</Text>
-            {logs?.map((item) => (
-              <FourDucksLog log={item} key={item.blockNumber}/>
-            ))}
+          <Stack p={'12px'} minW={['full', '360px']} w={['full', '360px']}>
+            <Stack minH={'200px'} bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
+              <Text fontSize={'sm'} fontWeight={'bold'}>Join other pools:</Text>
+            </Stack>
+            <Stack bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
+              {/* eslint-disable-next-line react/no-unescaped-entities */}
+              <Text fontSize={'sm'} fontWeight={'bold'}>History of this pool:</Text>
+              {logs?.map((item) => (
+                <FourDucksLog log={item} key={item.blockNumber}/>
+              ))}
+            </Stack>
           </Stack>
         </Stack>
-      </HStack>
+      </Stack>
     </Layout>
   );
 }

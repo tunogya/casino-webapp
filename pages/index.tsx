@@ -27,13 +27,13 @@ const Home: NextPage = () => {
 
   return (
     <Layout>
-      <Wrap h={'full'} justify={"space-around"} p={'48px'} spacing={'48px'} w={'full'}>
+      <Wrap h={'full'} justify={"space-around"} p={['24px', '48px']} spacing={['24px', '48px']} w={'full'}>
         { games.map((game) => (
-          <WrapItem key={game.id}>
+          <WrapItem key={game.id} w={'full'}>
             <Stack
               bg={'gold'}
-              w={'400px'}
-              h={'400px'}
+              w={['full', '400px']}
+              h={['300px', '400px']}
               border={"2px solid"}
               borderColor={"yellow.900"}
               borderRadius={'24px'}

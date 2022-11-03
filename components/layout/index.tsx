@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 const Layout = ({children}) => {
   const router = useRouter()
   return (
-    <Stack h={'100vh'} spacing={0} align={"center"} bg={'yellow.100'}>
+    <Stack h={['100%', '100vh']} spacing={0} align={"center"} bg={'yellow.100'}>
       <Head>
         <title>Casino | WizardingPay</title>
         <meta

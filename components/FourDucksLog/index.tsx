@@ -42,7 +42,7 @@ const FourDucksLog: FC<FourDucksLogProps> = ({log}) => {
           router.push({
             query: {
               ...router.query,
-              q: log.topics[2],
+              q: log.topics[3],
             }
           })
         }}

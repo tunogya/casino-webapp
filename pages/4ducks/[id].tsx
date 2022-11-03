@@ -4,9 +4,9 @@ import {
   HStack, Link,
   Spacer,
   Stack,
-  Text, chakra, IconButton,
+  Text, chakra
 } from "@chakra-ui/react";
-import {useAccount, useBalance, useContractEvent, useContractReads, useEnsName, useNetwork} from "wagmi";
+import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import FourDucksStake from "../../components/FourDucksStake";
 import FourDucksSetting from "../../components/FourDucksSetting";
@@ -17,7 +17,6 @@ import {useRouter} from "next/router";
 import {isAddress} from "ethers/lib/utils";
 import axios from "axios";
 import FourDucksLog from "../../components/FourDucksLog";
-import {CloseIcon} from "@chakra-ui/icons";
 
 export type LogType = {
   address: string,
@@ -44,7 +43,7 @@ const _4Ducks = () => {
     addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     contractInterface: FOUR_DUCKS_API,
   }
-  const [q, setQ] = useState("")
+  const [q, setQ] = useState<string | undefined>(undefined)
   const {data} = useContractReads({
     contracts: [
       {
@@ -64,7 +63,7 @@ const _4Ducks = () => {
     watch: true,
     cacheTime: 3_000,
   })
-  const { data: qData, isLoading: isQLoading } = useContractReads({
+  const {data: qData, isLoading: isQLoading} = useContractReads({
     contracts: [
       {
         ...FourDucksContract,
@@ -142,8 +141,12 @@ const _4Ducks = () => {
       url: `https://api-goerli.etherscan.io/api?module=logs&action=getLogs&fromBlock=0&toBlock=latest&topic0=${topic0}&topic0_1_opr=and&topic1=${topic1}&page=1&offset=1000&apikey=${apiKey}`,
       method: 'GET',
     })
-    if (res.data?.result) {
-      setLogs(res.data.result?.filter((item: any) => item.topics.length >= 4)?.reverse())
+    if (res.data?.result?.length > 0) {
+      try {
+        setLogs(res.data.result?.reverse())
+      } catch (e) {
+        console.log(e)
+      }
     }
   }, [poolId])
 
@@ -151,18 +154,10 @@ const _4Ducks = () => {
     fetchLogs()
   }, [fetchLogs])
 
-  useContractEvent({
-    ...FourDucksContract,
-    eventName: 'ReceivedUint256',
-    listener(node, label, owner) {
-      console.log(node, label, owner)
-    },
-  })
-
   return (
     <Layout>
-      <Stack w={'full'} p={['12px', '24px']}>
-        <HStack>
+      <Stack w={'full'} p={['12px', '24px']} h={'full'}>
+        <HStack spacing={'24px'}>
           <Heading fontWeight={'bold'} cursor={'pointer'} onClick={() => {
             router.push('/4ducks/')
           }}>4 Ducks</Heading>
@@ -183,22 +178,10 @@ const _4Ducks = () => {
           }
         </HStack>
         <Stack direction={['column', 'row']} w={'full'} h={'full'} alignItems={"start"}>
-          <Stack w={'full'} alignItems={"center"} spacing={'48px'}>
-            <Stack bgImage={'/pool.svg'} w={['full', '600px']} h={['300px', '600px']} bgPosition={"center"} bgSize={'contain'}
+          <Stack w={'full'} alignItems={"center"} spacing={'48px'} h={'full'} justify={"center"}>
+            <Stack bgImage={'/pool.svg'} w={['full', '400px']} h={['300px', '400px']} bgPosition={"center"}
+                   bgSize={'contain'}
                    position={"relative"} bgRepeat={"no-repeat"} spacing={0}>
-              <IconButton
-                icon={<CloseIcon/>}
-                borderRadius={'full'}
-                size={'lg'} zIndex={1} opacity={0.8}
-                aria-label={'Close'}
-                position={'absolute'} variant={"outline"} left={'50%'} top={'50%'}
-                transform={'translate(-50%, -50%)'}
-                isLoading={isQLoading}
-                onClick={() => {
-                  router.push(`/4ducks/${poolId}`)
-                }}
-              >
-              </IconButton>
               {
                 ducks.map((duck, index) => (
                   <chakra.img
@@ -206,28 +189,30 @@ const _4Ducks = () => {
                     src={'/duck.svg'}
                     w={['22px', '44px']} h={['22px', '44px']}
                     position={"absolute"}
-                    top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${260 * duck.r}px)`}
-                    left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${260 * duck.r}px)`}
+                    top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${200 * duck.r}px)`}
+                    left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${200 * duck.r}px)`}
                     transform={'translate(-50%, -50%)'}
                   />
                 ))
               }
             </Stack>
-            <HStack spacing={'48px'}>
+            <HStack spacing={'48px'} w={'full'} justify={"center"}>
               <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
               <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
             </HStack>
           </Stack>
           <Stack p={'12px'} minW={['full', '360px']} w={['full', '360px']}>
-            <Stack minH={'200px'} bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
+            <Stack minH={'120px'} bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
               <Text fontSize={'sm'} fontWeight={'bold'}>Join other pools:</Text>
             </Stack>
             <Stack bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
               {/* eslint-disable-next-line react/no-unescaped-entities */}
               <Text fontSize={'sm'} fontWeight={'bold'}>History of this pool:</Text>
-              {logs?.map((item) => (
-                <FourDucksLog log={item} key={item.blockNumber}/>
-              ))}
+              <Stack maxH={'480px'} overflow={"scroll"}>
+                {logs?.map((item) => (
+                  <FourDucksLog log={item} key={item.blockNumber}/>
+                ))}
+              </Stack>
             </Stack>
           </Stack>
         </Stack>

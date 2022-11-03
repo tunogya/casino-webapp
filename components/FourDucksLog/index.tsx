@@ -37,7 +37,7 @@ const FourDucksLog: FC<FourDucksLogProps> = ({log}) => {
   return (
     <HStack>
       <Badge cursor={"pointer"}
-        color={'white'} bg={data?.[1] ? 'green.400' : 'red.400'} w={'60px'} p={'1'} textAlign={"center"} fontSize={'xs'}
+        color={'white'} bg={data?.[1] ? 'green.400' : 'red.400'} w={'60px'} textAlign={"center"}
         onClick={() => {
           router.push({
             query: {

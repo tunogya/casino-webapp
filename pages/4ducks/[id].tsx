@@ -175,7 +175,7 @@ const _4Ducks = () => {
         </HStack>
         <Stack direction={['column', 'row']} w={'full'} h={'full'} alignItems={"start"}>
           <Stack w={'full'} alignItems={"center"} spacing={'48px'} h={'full'} justify={"center"}>
-            <Stack bgImage={'/pool.svg'} w={['full', '400px']} h={['300px', '400px']} bgPosition={"center"}
+            <Stack bgImage={'/pool.svg'} w={['full', '480px']} h={['320px', '480px']} bgPosition={"center"}
                    bgSize={'contain'}
                    position={"relative"} bgRepeat={"no-repeat"} spacing={0}>
               {
@@ -185,8 +185,8 @@ const _4Ducks = () => {
                     src={'/duck.svg'}
                     w={['22px', '44px']} h={['22px', '44px']}
                     position={"absolute"}
-                    top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${200 * duck.r}px)`}
-                    left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${200 * duck.r}px)`}
+                    top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${240 * duck.r}px)`}
+                    left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${240 * duck.r}px)`}
                     transform={'translate(-50%, -50%)'}
                   />
                 ))

@@ -4,7 +4,7 @@ import {
   HStack, Link,
   Spacer,
   Stack,
-  Text, chakra
+  Text, chakra, Badge
 } from "@chakra-ui/react";
 import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
 import {useCallback, useEffect, useMemo, useState} from "react";
@@ -166,13 +166,17 @@ const _4Ducks = () => {
           </Stack>
           <Stack direction={'row'} justify={"space-around"} alignItems={"center"}>
             {sponsorWalletData && (
-              <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal
-                    fontSize={'sm'}>sponsor: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
+              <Badge variant={'outline'}>
+                <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal
+                      fontSize={'sm'}>sponsor: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
+              </Badge>
             )}
             <Spacer/>
             {chain && poolId && (
-              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
-                    isExternal fontSize={'sm'}>{poolEnsName ? poolEnsName : poolId}</Link>
+              <Badge>
+                <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
+                      isExternal fontSize={'sm'}>pool: {poolEnsName ? poolEnsName : poolId}</Link>
+              </Badge>
             )}
           </Stack>
         </Stack>

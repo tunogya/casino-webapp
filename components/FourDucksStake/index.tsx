@@ -214,7 +214,8 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
               ) : (
                 <HStack>
                   <Button
-                    bg={isOptimistic ? 'green.400' : 'red.400'}
+                    variant={'outline'}
+                    color={isOptimistic ? 'green.400' : 'red.400'}
                     disabled={!soloStakeWrite}
                     onClick={() => soloStakeWrite?.()}
                     isLoading={isSoloStakeLoading || waitSoloStakeStatus === 'loading'}

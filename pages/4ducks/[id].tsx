@@ -175,7 +175,7 @@ const _4Ducks = () => {
             {chain && poolId && (
               <Badge>
                 <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
-                      isExternal fontSize={'sm'}>pool: {poolEnsName ? poolEnsName : poolId}</Link>
+                      isExternal fontSize={'sm'}>pool: {poolEnsName ? poolEnsName : poolId.slice(0, 4) + '...' + poolId.slice(-4)}</Link>
               </Badge>
             )}
           </Stack>

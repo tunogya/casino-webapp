@@ -153,26 +153,29 @@ const _4Ducks = () => {
   return (
     <Layout>
       <Stack w={'full'} p={['12px', '24px']} h={'full'}>
-        <HStack spacing={'24px'}>
-          <Heading fontWeight={'bold'} cursor={'pointer'} onClick={() => {
-            router.push('/4ducks/')
-          }}>4 Ducks</Heading>
-          {sponsorWalletData && (
-            <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal
-                  fontSize={'sm'}>sponsor
-              balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
-          )}
-          <Spacer/>
-          {chain && poolId && (
-            <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
-                  isExternal fontSize={'sm'}>the pool: {poolEnsName ? poolEnsName : poolId}</Link>
-          )}
-          {
-            data?.[0] === address && (
-              <FourDucksSetting/>
-            )
-          }
-        </HStack>
+        <Stack spacing={['8px', '24px']} direction={['column', 'row']} justify={"space-between"}>
+          <Stack direction={"row"} justify={"space-around"} alignItems={"center"}>
+            <Heading fontWeight={'bold'} cursor={'pointer'} onClick={() => {
+              router.push('/4ducks/')
+            }}>4 Ducks</Heading>
+            {
+              data?.[0] === address && (
+                <FourDucksSetting/>
+              )
+            }
+          </Stack>
+          <Stack direction={'row'} justify={"space-around"} alignItems={"center"}>
+            {sponsorWalletData && (
+              <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal
+                    fontSize={'sm'}>sponsor: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
+            )}
+            <Spacer/>
+            {chain && poolId && (
+              <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
+                    isExternal fontSize={'sm'}>{poolEnsName ? poolEnsName : poolId}</Link>
+            )}
+          </Stack>
+        </Stack>
         <Stack direction={['column', 'row']} w={'full'} h={'full'} alignItems={"start"}>
           <Stack w={'full'} alignItems={"center"} spacing={'48px'} h={'full'} justify={"center"}>
             <Stack bgImage={'/pool.svg'} w={['full', '480px']} h={['320px', '480px']} bgPosition={"center"}
@@ -192,8 +195,8 @@ const _4Ducks = () => {
                 ))
               }
             </Stack>
-            <Text fontSize={'2xl'} fontWeight={'bold'}>Can 4 ducks swim halfway down the pool?</Text>
-            <HStack spacing={'48px'} w={'full'} justify={"center"}>
+            <Text fontSize={'2xl'} fontWeight={'bold'} textAlign={"center"}>Can 4 ducks swim halfway down the pool?</Text>
+            <HStack spacing={['24px', '48px']} maxW={'full'} justify={"center"}>
               <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
               <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
             </HStack>

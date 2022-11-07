@@ -46,6 +46,7 @@ const FourDucksSetting = () => {
   return (
     <>
       <Button
+        width={'120px'}
         variant={"outline"}
         leftIcon={<SettingsIcon/>}
         onClick={onOpen}

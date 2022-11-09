@@ -20,7 +20,7 @@ const Home: NextPage = () => {
     {
       id: 2,
       name: '4 Ducks',
-      path: `/4ducks/${address || '0x0000000000000000000000000000000000000000'}`,
+      path: `/4ducks/?id=${address || '0x0000000000000000000000000000000000000000'}`,
       contract: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     }
   ])

@@ -1,6 +1,6 @@
 import {Badge, HStack, Link, Spacer, Text} from "@chakra-ui/react";
 import {FC} from "react";
-import {LogType} from "../../pages/4ducks/[id]";
+import {LogType} from "../../pages/4ducks";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {useContractReads, useNetwork} from "wagmi";

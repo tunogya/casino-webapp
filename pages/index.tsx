@@ -14,7 +14,7 @@ const Home: NextPage = () => {
     {
       id: 1,
       name: 'Snatch Pool',
-      path: '/snatchpools/0',
+      path: '/snatchpools/',
       contract: SNATCH_ADDRESS[chain?.id || 5],
     },
     {

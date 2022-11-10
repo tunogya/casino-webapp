@@ -163,6 +163,8 @@ const Pool = () => {
   const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
   const {data: sponsorWalletData} = useBalance({
     addressOrName: sponsorWallet,
+    watch: true,
+    cacheTime: 3_000,
   })
 
   const etherscanUrl = useMemo(() => {
@@ -236,8 +238,7 @@ const Pool = () => {
         <Stack w={'full'} h={'full'} alignItems={"center"} p={'20px'}>
           <HStack w={'full'} spacing={'20px'}>
             {sponsorWalletData && (
-              <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor
-                balance: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
+              <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
             )}
             <Spacer/>
             {address && poolConfig && (

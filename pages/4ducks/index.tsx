@@ -73,6 +73,8 @@ const _4Ducks = () => {
   const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
   const {data: sponsorWalletData} = useBalance({
     addressOrName: sponsorWallet,
+    watch: true,
+    cacheTime: 3_000,
   })
   const [ducks, setDucks] = useState<{ t: number, r: number }[]>([])
   const [logs, setLogs] = useState<LogType[]>([])

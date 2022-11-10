@@ -238,7 +238,10 @@ const Pool = () => {
         <Stack w={'full'} h={'full'} alignItems={"center"} p={'20px'}>
           <HStack w={'full'} spacing={'20px'}>
             {sponsorWalletData && (
-              <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal fontSize={'sm'}>sponsor: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
+              <Badge variant={'outline'}>
+                <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal
+                      fontSize={'xs'}>sponsor: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
+              </Badge>
             )}
             <Spacer/>
             {address && poolConfig && (

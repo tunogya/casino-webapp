@@ -1,5 +1,5 @@
 import type {NextPage} from 'next';
-import {Stack, Wrap, WrapItem, Heading, useConst, Text} from "@chakra-ui/react";
+import {Stack, Wrap, WrapItem, Heading, useConst, Text, Link} from "@chakra-ui/react";
 import Layout from "../components/layout";
 import {useRouter} from "next/router";
 import {FOUR_DUCKS_ADDRESS, SNATCH_ADDRESS} from "../constant/address";
@@ -47,7 +47,9 @@ const Home: NextPage = () => {
                          await router.push(game.path)
                        }}
               >{game.name}</Heading>
-              <Text fontSize={'xs'}>View Contract: <br/>{game.contract}</Text>
+              <Text fontSize={'xs'}>View Contract:<br/>
+                <Link href={chain?.blockExplorers?.etherscan?.url + '/address/' + game.contract } isExternal>{game.contract}</Link>
+              </Text>
             </Stack>
           </WrapItem>
         )) }

@@ -200,7 +200,7 @@ const Pool = () => {
               key={item}
               variant={Number(id) === item ? "solid" : "outline"}
               onClick={async () => {
-                await router.push(`/pools/${item}`)
+                await router.push(`/snatchpools/${item}`)
               }}
             >#{item} Pool</Button>
           ))}
@@ -211,7 +211,7 @@ const Pool = () => {
                 variant={"outline"}
                 leftIcon={<AddIcon/>}
                 onClick={async () => {
-                  await router.push('/pools/create')
+                  await router.push('/snatchpools/create')
                 }}
               >
                 Pool

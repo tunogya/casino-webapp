@@ -164,7 +164,7 @@ const _4Ducks = () => {
         <Stack spacing={['8px', '24px']} direction={['column', 'row']} justify={"space-between"}>
           <Stack direction={"row"} justify={"space-around"} alignItems={"center"}>
             <Heading fontWeight={'bold'} cursor={'pointer'} onClick={() => {
-              router.push('/4ducks/')
+              router.push('/fourducks/')
             }}>4 Ducks</Heading>
             {
               data?.[0] === address && (

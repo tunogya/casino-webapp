@@ -1,6 +1,6 @@
 import {Badge, HStack, Link, Spacer, Text} from "@chakra-ui/react";
 import {FC} from "react";
-import {LogType} from "../../pages/4ducks";
+import {LogType} from "../../pages/fourducks";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {useContractReads, useNetwork} from "wagmi";
@@ -17,7 +17,7 @@ const FourDucksLog: FC<FourDucksLogProps> = ({log}) => {
     addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     contractInterface: FOUR_DUCKS_API,
   }
-  const {data} = useContractReads({
+  const {data, isLoading} = useContractReads({
     contracts: [
       {
         ...FourDucksContract,
@@ -36,17 +36,22 @@ const FourDucksLog: FC<FourDucksLogProps> = ({log}) => {
 
   return (
     <HStack>
-      <Badge cursor={"pointer"}
-        color={'white'} bg={data?.[1] ? 'green.400' : 'red.400'} w={'60px'} textAlign={"center"}
-        onClick={() => {
-          router.push({
-            query: {
-              ...router.query,
-              q: log.topics[3],
-            }
-          })
-        }}
-      >{data?.[1] ? 'Yes' : 'No'}</Badge>
+      { isLoading ? (
+        <Badge color={'black'} bg={"white"} w={'60px'} textAlign={"center"}
+        >...</Badge>
+      ) : (
+        <Badge cursor={"pointer"}
+               color={'white'} bg={data?.[1] ? 'green.400' : 'red.400'} w={'60px'} textAlign={"center"}
+               onClick={() => {
+                 router.push({
+                   query: {
+                     ...router.query,
+                     q: log.topics[3],
+                   }
+                 })
+               }}
+        >{data?.[1] ? 'Yes' : 'No'}</Badge>
+      ) }
       <Link fontSize={'xs'} isExternal
             href={chain?.blockExplorers?.etherscan?.url + '/tx/' + log.transactionHash}>
         TX: {log.transactionHash.slice(0, 6) + '...' + log.transactionHash.slice(-4)}

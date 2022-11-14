@@ -15,9 +15,10 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction
 } from "wagmi";
-import {FOUR_DUCKS_ADDRESS, NATIVE_CURRENCY_ADDRESS} from "../../constant/address";
+import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {BigNumber, ethers} from "ethers";
+import {AddressZero} from "@ethersproject/constants";
 
 type PickStakeProps = {
   label: string,
@@ -98,7 +99,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
     functionName: 'pooledStake',
     args: [poolId, token, parseAmount],
     overrides: {
-      value: token === NATIVE_CURRENCY_ADDRESS ? parseAmount : BigNumber.from(0),
+      value: token === AddressZero ? parseAmount : BigNumber.from(0),
       gasLimit: 1000000,
     }
   })
@@ -120,7 +121,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
     functionName: 'soloStake',
     args: [poolId, token, parseAmount],
     overrides: {
-      value: token === NATIVE_CURRENCY_ADDRESS ? parseAmount : ethers.utils.parseEther(sponsorFee),
+      value: token === AddressZero ? parseAmount : ethers.utils.parseEther(sponsorFee),
       gasLimit: 1000000,
     }
   })

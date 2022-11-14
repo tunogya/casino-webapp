@@ -7,5 +7,3 @@ export const SNATCH_ADDRESS = {
 export const FOUR_DUCKS_ADDRESS = {
   [chain.goerli.id]: "0x97306f1c9679f5DE1c5223F2b2AC8EFBc5BF6caC"
 }
-
-export const NATIVE_CURRENCY_ADDRESS = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"

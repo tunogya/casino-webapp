@@ -9,7 +9,7 @@ import {
   erc20ABI,
   useBalance, useWaitForTransaction
 } from "wagmi";
-import {NATIVE_CURRENCY_ADDRESS, SNATCH_ADDRESS} from "../../constant/address";
+import {SNATCH_ADDRESS} from "../../constant/address";
 import SNATCH_ABI from "../../abis/Snatch.json";
 import {useRouter} from "next/router";
 import {BigNumber, ethers} from "ethers";
@@ -20,6 +20,7 @@ import {AddIcon} from "@chakra-ui/icons";
 import SnatchTokenBalance from "../../components/SnatchTokenBalance";
 import {useRecoilState} from "recoil";
 import {poolIdsAtom} from "../../state/snatchpools";
+import {AddressZero} from "@ethersproject/constants";
 
 const Pool = () => {
   const {address} = useAccount()
@@ -66,7 +67,7 @@ const Pool = () => {
     functionName: 'draw',
     args: [id],
     overrides: {
-      value: data?.[0]?.paymentToken === NATIVE_CURRENCY_ADDRESS ? data?.[0]?.singleDrawPrice : '0',
+      value: data?.[0]?.paymentToken === AddressZero ? data?.[0]?.singleDrawPrice : '0',
       gasLimit: 1000000,
     }
   })
@@ -76,7 +77,7 @@ const Pool = () => {
     functionName: 'batchDraw',
     args: [id],
     overrides: {
-      value: data?.[0]?.paymentToken === NATIVE_CURRENCY_ADDRESS ? data?.[0]?.batchDrawPrice : '0',
+      value: data?.[0]?.paymentToken === AddressZero ? data?.[0]?.batchDrawPrice : '0',
       gasLimit: 1000000,
     }
   })

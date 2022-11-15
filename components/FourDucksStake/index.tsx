@@ -186,7 +186,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
                 fontWeight={'bold'}
                 fontFamily={'Syncopate'}
               >Amount:</FormLabel>
-              <Input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={'Token Amount'}/>
+              <Input type={"number"} value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={'Token Amount'}/>
               <FormHelperText
                 fontSize={'xs'}
                 color={'yellow.900'}
@@ -217,7 +217,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
                   <Button
                     variant={'outline'}
                     color={isOptimistic ? 'green.400' : 'red.400'}
-                    disabled={!soloStakeWrite}
+                    disabled={!soloStakeWrite || amount == '' || Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()) < Number(amount)}
                     onClick={() => soloStakeWrite?.()}
                     isLoading={isSoloStakeLoading || waitSoloStakeStatus === 'loading'}
                     size={'lg'}
@@ -226,7 +226,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
                   </Button>
                   <Button
                     bg={isOptimistic ? 'green.400' : 'red.400'}
-                    disabled={!poolStakeWrite}
+                    disabled={!poolStakeWrite || amount == '' || Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()) < Number(amount)}
                     onClick={() => poolStakeWrite?.()}
                     isLoading={isPooledStakeLoading || waitPooledStakeStatus === 'loading'}
                     size={'lg'}

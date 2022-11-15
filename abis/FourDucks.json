@@ -84,7 +84,7 @@
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "token",
         "type": "address"
@@ -115,7 +115,7 @@
         "type": "bytes32"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "response",
         "type": "uint256"
@@ -147,7 +147,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "value",
         "type": "uint256"
@@ -160,7 +160,7 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "uint256",
         "name": "value",
         "type": "uint256"
@@ -185,7 +185,7 @@
         "type": "address"
       },
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "token",
         "type": "address"
@@ -212,19 +212,6 @@
     ],
     "name": "Upgraded",
     "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "NATIVE_CURRENCY",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
   },
   {
     "inputs": [],

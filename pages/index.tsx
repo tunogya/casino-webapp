@@ -2,8 +2,9 @@ import type {NextPage} from 'next';
 import {Stack, Wrap, WrapItem, Heading, useConst, Text, Link} from "@chakra-ui/react";
 import Layout from "../components/layout";
 import {useRouter} from "next/router";
-import {FOUR_DUCKS_ADDRESS, SNATCH_ADDRESS} from "../constant/address";
+import {FOUR_DUCKS_ADDRESS, PRINTING_POD_ADDRESS, SNATCH_ADDRESS} from "../constant/address";
 import {useAccount, useNetwork} from "wagmi";
+import {AddressZero} from "@ethersproject/constants";
 
 const Home: NextPage = () => {
   const router = useRouter()
@@ -20,14 +21,14 @@ const Home: NextPage = () => {
     {
       id: 2,
       name: '4 Ducks',
-      path: `/fourducks/?id=${address || '0x0000000000000000000000000000000000000000'}`,
+      path: `/fourducks/?id=${address || AddressZero}`,
       contract: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     },
     {
       id: 3,
       name: 'Printing Pod',
       path: '/printingpod/',
-      contract: '0x0000000000000000000000000000000000000000',
+      contract: PRINTING_POD_ADDRESS[chain?.id || 5],
     }
   ])
 

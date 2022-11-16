@@ -7,3 +7,7 @@ export const SNATCH_ADDRESS = {
 export const FOUR_DUCKS_ADDRESS = {
   [chain.goerli.id]: "0x97306f1c9679f5DE1c5223F2b2AC8EFBc5BF6caC"
 }
+
+export const PRINTING_POD_ADDRESS = {
+  [chain.goerli.id]: "0xB2eC8E843c27946Dd4789609E5a333917E0Ba215"
+}

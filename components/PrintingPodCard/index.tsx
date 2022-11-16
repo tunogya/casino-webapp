@@ -16,7 +16,6 @@ const PrintingPodCard = () => {
         </Button>
       ) }
     </Stack>
-
   )
 }
 

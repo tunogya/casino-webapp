@@ -5,6 +5,7 @@ const Button = defineStyleConfig({
     fontWeight: 700,
     borderRadius: '12px',
     fontFamily: 'Syncopate',
+    minH: '44px',
   },
   variants: {
     outline: {

@@ -7,7 +7,7 @@ import {useRouter} from "next/router";
 const Layout = ({children}) => {
   const router = useRouter()
   return (
-    <Stack h={['100%', '100vh']} spacing={0} align={"center"} bg={'yellow.100'}>
+    <Stack align={"center"} w={'full'} h={'full'}>
       <Head>
         <title>Casino | WizardingPay</title>
         <meta
@@ -16,25 +16,28 @@ const Layout = ({children}) => {
         />
         <link rel="icon" href="/favicon.svg"/>
       </Head>
-      <Stack direction={"row"} px={4} py={2} align={"center"} bg={'gold'} w={'full'} borderBottom={"2px solid #400000"}>
-        <Stack
-          spacing={0}
-          onClick={() => {
-            router.push('/')
-          }}
-          cursor={"pointer"}
-        >
-          <Heading fontSize={'xx-small'} fontWeight={'normal'}>WizardingPay</Heading>
-          <Heading
-            fontSize={"md"}
+      <Stack maxW={'container.sm'} spacing={'0'} align={"center"}>
+        <Stack direction={"row"} px={4} py={2} align={"center"} bg={'#FAE35A'} w={'full'} position={'sticky'} top={0}
+               borderBottom={"2px solid #400000"}>
+          <Stack
+            spacing={0}
+            onClick={() => {
+              router.push('/')
+            }}
+            cursor={"pointer"}
           >
-            Casino
-          </Heading>
+            <Heading fontSize={'xx-small'} fontWeight={'normal'}>WizardingPay</Heading>
+            <Heading
+              fontSize={"md"}
+            >
+              Casino
+            </Heading>
+          </Stack>
+          <Spacer/>
+          <ConnectButton/>
         </Stack>
-        <Spacer/>
-        <ConnectButton/>
+        {children}
       </Stack>
-      {children}
     </Stack>
   )
 }

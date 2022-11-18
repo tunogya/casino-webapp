@@ -1,66 +1,38 @@
 import type {NextPage} from 'next';
-import {Stack, Wrap, WrapItem, Heading, useConst, Text, Link} from "@chakra-ui/react";
+import {Stack, Heading, Text, Button} from "@chakra-ui/react";
 import Layout from "../components/layout";
 import {useRouter} from "next/router";
-import {FOUR_DUCKS_ADDRESS, PRINTING_POD_ADDRESS, SNATCH_ADDRESS} from "../constant/address";
-import {useAccount, useNetwork} from "wagmi";
+import {useAccount} from "wagmi";
 import {AddressZero} from "@ethersproject/constants";
 
 const Home: NextPage = () => {
   const router = useRouter()
-  const { chain } = useNetwork()
   const { address } = useAccount()
-
-  const games = useConst([
-    {
-      id: 1,
-      name: 'Snatch Pool',
-      path: '/snatchpools/',
-      contract: SNATCH_ADDRESS[chain?.id || 5],
-    },
-    {
-      id: 2,
-      name: '4 Ducks',
-      path: `/fourducks/?id=${address || AddressZero}`,
-      contract: FOUR_DUCKS_ADDRESS[chain?.id || 5],
-    },
-    {
-      id: 3,
-      name: 'Printing Pod',
-      path: '/printingpod/',
-      contract: PRINTING_POD_ADDRESS[chain?.id || 5],
-    }
-  ])
 
   return (
     <Layout>
-      <Wrap h={'full'} justify={"space-around"} p={['24px', '48px']} spacing={['24px', '48px']} w={'full'}>
-        { games.map((game) => (
-          <WrapItem key={game.id} w={['full', '400px']}>
-            <Stack
-              bg={'gold'}
-              h={['300px', '400px']}
-              w={['full', '400px']}
-              border={"2px solid"}
-              borderColor={"yellow.900"}
-              borderRadius={'24px'}
-              alignItems={"center"}
-              justify={"space-around"}
-            >
-              <Heading fontSize={'2xl'} fontWeight={'bold'}
-                       cursor={'pointer'}
-                       p={'24px'}
-                       onClick={async () => {
-                         await router.push(game.path)
-                       }}
-              >{game.name}</Heading>
-              <Text fontSize={'xs'}>View Contract:<br/>
-                <Link href={chain?.blockExplorers?.etherscan?.url + '/address/' + game.contract } isExternal>{game.contract}</Link>
-              </Text>
-            </Stack>
-          </WrapItem>
-        )) }
-      </Wrap>
+      <Stack spacing={'11px'} w={'full'} h={'full'} p={'22px'} pb={'44px'}>
+        <Stack w={'full'} h={'400px'} bg={"#FEFAC0"} border={'2px'} borderRadius={'11px'} borderColor={'yellow.900'}>
+
+        </Stack>
+        <Button fontSize={'14px'} minH={'75px'} bg={'#EB5370'} onClick={() => {
+          router.push(`/fourducks/?id=${address || AddressZero}`)
+        }}>
+          QUACK! QUACK! QUACK! QUACK!
+        </Button>
+      </Stack>
+      <Stack p={'44px 22px'} w={'full'} spacing={'22px'} h={'full'} bg={'#81D8C5'} align={"center"} borderTop={'2px'} borderColor={'yellow.900'}>
+        <Heading fontSize={'36px'}>Snatch Pool</Heading>
+        <Stack align={"center"} spacing={0}>
+          <Text fontSize={'12px'}>The more draws, the higher the lucky value!</Text>
+          <Text fontSize={'12px'} fontWeight={'bold'}>RP = 200, Special bonus!</Text>
+        </Stack>
+        <Button fontSize={'14px'} bg={'white'} w={'full'} color={'yellow.900'} onClick={() => {
+          router.push(`/snatchpools/`)
+        }}>
+          Draw
+        </Button>
+      </Stack>
     </Layout>
   );
 };

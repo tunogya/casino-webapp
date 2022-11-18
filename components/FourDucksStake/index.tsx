@@ -1,5 +1,5 @@
 import {
-  Button, FormControl, FormHelperText, FormLabel, HStack, Input, Link,
+  Button, FormControl, FormHelperText, FormLabel, HStack, Input,
   Popover,
   PopoverBody,
   PopoverContent,
@@ -30,7 +30,11 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
   const {chain} = useNetwork()
   const {address} = useAccount()
   const [token, setToken] = useState("0xDfcBBb16FeEB9dD9cE3870f6049bD11d28390FbF")
+  const [tokenName, setTokenName] = useState("")
+  const [tokenSymbol, setTokenSymbol] = useState("")
   const [amount, setAmount] = useState("")
+  const [tokenBalanceOfMe, setTokenBalanceOfMe] = useState("")
+  const [tokenBalanceOfContract, setTokenBalanceOfContract] = useState("")
   const TokenContract = {
     addressOrName: token,
     contractInterface: erc20ABI,
@@ -147,11 +151,20 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
     }
   }, [fourDucksData])
 
+  useEffect(() => {
+    if (data) {
+      setTokenName(String(data[4]))
+      setTokenBalanceOfMe(ethers.utils.formatUnits(data[1], data[0]))
+      setTokenBalanceOfContract(ethers.utils.formatUnits(data[5], data[0]))
+      setTokenSymbol(String(data[3]))
+    }
+  }, [data])
+
   return (
     <Popover>
       <PopoverTrigger>
         <Button
-          maxW={'120px'}
+          w={'full'}
           bg={isOptimistic ? 'green.400' : 'red.400'}
           size={'lg'}
         >{label}</Button>
@@ -159,26 +172,15 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
       <PopoverContent border={'2px solid'} borderColor={'yellow.900'} p={'12px'} borderRadius={'12px'}>
         <PopoverBody>
           <Stack spacing={'12px'}>
-            <FormControl>
-              <FormLabel
-                fontSize={'xs'}
-                color={'yellow.900'}
-                fontWeight={'bold'}
-                fontFamily={'Syncopate'}
-              >Token: {data?.[4] || '...'}</FormLabel>
-              <Input value={token} onChange={(e) => setToken(e.target.value)} placeholder={'Token Address'}/>
-              <FormHelperText
-                fontSize={'xs'}
-                color={'yellow.900'}
-                textAlign={"end"}
-              >
-                Query tokens in <Link href={chain?.blockExplorers?.etherscan?.url}
-                                      fontSize={'xs'}
-                                      color={'yellow.900'}
-                                      fontWeight={'bold'}
-                                      isExternal>{chain?.blockExplorers?.etherscan?.name}</Link>
-              </FormHelperText>
-            </FormControl>
+              <FormControl>
+                <FormLabel
+                  fontSize={'xs'}
+                  color={'yellow.900'}
+                  fontWeight={'bold'}
+                  fontFamily={'Syncopate'}
+                >Token: {tokenName}</FormLabel>
+                <Input value={token} onChange={(e) => setToken(e.target.value)} placeholder={'Token Address'}/>
+              </FormControl>
             <FormControl>
               <FormLabel
                 fontSize={'xs'}
@@ -193,12 +195,12 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
                 textAlign={"end"}
               >
                 <Text
-                  color={Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()) < Number(amount) ? 'red.400' : ''}>My
-                  Balance: {Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()).toLocaleString()} {data?.[3] || '...'}<br/></Text>
+                  color={Number(tokenBalanceOfMe) < Number(amount) ? 'red.400' : ''}>My
+                  Balance: {Number(tokenBalanceOfMe).toLocaleString()} {tokenSymbol}<br/></Text>
                 <Text
-                  color={Number(ethers.utils.formatUnits(data?.[5] || '0', data?.[0]).toString()) < Number(amount) * 2 ? 'red.400' : ''}
+                  color={Number(tokenBalanceOfContract) < Number(amount) * 2 ? 'red.400' : ''}
                 >Pool
-                  Balance: {Number(ethers.utils.formatUnits(data?.[5] || '0', data?.[0]).toString()).toLocaleString()} {data?.[3] || '...'}</Text>
+                  Balance: {Number(tokenBalanceOfContract).toLocaleString()} {tokenSymbol}</Text>
               </FormHelperText>
             </FormControl>
             <Stack pt={'24px'}>

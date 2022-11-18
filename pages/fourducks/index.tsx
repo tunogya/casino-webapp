@@ -2,14 +2,12 @@ import Layout from "../../components/layout";
 import {
   Heading,
   HStack, Link,
-  Spacer,
   Stack,
-  Text, chakra, Badge
+  Text, chakra,
 } from "@chakra-ui/react";
-import {useAccount, useBalance, useContractReads, useEnsName, useNetwork} from "wagmi";
+import {useAccount, useBalance, useContractReads, useNetwork} from "wagmi";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import FourDucksStake from "../../components/FourDucksStake";
-import FourDucksSetting from "../../components/FourDucksSetting";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
 import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {BigNumber, ethers} from "ethers";
@@ -36,9 +34,6 @@ const _4Ducks = () => {
   const {address} = useAccount()
   const {chain, chains} = useNetwork()
   const router = useRouter()
-  const {data: poolEnsName} = useEnsName({
-    address: poolId
-  })
   const FourDucksContract = {
     addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
     contractInterface: FOUR_DUCKS_API,
@@ -160,74 +155,47 @@ const _4Ducks = () => {
 
   return (
     <Layout>
-      <Stack w={'full'} p={['12px', '24px']} h={'full'}>
-        <Stack spacing={['8px', '24px']} direction={['column', 'row']} justify={"space-between"}>
-          <Stack direction={"row"} justify={"space-around"} alignItems={"center"}>
-            <Heading fontWeight={'bold'} cursor={'pointer'} onClick={() => {
-              router.push('/fourducks/')
-            }}>4 Ducks</Heading>
-            {
-              data?.[0] === address && (
-                <FourDucksSetting/>
-              )
-            }
-          </Stack>
-          <Stack direction={'row'} justify={"space-around"} alignItems={"center"}>
-            {sponsorWalletData && (
-              <Badge variant={'outline'}>
-                <Link href={`${etherscanUrl}/address/${sponsorWallet}`} isExternal
-                      fontSize={'sm'}>sponsor: {Number(ethers.utils.formatUnits(sponsorWalletData.value, sponsorWalletData.decimals)).toLocaleString()} {sponsorWalletData.symbol}</Link>
-              </Badge>
-            )}
-            <Spacer/>
-            {chain && poolId && (
-              <Badge>
-                <Link href={`${chain?.blockExplorers?.etherscan?.url}/address/${FOUR_DUCKS_ADDRESS[chain?.id || 5]}`}
-                      isExternal fontSize={'sm'}>pool: {poolEnsName ? poolEnsName : poolId.slice(0, 4) + '...' + poolId.slice(-4)}</Link>
-              </Badge>
-            )}
-          </Stack>
+      <Stack spacing={'22px'} align={"center"} p={'22px'} pb={'44px'} w={'full'} bg={'#FEFAC0'} borderBottom={'2px'}
+             borderColor={'yellow.900'}>
+        <Heading onClick={() => {
+          router.push('/fourducks/')
+        }} cursor={'pointer'}>
+          FOUR DUCKS
+        </Heading>
+        <Link fontSize={'12px'} fontFamily={'Syncopate'} href={`${etherscanUrl}/address/${sponsorWallet}`}
+              isExternal>SPONSOR: {Number(ethers.utils.formatUnits(sponsorWalletData?.value || 0, sponsorWalletData?.decimals || 18)).toLocaleString()} {sponsorWalletData?.symbol}</Link>
+        <Stack bgImage={'/pool.svg'} w={['full', '360px']} h={['320px', '360px']} bgPosition={"center"}
+               bgSize={'contain'}
+               position={"relative"} bgRepeat={"no-repeat"} spacing={0}>
+          {
+            ducks.map((duck, index) => (
+              <chakra.img
+                key={index}
+                src={'/duck.svg'}
+                w={['22px', '44px']} h={['22px', '44px']}
+                position={"absolute"}
+                top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${180 * duck.r}px)`}
+                left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${180 * duck.r}px)`}
+                transform={'translate(-50%, -50%)'}
+              />
+            ))
+          }
         </Stack>
-        <Stack direction={['column', 'row']} w={'full'} h={'full'} alignItems={"start"}>
-          <Stack w={'full'} alignItems={"center"} spacing={'48px'} h={'full'} justify={"center"}>
-            <Stack bgImage={'/pool.svg'} w={['full', '480px']} h={['320px', '480px']} bgPosition={"center"}
-                   bgSize={'contain'}
-                   position={"relative"} bgRepeat={"no-repeat"} spacing={0}>
-              {
-                ducks.map((duck, index) => (
-                  <chakra.img
-                    key={index}
-                    src={'/duck.svg'}
-                    w={['22px', '44px']} h={['22px', '44px']}
-                    position={"absolute"}
-                    top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${240 * duck.r}px)`}
-                    left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${240 * duck.r}px)`}
-                    transform={'translate(-50%, -50%)'}
-                  />
-                ))
-              }
-            </Stack>
-            <Text fontSize={'2xl'} fontWeight={'bold'} textAlign={"center"}>Can 4 ducks swim halfway down the pool?</Text>
-            <HStack spacing={['24px', '48px']} maxW={'full'} justify={"center"}>
-              <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
-              <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
-            </HStack>
-          </Stack>
-          <Stack py={'24px'} spacing={'24px'} minW={['full', '360px']} w={['full', '360px']}>
-            <Stack minH={'120px'} bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
-              <Text fontSize={'sm'} fontWeight={'bold'}>Join other pools:</Text>
-            </Stack>
-            <Stack bg={"gray.50"} p={'20px'} borderRadius={'20px'}>
-              {/* eslint-disable-next-line react/no-unescaped-entities */}
-              <Text fontSize={'sm'} fontWeight={'bold'}>History of this pool:</Text>
-              <Stack maxH={'480px'} overflow={"scroll"}>
-                {logs?.map((item) => (
-                  <FourDucksLog log={item} key={item.blockNumber}/>
-                ))}
-              </Stack>
-            </Stack>
-          </Stack>
-        </Stack>
+        <Text fontSize={'16px'} fontFamily={'Syncopate'} fontWeight={'bold'} textOverflow={'ellipsis'}
+              textAlign={"center"}>
+          Can 4 ducks swim halfway<br/> down the pool?
+        </Text>
+        <HStack w={'full'} spacing={'22px'}>
+          <FourDucksStake label={"Yes"} poolId={poolId} isOptimistic={true}/>
+          <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
+        </HStack>
+      </Stack>
+      <Stack bg={'#8AD5FB'} w={'full'} h={'full'} p={'22px'}>
+        <Text fontFamily={'Syncopate'} fontSize={'14px'} fontWeight={'bold'} color={'yellow.900'}>History of the
+          pool</Text>
+        {logs?.map((item) => (
+          <FourDucksLog log={item} key={item.blockNumber}/>
+        ))}
       </Stack>
     </Layout>
   );

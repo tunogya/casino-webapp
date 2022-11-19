@@ -83,11 +83,20 @@ const _4Ducks = () => {
     }
   }, [data])
 
+  function randomQ() {
+    // create a random big number
+    const seed = ethers.BigNumber.from(Math.random().toString().slice(2))
+    const q = ethers.utils.keccak256(seed.toHexString())
+    setQ(q)
+  }
+
   useEffect(() => {
     if (router.query.id && isAddress(router.query.id.toString())) {
       setPoolId(router.query.id.toString())
       if (router.query.q) {
         setQ(router.query.q.toString())
+      } else {
+        randomQ()
       }
     }
   }, [address, router])
@@ -166,6 +175,8 @@ const _4Ducks = () => {
             ducks.map((duck, index) => (
               <chakra.img
                 key={index}
+                cursor={"pointer"}
+                onClick={randomQ}
                 src={`/duck${index + 1}.png`}
                 position={"absolute"}
                 h={(Math.min(width || 640, 640) - 44) / 5}

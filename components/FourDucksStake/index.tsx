@@ -157,6 +157,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
     }
     if (data?.[1] && data?.[0] && data?.[5] ) {
       setTokenBalanceOfMe(ethers.utils.formatUnits(data[1], data[0]))
+      setTokenBalanceOfContract(ethers.utils.formatUnits(data[5], data[0]))
     }
     if (data?.[3]) {
       setTokenSymbol(String(data[3]))

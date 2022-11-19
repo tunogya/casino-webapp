@@ -150,7 +150,7 @@ const _4Ducks = () => {
 
   return (
     <Layout>
-      <Stack spacing={'22px'} align={"center"} p={'22px'} pb={'44px'} w={'full'} bg={'#FEFAC0'} borderBottom={'2px'}
+      <Stack spacing={'22px'} align={"center"} p={'22px'} pb={'44px'} w={'full'} bg={'#27F3F6'} borderBottom={'2px'}
              borderColor={'yellow.900'}>
         <Heading onClick={() => {
           router.push('/fourducks/')
@@ -159,15 +159,15 @@ const _4Ducks = () => {
         </Heading>
         <Link fontSize={'12px'} fontFamily={'Syncopate'} href={`${etherscanUrl}/address/${sponsorWallet}`}
               isExternal>SPONSOR: {Number(ethers.utils.formatUnits(sponsorWalletData?.value || 0, sponsorWalletData?.decimals || 18)).toLocaleString()} {sponsorWalletData?.symbol}</Link>
-        <Stack bgImage={'/pool.svg'} w={"full"} h={Math.min(width || 640, 640) - 44 } bgPosition={"center"}
+        <Stack bgImage={'/pool.png'} w={"full"} h={Math.min(width || 640, 640) - 44 } bgPosition={"center"}
                bgSize={'contain'} position={"relative"} bgRepeat={"no-repeat"} spacing={0}>
           {
             ducks.map((duck, index) => (
               <chakra.img
                 key={index}
-                src={'/duck.svg'}
-                w={['22px', '44px']} h={['22px', '44px']}
+                src={`/duck${index + 1}.png`}
                 position={"absolute"}
+                h={'100px'}
                 top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${(Math.min(width || 640, 640) - 88) / 2 * duck.r}px)`}
                 left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${(Math.min(width || 640, 640) - 88) / 2 * duck.r}px)`}
                 transform={'translate(-50%, -50%)'}
@@ -184,7 +184,7 @@ const _4Ducks = () => {
           <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
         </HStack>
       </Stack>
-      <Stack bg={'#8AD5FB'} w={'full'} h={'full'} p={'22px'}>
+      <Stack bg={'#FEFAC0'} w={'full'} h={'full'} p={'22px'}>
         <Text fontFamily={'Syncopate'} fontSize={'14px'} fontWeight={'bold'} color={'yellow.900'}>History of the
           pool</Text>
         {logs?.map((item) => (

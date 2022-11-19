@@ -16,6 +16,7 @@ import {isAddress} from "ethers/lib/utils";
 import axios from "axios";
 import FourDucksLog from "../../components/FourDucksLog";
 import {useWindowSize} from "../../hooks/useWindowSize";
+import {AddressZero} from "@ethersproject/constants";
 
 export type LogType = {
   address: string,
@@ -31,7 +32,7 @@ export type LogType = {
 }
 
 const _4Ducks = () => {
-  const [poolId, setPoolId] = useState("")
+  const [poolId, setPoolId] = useState(AddressZero)
   const {address} = useAccount()
   const {chain, chains} = useNetwork()
   const router = useRouter()
@@ -153,7 +154,7 @@ const _4Ducks = () => {
       <Stack spacing={'22px'} align={"center"} p={'22px'} pb={'44px'} w={'full'} bg={'#27F3F6'} borderBottom={'2px'}
              borderColor={'yellow.900'}>
         <Heading onClick={() => {
-          router.push('/fourducks/')
+          router.push(`/fourducks/?id=${poolId}`)
         }} cursor={'pointer'}>
           FOUR DUCKS
         </Heading>
@@ -167,7 +168,7 @@ const _4Ducks = () => {
                 key={index}
                 src={`/duck${index + 1}.png`}
                 position={"absolute"}
-                h={'100px'}
+                h={(Math.min(width || 640, 640) - 44) / 5}
                 top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${(Math.min(width || 640, 640) - 88) / 2 * duck.r}px)`}
                 left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${(Math.min(width || 640, 640) - 88) / 2 * duck.r}px)`}
                 transform={'translate(-50%, -50%)'}

@@ -1,9 +1,10 @@
 import {
-  Button, FormControl, FormHelperText, FormLabel, HStack, Input,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverTrigger, Stack, Text
+  Button, FormControl, FormHelperText, FormLabel, HStack, Input, Stack, Text, useDisclosure,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
 } from "@chakra-ui/react";
 import {FC, useEffect, useMemo, useState} from "react";
 import {
@@ -35,6 +36,7 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
   const [amount, setAmount] = useState("")
   const [tokenBalanceOfMe, setTokenBalanceOfMe] = useState("")
   const [tokenBalanceOfContract, setTokenBalanceOfContract] = useState("")
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const TokenContract = {
     addressOrName: token,
     contractInterface: erc20ABI,
@@ -165,92 +167,95 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
   }, [data])
 
   return (
-    <Popover>
-      <PopoverTrigger>
-        <Button
-          w={'full'}
-          bg={isOptimistic ? 'green.400' : 'red.400'}
-          size={'lg'}
-        >{label}</Button>
-      </PopoverTrigger>
-      <PopoverContent border={'2px solid'} borderColor={'yellow.900'} p={'12px'} borderRadius={'12px'}>
-        <PopoverBody>
-          <Stack spacing={'12px'}>
-            <FormControl>
-              <FormLabel
-                fontSize={'xs'}
-                color={'yellow.900'}
-                fontWeight={'bold'}
-                fontFamily={'Syncopate'}
-              >Token: {tokenName}</FormLabel>
-              <Input value={token} onChange={(e) => setToken(e.target.value)} placeholder={'Token Address'}/>
-            </FormControl>
-            <FormControl>
-              <FormLabel
-                fontSize={'xs'}
-                color={'yellow.900'}
-                fontWeight={'bold'}
-                fontFamily={'Syncopate'}
-              >Amount:</FormLabel>
-              <Input type={"number"} value={amount} onChange={(e) => setAmount(e.target.value)}
-                     placeholder={'Token Amount'}/>
-              <FormHelperText
-                fontSize={'xs'}
-                color={'yellow.900'}
-                textAlign={"end"}
-              >
-                <Text
-                  color={Number(tokenBalanceOfMe) < Number(amount) ? 'red.400' : ''}>My
-                  Balance: {Number(tokenBalanceOfMe).toLocaleString()} {tokenSymbol}<br/></Text>
-                <Text
-                  color={Number(tokenBalanceOfContract) < Number(amount) * 2 ? 'red.400' : ''}
-                >Pool
-                  Balance: {Number(tokenBalanceOfContract).toLocaleString()} {tokenSymbol}</Text>
-              </FormHelperText>
-            </FormControl>
-            <Stack pt={'24px'}>
-              {(BigNumber.from(data?.[2] || 0).lt(parseAmount)) ? (
-                <Button
-                  bg={isOptimistic ? 'green.400' : 'red.400'}
-                  disabled={!approveWrite}
-                  onClick={() => approveWrite?.()}
-                  isLoading={isApproveLoading || waitApproveStatus === 'loading'}
-                  size={'lg'}
+    <>
+      <Button
+        w={'full'}
+        bg={isOptimistic ? 'green.400' : 'red.400'}
+        size={'lg'}
+        onClick={onOpen}
+      >{label}</Button>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
+        <ModalContent  border={'2px solid'} borderColor={'yellow.900'} p={'12px'} borderRadius={'12px'}>
+          <ModalHeader  fontFamily={'Syncopate'} fontSize={'xl'} color={isOptimistic ? 'green.400' : 'red.400'}>{ isOptimistic ? "Yes" : "No" }</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Stack spacing={'12px'}>
+              <FormControl>
+                <FormLabel
+                  fontSize={'xs'}
+                  color={'yellow.900'}
+                  fontWeight={'bold'}
+                  fontFamily={'Syncopate'}
+                >Token: {tokenName}</FormLabel>
+                <Input value={token} onChange={(e) => setToken(e.target.value)} placeholder={'Token Address'}/>
+              </FormControl>
+              <FormControl>
+                <FormLabel
+                  fontSize={'xs'}
+                  color={'yellow.900'}
+                  fontWeight={'bold'}
+                  fontFamily={'Syncopate'}
+                >Amount:</FormLabel>
+                <Input type={"number"} value={amount} onChange={(e) => setAmount(e.target.value)}
+                       placeholder={'Token Amount'}/>
+                <FormHelperText
+                  fontSize={'xs'}
+                  color={'yellow.900'}
+                  textAlign={"end"}
                 >
-                  Approve
-                </Button>
-              ) : (
-                <HStack>
-                  <Button
-                    variant={'outline'}
-                    color={isOptimistic ? 'green.400' : 'red.400'}
-                    disabled={!soloStakeWrite || amount == '' || Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()) < Number(amount)}
-                    onClick={() => soloStakeWrite?.()}
-                    isLoading={isSoloStakeLoading || waitSoloStakeStatus === 'loading'}
-                    size={'lg'}
-                  >
-                    Solo
-                  </Button>
+                  <Text
+                    color={Number(tokenBalanceOfMe) < Number(amount) ? 'red.400' : ''}>My
+                    Balance: {Number(tokenBalanceOfMe).toLocaleString()} {tokenSymbol}<br/></Text>
+                  <Text
+                    color={Number(tokenBalanceOfContract) < Number(amount) * 2 ? 'red.400' : ''}
+                  >Pool
+                    Balance: {Number(tokenBalanceOfContract).toLocaleString()} {tokenSymbol}</Text>
+                </FormHelperText>
+              </FormControl>
+              <Stack pt={'24px'}>
+                {(BigNumber.from(data?.[2] || 0).lt(parseAmount)) ? (
                   <Button
                     bg={isOptimistic ? 'green.400' : 'red.400'}
-                    disabled={!poolStakeWrite || amount == '' || Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()) < Number(amount)}
-                    onClick={() => poolStakeWrite?.()}
-                    isLoading={isPooledStakeLoading || waitPooledStakeStatus === 'loading'}
+                    disabled={!approveWrite}
+                    onClick={() => approveWrite?.()}
+                    isLoading={isApproveLoading || waitApproveStatus === 'loading'}
                     size={'lg'}
                   >
-                    Pooled
+                    Approve
                   </Button>
-                </HStack>
-              )}
+                ) : (
+                  <HStack>
+                    <Button
+                      variant={'outline'}
+                      color={isOptimistic ? 'green.400' : 'red.400'}
+                      disabled={!soloStakeWrite || amount == '' || Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()) < Number(amount)}
+                      onClick={() => soloStakeWrite?.()}
+                      isLoading={isSoloStakeLoading || waitSoloStakeStatus === 'loading'}
+                      size={'lg'}
+                    >
+                      Solo
+                    </Button>
+                    <Button
+                      bg={isOptimistic ? 'green.400' : 'red.400'}
+                      disabled={!poolStakeWrite || amount == '' || Number(ethers.utils.formatUnits(data?.[1] || '0', data?.[0]).toString()) < Number(amount)}
+                      onClick={() => poolStakeWrite?.()}
+                      isLoading={isPooledStakeLoading || waitPooledStakeStatus === 'loading'}
+                      size={'lg'}
+                    >
+                      Pooled
+                    </Button>
+                  </HStack>
+                )}
+              </Stack>
+              <Stack spacing={0} fontSize={'xs'}>
+                <Text>platform fee: {platformFee} %, sponsor fee: {sponsorFee} ETH</Text>
+                <Text>Pooled stake without sponsor fee!</Text>
+              </Stack>
             </Stack>
-            <Stack spacing={0} fontSize={'xs'}>
-              <Text>platform fee: {platformFee} %, sponsor fee: {sponsorFee} ETH</Text>
-              <Text>Pooled stake without sponsor fee!</Text>
-            </Stack>
-          </Stack>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
 

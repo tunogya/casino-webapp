@@ -15,6 +15,7 @@ import {useRouter} from "next/router";
 import {isAddress} from "ethers/lib/utils";
 import axios from "axios";
 import FourDucksLog from "../../components/FourDucksLog";
+import {useWindowSize} from "../../hooks/useWindowSize";
 
 export type LogType = {
   address: string,
@@ -73,6 +74,7 @@ const _4Ducks = () => {
   })
   const [ducks, setDucks] = useState<{ t: number, r: number }[]>([])
   const [logs, setLogs] = useState<LogType[]>([])
+  const {width} = useWindowSize()
 
   useEffect(() => {
     if (data?.[1]) {
@@ -83,15 +85,8 @@ const _4Ducks = () => {
   useEffect(() => {
     if (router.query.id && isAddress(router.query.id.toString())) {
       setPoolId(router.query.id.toString())
-    } else {
-      if (address) {
-        setPoolId(address)
-        router.push({
-          query: {
-            ...router.query,
-            id: address,
-          }
-        })
+      if (router.query.q) {
+        setQ(router.query.q.toString())
       }
     }
   }, [address, router])
@@ -164,9 +159,8 @@ const _4Ducks = () => {
         </Heading>
         <Link fontSize={'12px'} fontFamily={'Syncopate'} href={`${etherscanUrl}/address/${sponsorWallet}`}
               isExternal>SPONSOR: {Number(ethers.utils.formatUnits(sponsorWalletData?.value || 0, sponsorWalletData?.decimals || 18)).toLocaleString()} {sponsorWalletData?.symbol}</Link>
-        <Stack bgImage={'/pool.svg'} w={['full', '360px']} h={['320px', '360px']} bgPosition={"center"}
-               bgSize={'contain'}
-               position={"relative"} bgRepeat={"no-repeat"} spacing={0}>
+        <Stack bgImage={'/pool.svg'} w={"full"} h={Math.min(width || 640, 640) - 44 } bgPosition={"center"}
+               bgSize={'contain'} position={"relative"} bgRepeat={"no-repeat"} spacing={0}>
           {
             ducks.map((duck, index) => (
               <chakra.img
@@ -174,8 +168,8 @@ const _4Ducks = () => {
                 src={'/duck.svg'}
                 w={['22px', '44px']} h={['22px', '44px']}
                 position={"absolute"}
-                top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${180 * duck.r}px)`}
-                left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${180 * duck.r}px)`}
+                top={`calc(50% - ${Math.sin(duck.t * 2 * Math.PI)} * ${(Math.min(width || 640, 640) - 88) / 2 * duck.r}px)`}
+                left={`calc(50% - ${Math.cos(duck.t * 2 * Math.PI)} * ${(Math.min(width || 640, 640) - 88) / 2 * duck.r}px)`}
                 transform={'translate(-50%, -50%)'}
               />
             ))

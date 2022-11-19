@@ -4,16 +4,17 @@ import Layout from "../components/layout";
 import {useRouter} from "next/router";
 import {useAccount} from "wagmi";
 import {AddressZero} from "@ethersproject/constants";
+import {useWindowSize} from "../hooks/useWindowSize";
 
 const Home: NextPage = () => {
   const router = useRouter()
   const { address } = useAccount()
+  const { width } = useWindowSize()
 
   return (
     <Layout>
       <Stack spacing={'11px'} w={'full'} h={'full'} p={'22px'} pb={'44px'}>
-        <Stack w={'full'} h={'400px'} bg={"#FEFAC0"} border={'2px'} borderRadius={'11px'} borderColor={'yellow.900'}>
-
+        <Stack w={'full'} h={ Math.min(width || 640, 640) - 44 } bg={"#FEFAC0"} border={'2px'} borderRadius={'11px'} borderColor={'yellow.900'}>
         </Stack>
         <Button fontSize={'14px'} minH={'75px'} bg={'#EB5370'} onClick={() => {
           router.push(`/fourducks/?id=${address || AddressZero}`)

@@ -152,10 +152,13 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
   }, [fourDucksData])
 
   useEffect(() => {
-    if (data) {
+    if (data?.[4]) {
       setTokenName(String(data[4]))
+    }
+    if (data?.[1] && data?.[0] && data?.[5] ) {
       setTokenBalanceOfMe(ethers.utils.formatUnits(data[1], data[0]))
-      setTokenBalanceOfContract(ethers.utils.formatUnits(data[5], data[0]))
+    }
+    if (data?.[3]) {
       setTokenSymbol(String(data[3]))
     }
   }, [data])
@@ -172,15 +175,15 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
       <PopoverContent border={'2px solid'} borderColor={'yellow.900'} p={'12px'} borderRadius={'12px'}>
         <PopoverBody>
           <Stack spacing={'12px'}>
-              <FormControl>
-                <FormLabel
-                  fontSize={'xs'}
-                  color={'yellow.900'}
-                  fontWeight={'bold'}
-                  fontFamily={'Syncopate'}
-                >Token: {tokenName}</FormLabel>
-                <Input value={token} onChange={(e) => setToken(e.target.value)} placeholder={'Token Address'}/>
-              </FormControl>
+            <FormControl>
+              <FormLabel
+                fontSize={'xs'}
+                color={'yellow.900'}
+                fontWeight={'bold'}
+                fontFamily={'Syncopate'}
+              >Token: {tokenName}</FormLabel>
+              <Input value={token} onChange={(e) => setToken(e.target.value)} placeholder={'Token Address'}/>
+            </FormControl>
             <FormControl>
               <FormLabel
                 fontSize={'xs'}
@@ -188,7 +191,8 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
                 fontWeight={'bold'}
                 fontFamily={'Syncopate'}
               >Amount:</FormLabel>
-              <Input type={"number"} value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={'Token Amount'}/>
+              <Input type={"number"} value={amount} onChange={(e) => setAmount(e.target.value)}
+                     placeholder={'Token Amount'}/>
               <FormHelperText
                 fontSize={'xs'}
                 color={'yellow.900'}

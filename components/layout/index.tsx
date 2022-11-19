@@ -14,6 +14,7 @@ const Layout = ({children}) => {
           name="description"
           content="WizardingPay Casino"
         />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
         <link rel="icon" href="/favicon.svg"/>
       </Head>
       <Stack maxW={'container.sm'} w={'full'} spacing={'0'} align={"center"}>

@@ -16,7 +16,7 @@ const Layout = ({children}) => {
         />
         <link rel="icon" href="/favicon.svg"/>
       </Head>
-      <Stack maxW={'container.sm'} spacing={'0'} align={"center"}>
+      <Stack maxW={'container.sm'} w={'full'} spacing={'0'} align={"center"}>
         <Stack direction={"row"} px={4} py={2} align={"center"} bg={'#FAE35A'} w={'full'} position={'sticky'} top={0}
                borderBottom={"2px solid #400000"}>
           <Stack

@@ -13,8 +13,6 @@ import FOUR_DUCKS_API from "../../abis/FourDucks.json";
 import {BigNumber, ethers} from "ethers";
 import {useRouter} from "next/router";
 import {isAddress} from "ethers/lib/utils";
-import axios from "axios";
-import FourDucksLog from "../../components/FourDucksLog";
 import {useWindowSize} from "../../hooks/useWindowSize";
 import {AddressZero} from "@ethersproject/constants";
 
@@ -74,7 +72,6 @@ const _4Ducks = () => {
     cacheTime: 3_000,
   })
   const [ducks, setDucks] = useState<{ t: number, r: number }[]>([])
-  const [logs, setLogs] = useState<LogType[]>([])
   const {width} = useWindowSize()
 
   useEffect(() => {
@@ -134,30 +131,6 @@ const _4Ducks = () => {
     }
   }, [chain, chains])
 
-  const fetchLogs = useCallback(async () => {
-    if (!poolId) {
-      return
-    }
-    const topic0 = "0x754200201f11dd285de648ff60f1b2e399df9ae7964b9b0043c0cb50aca874db"
-    const topic1 = "0x000000000000000000000000" + poolId.replace("0x", "")
-    const apiKey = process.env.ETHERSCAN_API_KEY
-    const res = await axios({
-      url: `https://api-goerli.etherscan.io/api?module=logs&action=getLogs&fromBlock=0&toBlock=latest&topic0=${topic0}&topic0_1_opr=and&topic1=${topic1}&page=1&offset=1000&apikey=${apiKey}`,
-      method: 'GET',
-    })
-    if (res.data?.result?.length > 0) {
-      try {
-        setLogs(res.data.result?.reverse())
-      } catch (e) {
-        console.log(e)
-      }
-    }
-  }, [poolId])
-
-  useEffect(() => {
-    fetchLogs()
-  }, [fetchLogs])
-
   return (
     <Layout>
       <Stack spacing={'22px'} align={"center"} p={'22px'} pb={'44px'} w={'full'} bg={'#27F3F6'} borderBottom={'2px'}
@@ -199,9 +172,6 @@ const _4Ducks = () => {
       <Stack bg={'#FEFAC0'} w={'full'} h={'full'} p={'22px'}>
         <Text fontFamily={'Syncopate'} fontSize={'14px'} fontWeight={'bold'} color={'yellow.900'}>History of the
           pool</Text>
-        {logs?.map((item) => (
-          <FourDucksLog log={item} key={item.blockNumber}/>
-        ))}
       </Stack>
     </Layout>
   );

@@ -14,6 +14,7 @@ import PrintingPodSetting from "../../components/PrintingPodSetting";
 import PRINTING_POD_API from "../../abis/PrintingPod.json";
 import {useEffect, useMemo, useState} from "react";
 import {ethers} from "ethers";
+import Head from "next/head";
 
 const Printingpod = () => {
   const {chain, chains} = useNetwork()
@@ -79,6 +80,9 @@ const Printingpod = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>PrintingPod | WizardingPay</title>
+      </Head>
       <Stack h={'full'} w={'full'} align={"center"} p={['12px', '24px']} spacing={'48px'}>
         <Heading>Printing Pod</Heading>
         <Stack w={'full'} h={'full'} maxW={'container.md'} spacing={'48px'}>

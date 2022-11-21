@@ -15,6 +15,7 @@ import {useRouter} from "next/router";
 import {isAddress} from "ethers/lib/utils";
 import {useWindowSize} from "../../hooks/useWindowSize";
 import {AddressZero} from "@ethersproject/constants";
+import Head from "next/head";
 
 export type LogType = {
   address: string,
@@ -133,6 +134,9 @@ const _4Ducks = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Four Ducks | WizardingPay</title>
+      </Head>
       <Stack spacing={'22px'} align={"center"} p={'22px'} pb={'44px'} w={'full'} bg={'#27F3F6'} borderBottom={'2px'}
              borderColor={'yellow.900'}>
         <Heading onClick={() => {

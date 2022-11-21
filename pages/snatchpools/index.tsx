@@ -21,6 +21,7 @@ import SnatchTokenBalance from "../../components/SnatchTokenBalance";
 import {useRecoilState} from "recoil";
 import {poolIdsAtom} from "../../state/snatchpools";
 import {AddressZero} from "@ethersproject/constants";
+import Head from "next/head";
 
 const Pool = () => {
   const {address} = useAccount()
@@ -209,6 +210,9 @@ const Pool = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>Snatch Pool | WizardingPay</title>
+      </Head>
       <Stack direction={"row"} h={'full'} w={'full'}>
         <Stack minW={60} p={4} spacing={3} overflow={"scroll"}>
           {poolIds.map((item) => (

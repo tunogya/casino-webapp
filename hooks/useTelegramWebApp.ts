@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import axios from "axios";
+import qs from "qs";
 
 interface TelegramUser {
   id: number
@@ -27,11 +28,11 @@ const useTelegramWebApp = () => {
         const res = await axios("/api/telegram", {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded",
           },
-          data: {
+          data: qs.stringify({
             _auth: initData,
-          }
+          }),
         });
         if (res.status === 200) {
           setIsValid(true)

@@ -15,7 +15,7 @@ const useTelegramWebApp = () => {
   const [isValid, setIsValid] = useState<boolean>(false)
 
   const valid = useCallback(async () => {
-    if (typeof window === 'undefined') {
+    if (typeof window !== 'undefined') {
       // @ts-ignore
       window?.Telegram?.WebApp.ready();
       // @ts-ignore

@@ -1,17 +1,15 @@
 import type {NextPage} from 'next';
-import {Stack, Heading, Text, Button, Code} from "@chakra-ui/react";
+import {Stack, Heading, Text, Button} from "@chakra-ui/react";
 import Layout from "../components/layout";
 import {useRouter} from "next/router";
 import {useAccount} from "wagmi";
 import {AddressZero} from "@ethersproject/constants";
 import {useWindowSize} from "../hooks/useWindowSize";
-import {useState} from "react";
 
 const Home: NextPage = () => {
   const router = useRouter()
   const { address } = useAccount()
   const { width } = useWindowSize()
-  const [code, setCode] = useState("")
 
   return (
     <Layout>
@@ -36,17 +34,6 @@ const Home: NextPage = () => {
         }}>
           Draw
         </Button>
-        <Button onClick={() => {
-          if (typeof window !== 'undefined') {
-            // @ts-ignore
-            setCode(JSON.stringify(window?.Telegram?.WebApp))
-          }
-        }}>
-          Test Telegram
-        </Button>
-        <Code w={'full'}>
-          {code}
-        </Code>
       </Stack>
     </Layout>
   );

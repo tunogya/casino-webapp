@@ -20,6 +20,8 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import theme from "../theme";
 import {RecoilRoot} from "recoil";
+import Script from "next/script";
+import Head from "next/head";
 
 const {chains, provider, webSocketProvider} = configureChains(
   [
@@ -87,6 +89,26 @@ function MyApp({Component, pageProps}: AppProps) {
             appName: 'Playground',
             disclaimer: Disclaimer,
           }}>
+            <Head>
+              <title>Casino | WizardingPay</title>
+              <meta
+                name="description"
+                content="WizardingPay Casino"
+              />
+              <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+              <link rel="icon" href="/favicon.svg"/>
+            </Head>
+            <Script id={"telegram-web-app"} async={true} src={"https://telegram.org/js/telegram-web-app.js"}></Script>
+            <Script src={"https://www.googletagmanager.com/gtag/js?id=G-X9C08SL576"}></Script>
+            <Script id="google-tag-manager" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                
+                gtag('config', 'G-X9C08SL576');
+              `}
+            </Script>
             <Component {...pageProps} />
           </RainbowKitProvider>
         </WagmiConfig>

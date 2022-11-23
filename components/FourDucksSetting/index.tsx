@@ -33,8 +33,8 @@ const FourDucksSetting = () => {
     _sponsorWallet: "",
   })
   const {config} = usePrepareContractWrite({
-    addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
-    contractInterface: FOUR_DUCKS_API,
+    address: FOUR_DUCKS_ADDRESS[chain?.id || 5],
+    abi: FOUR_DUCKS_API,
     functionName: 'setRequestParameters',
     args: [requestParams._airnode, requestParams._endpointIdUint256, requestParams._sponsorWallet],
   })

@@ -14,8 +14,8 @@ const FourDucksLog: FC<FourDucksLogProps> = ({log}) => {
   const {chain} = useNetwork()
   const router = useRouter()
   const FourDucksContract = {
-    addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
-    contractInterface: FOUR_DUCKS_API,
+    address: FOUR_DUCKS_ADDRESS[chain?.id || 5],
+    abi: FOUR_DUCKS_API,
   }
   const {data, isLoading} = useContractReads({
     contracts: [

@@ -38,12 +38,12 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
   const [tokenBalanceOfContract, setTokenBalanceOfContract] = useState("")
   const { isOpen, onOpen, onClose } = useDisclosure()
   const TokenContract = {
-    addressOrName: token,
-    contractInterface: erc20ABI,
+    address: token,
+    abi: erc20ABI,
   }
   const FourDucksContract = {
-    addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
-    contractInterface: FOUR_DUCKS_API,
+    address: FOUR_DUCKS_ADDRESS[chain?.id || 5],
+    abi: FOUR_DUCKS_API,
   }
   const {data} = useContractReads({
     contracts: [
@@ -54,12 +54,12 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
       {
         ...TokenContract,
         functionName: 'balanceOf',
-        args: [address],
+        args: [address || AddressZero],
       },
       {
         ...TokenContract,
         functionName: 'allowance',
-        args: [address, FOUR_DUCKS_ADDRESS[chain?.id || 5]],
+        args: [address || AddressZero, FOUR_DUCKS_ADDRESS[chain?.id || 5]],
       },
       {
         ...TokenContract,
@@ -100,13 +100,13 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
     }
   }, [amount, data, isOptimistic])
   const {config: pooledStakeConfig} = usePrepareContractWrite({
-    addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
-    contractInterface: FOUR_DUCKS_API,
+    address: FOUR_DUCKS_ADDRESS[chain?.id || 5],
+    abi: FOUR_DUCKS_API,
     functionName: 'pooledStake',
     args: [poolId, token, parseAmount],
     overrides: {
       value: token === AddressZero ? parseAmount : BigNumber.from(0),
-      gasLimit: 1000000,
+      gasLimit: BigNumber.from(1000000),
     }
   })
   const [platformFee, setPlatformFee] = useState('0')
@@ -122,13 +122,13 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
     wait: pooledStakeData?.wait
   })
   const {config: soloStakeConfig} = usePrepareContractWrite({
-    addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
-    contractInterface: FOUR_DUCKS_API,
+    address: FOUR_DUCKS_ADDRESS[chain?.id || 5],
+    abi: FOUR_DUCKS_API,
     functionName: 'soloStake',
     args: [poolId, token, parseAmount],
     overrides: {
       value: token === AddressZero ? parseAmount : ethers.utils.parseEther(sponsorFee),
-      gasLimit: 1000000,
+      gasLimit: BigNumber.from(1000000),
     }
   })
   const {write: soloStakeWrite, data: soloStakeData, isLoading: isSoloStakeLoading} = useContractWrite(soloStakeConfig)
@@ -136,8 +136,8 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
     wait: soloStakeData?.wait
   })
   const {config: approveConfig} = usePrepareContractWrite({
-    addressOrName: token,
-    contractInterface: erc20ABI,
+    address: token,
+    abi: erc20ABI,
     functionName: 'approve',
     args: [FOUR_DUCKS_ADDRESS[chain?.id || 5], ethers.constants.MaxUint256],
   })
@@ -148,8 +148,8 @@ const FourDucksStake: FC<PickStakeProps> = ({label, poolId, isOptimistic}) => {
 
   useEffect(() => {
     if (fourDucksData) {
-      setPlatformFee((Number(ethers.utils.formatEther(fourDucksData?.[0] || '0')) * 100).toString())
-      setSponsorFee(ethers.utils.formatEther(fourDucksData?.[1] || '0'))
+      setPlatformFee((Number(ethers.utils.formatEther(BigNumber.from(fourDucksData?.[0] || '0'))) * 100).toString())
+      setSponsorFee(ethers.utils.formatEther(BigNumber.from(fourDucksData?.[1] || '0')))
     }
   }, [fourDucksData])
 

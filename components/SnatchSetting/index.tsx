@@ -34,8 +34,8 @@ const SnatchSetting = () => {
     _sponsorWallet: "",
   })
   const {config} = usePrepareContractWrite({
-    addressOrName: SNATCH_ADDRESS[chain?.id || 5],
-    contractInterface: SNATCH_ABI,
+    address: SNATCH_ADDRESS[chain?.id || 5],
+    abi: SNATCH_ABI,
     functionName: 'setRequestParameters',
     args: [requestParams._airnode, requestParams._endpointIdUint256, requestParams._endpointIdUint256Array, requestParams._sponsorWallet],
   })

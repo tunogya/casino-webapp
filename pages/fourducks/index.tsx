@@ -5,7 +5,7 @@ import {
   Stack,
   Text, chakra,
 } from "@chakra-ui/react";
-import {useAccount, useBalance, useContractReads, useNetwork} from "wagmi";
+import {Address, useAccount, useBalance, useContractReads, useNetwork} from "wagmi";
 import {useCallback, useEffect, useMemo, useState} from "react";
 import FourDucksStake from "../../components/FourDucksStake";
 import {FOUR_DUCKS_ADDRESS} from "../../constant/address";
@@ -36,10 +36,10 @@ const _4Ducks = () => {
   const {chain, chains} = useNetwork()
   const router = useRouter()
   const FourDucksContract = {
-    addressOrName: FOUR_DUCKS_ADDRESS[chain?.id || 5],
-    contractInterface: FOUR_DUCKS_API,
+    address: FOUR_DUCKS_ADDRESS[chain?.id || 5],
+    abi: FOUR_DUCKS_API,
   }
-  const [q, setQ] = useState<string | undefined>(undefined)
+  const [q, setQ] = useState<string>(AddressZero)
   const {data} = useContractReads({
     contracts: [
       {
@@ -66,9 +66,9 @@ const _4Ducks = () => {
       }
     ]
   })
-  const [sponsorWallet, setSponsorWallet] = useState<string | undefined>(undefined)
+  const [sponsorWallet, setSponsorWallet] = useState<Address | undefined>(undefined)
   const {data: sponsorWalletData} = useBalance({
-    addressOrName: sponsorWallet,
+    address: sponsorWallet,
     watch: true,
     cacheTime: 3_000,
   })
@@ -77,7 +77,7 @@ const _4Ducks = () => {
 
   useEffect(() => {
     if (data?.[1]) {
-      setSponsorWallet(data?.[1].toString())
+      setSponsorWallet(`0x${data?.[1].toString().slice(2)}`)
     }
   }, [data])
 
@@ -109,11 +109,13 @@ const _4Ducks = () => {
 
   const fetchDucks = useCallback(() => {
     setDucks([])
-    if (qData?.[0]) {
-      for (let i = 0; i < qData?.[0].length; i += 2) {
+    if (qData && qData[0]) {
+      for (let i = 0; i < 8; i += 2) {
         setDucks((ducks) => [...ducks, {
-          t: BigNumber.from(qData[0][i]).toNumber() / BigNumber.from('0x100000000').toNumber(),
-          r: BigNumber.from(qData[0][i + 1]).toNumber() / BigNumber.from('0x100000000').toNumber(),
+          // @ts-ignore
+          t: BigNumber.from(qData[0][i]!).toNumber() / BigNumber.from('0x100000000').toNumber(),
+          // @ts-ignore
+          r: BigNumber.from(qData[0][i + 1]!).toNumber() / BigNumber.from('0x100000000').toNumber(),
         }])
       }
     }

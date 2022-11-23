@@ -30,7 +30,7 @@ const Home: NextPage = () => {
           <Text fontSize={'12px'} fontWeight={'bold'}>RP = 200, Special bonus!</Text>
         </Stack>
         <Button fontSize={'14px'} bg={'white'} w={'full'} color={'yellow.900'} onClick={() => {
-          router.push(`/snatchpools/`)
+          // router.push(`/snatchpools/`)
         }}>
           Draw
         </Button>

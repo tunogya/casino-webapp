@@ -29,7 +29,7 @@ const {chains, provider, webSocketProvider} = configureChains(
   ],
   [
     infuraProvider({
-      apiKey: process.env.INFURA_KEY,
+      apiKey: process.env.INFURA_KEY!,
       priority: 0
     }),
   ],

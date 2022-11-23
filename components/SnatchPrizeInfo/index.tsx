@@ -12,8 +12,8 @@ export type PrizeProps = {
 const SnatchPrizeInfo: FC<PrizeProps> = ({token, value}) => {
   const { chain, chains } = useNetwork()
   const PrizeTokenContract = {
-    addressOrName: token,
-    contractInterface: erc20ABI,
+    address: token,
+    abi: erc20ABI,
   }
   const {data} = useContractReads({
     contracts: [

@@ -33,8 +33,8 @@ const PrintingPodSetting = () => {
     _sponsorWallet: "",
   })
   const {config} = usePrepareContractWrite({
-    addressOrName: PRINTING_POD_ADDRESS[chain?.id || 5],
-    contractInterface: PRINTING_POD_ABI,
+    address: PRINTING_POD_ADDRESS[chain?.id || 5],
+    abi: PRINTING_POD_ABI,
     functionName: 'setRequestParameters',
     args: [requestParams._airnode, requestParams._endpointIdUint256Array, requestParams._sponsorWallet],
   })

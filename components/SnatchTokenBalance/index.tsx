@@ -11,8 +11,8 @@ type TokenBalanceProps = {
 const SnatchTokenBalance:FC<TokenBalanceProps> = ({token, address}) => {
   const { chain, chains } = useNetwork()
   const TokenContract = {
-    addressOrName: token,
-    contractInterface: erc20ABI,
+    address: token,
+    abi: erc20ABI,
   }
   const {data} = useContractReads({
     contracts: [

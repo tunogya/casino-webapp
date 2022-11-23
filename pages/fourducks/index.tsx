@@ -175,10 +175,10 @@ const _4Ducks = () => {
           <FourDucksStake label={"No"} poolId={poolId} isOptimistic={false}/>
         </HStack>
       </Stack>
-      <Stack bg={'#FEFAC0'} w={'full'} h={'full'} p={'22px'}>
-        <Text fontFamily={'Syncopate'} fontSize={'14px'} fontWeight={'bold'} color={'yellow.900'}>History of the
-          pool</Text>
-      </Stack>
+      {/*<Stack bg={'#FEFAC0'} w={'full'} h={'full'} p={'22px'}>*/}
+      {/*  <Text fontFamily={'Syncopate'} fontSize={'14px'} fontWeight={'bold'} color={'yellow.900'}>Pool Info</Text>*/}
+
+      {/*</Stack>*/}
     </Layout>
   );
 }

@@ -5,7 +5,14 @@ import "@fontsource/syncopate/700.css";
 import "@fontsource/readex-pro/400.css";
 import "@fontsource/readex-pro/700.css";
 import type {AppProps} from 'next/app';
-import {RainbowKitProvider, connectorsForWallets, DisclaimerComponent} from '@rainbow-me/rainbowkit';
+import merge from 'lodash.merge';
+import {
+  RainbowKitProvider,
+  connectorsForWallets,
+  DisclaimerComponent,
+  Theme,
+  lightTheme,
+} from '@rainbow-me/rainbowkit';
 import {chain, configureChains, createClient, WagmiConfig} from 'wagmi';
 import {infuraProvider} from 'wagmi/providers/infura';
 import {ChakraProvider} from "@chakra-ui/react";
@@ -80,12 +87,21 @@ const Disclaimer: DisclaimerComponent = ({Text, Link}) => (
   </Text>
 );
 
+const myTheme = merge(lightTheme(), {
+  colors: {
+    accentColor: '#EB5370',
+  },
+  fonts: {
+    body: 'Syncopate',
+  },
+} as Theme);
+
 function MyApp({Component, pageProps}: AppProps) {
   return (
     <RecoilRoot>
       <ChakraProvider theme={theme}>
         <WagmiConfig client={wagmiClient}>
-          <RainbowKitProvider coolMode chains={chains} appInfo={{
+          <RainbowKitProvider coolMode theme={myTheme} chains={chains} appInfo={{
             appName: 'Playground',
             disclaimer: Disclaimer,
           }}>

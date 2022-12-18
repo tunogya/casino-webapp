@@ -34,6 +34,7 @@ const Button = defineStyleConfig({
     },
     ghost: {
       bg: 'transparent',
+      border: '2px dashed transparent',
       _hover: {
         bg: 'transparent',
         border: '2px dashed white',

@@ -9,39 +9,34 @@ const Button = defineStyleConfig({
   },
   variants: {
     outline: {
-      border: '2px dashed white',
+      border: '1px dashed white',
       color: 'white',
       _active: {
         bg: 'transparent',
-        border: '2px dashed white',
+        border: '1px dashed white',
       },
       _hover: {
         bg: 'transparent',
-        border: '2px solid white',
       },
     },
     solid: {
       color: 'white',
-      border: '2px dashed white',
+      border: '1px dashed white',
       _hover: {
         bg: 'transparent',
-        border: '2px solid white',
       },
       _active: {
         bg: 'transparent',
-        border: '2px solid white',
+        border: '1px solid white',
       },
     },
     ghost: {
       bg: 'transparent',
-      border: '2px dashed transparent',
       _hover: {
         bg: 'transparent',
-        border: '2px dashed white',
       },
       _active: {
         bg: 'transparent',
-        border: '2px solid white',
       },
     }
   },

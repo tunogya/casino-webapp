@@ -1,4 +1,3 @@
-import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
 import "@fontsource/readex-pro/400.css";
 import "@fontsource/readex-pro/700.css";
@@ -87,10 +86,10 @@ const Disclaimer: DisclaimerComponent = ({Text, Link}) => (
 
 const myTheme = merge(lightTheme(), {
   colors: {
-    accentColor: '#EB5370',
+    accentColor: '#000000',
   },
   fonts: {
-    body: 'Syncopate',
+    body: 'Readex Pro, sans-serif',
   },
 } as Theme);
 
@@ -104,13 +103,22 @@ function MyApp({Component, pageProps}: AppProps) {
             disclaimer: Disclaimer,
           }}>
             <Head>
-              <title>Casino | WizardingPay</title>
+              <title>Wizarding Pay</title>
               <meta
                 name="description"
-                content="WizardingPay Casino"
+                content="Wizarding Pay"
               />
               <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+              <meta content={'yes'} name={"apple-mobile-web-app-capable"} />
+              <meta content={'yes'} name={"mobile-web-app-capable"} />
+              <meta content={'black'} name={"apple-mobile-web-app-status-bar-style"} />
+              <meta content={'Wizarding Pay'} name={"apple-mobile-web-app-title"} />
+              <meta content={'telephone=no'} name={"format-detection"} />
+              <meta content={'email=no'} name={"format-detection"} />
+              <meta name="theme-color" content="#000000"/>
               <link rel="icon" href="/favicon.svg"/>
+              <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+              <link rel="apple-touch-startup-image" href="/launch.png"/>
             </Head>
             <Script id={"telegram-web-app"} async={true} src={"https://telegram.org/js/telegram-web-app.js"}></Script>
             <Script src={"https://www.googletagmanager.com/gtag/js?id=G-X9C08SL576"}></Script>

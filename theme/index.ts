@@ -14,7 +14,8 @@ const overrides = {
       },
       a: {
         color: 'white',
-      }
+        '-webkit-user-select': 'none',
+      },
     }
   },
   components: {

@@ -32,13 +32,13 @@ const Home: NextPage = () => {
                     variant={'ghost'}/>
       </HStack>
       <VStack w={'full'} px={'10px'} spacing={'20px'}>
-        <Button variant={'outline'} w={'full'} fontSize={'2xl'} size={'lg'} minH={'60px'} onClick={onOpen}>
+        <Button variant={'outline'} w={'full'} onClick={onOpen}>
           200 WUSD
         </Button>
-        <Button variant={'outline'} w={'full'} fontSize={'2xl'} size={'lg'} minH={'60px'} onClick={onOpen}>
+        <Button variant={'outline'} w={'full'} onClick={onOpen}>
           200 WUSD
         </Button>
-        <Button variant={'outline'} w={'full'} fontSize={'2xl'} size={'lg'} minH={'60px'} onClick={onOpen}>
+        <Button variant={'outline'} w={'full'} onClick={onOpen}>
           200 WUSD
         </Button>
       </VStack>

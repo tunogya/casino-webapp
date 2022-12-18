@@ -8,7 +8,7 @@ const Input = defineStyleConfig({
       field: {
         border: '0.5px solid',
         borderColor: 'yellow.900',
-        fontFamily: 'Syncopate',
+        fontFamily: 'Readex Pro',
         fontSize: 'sm',
         _focus: {
           border: '2px solid',
@@ -22,7 +22,7 @@ const Input = defineStyleConfig({
       field: {
         bg: 'yellow.900',
         color: 'white',
-        fontFamily: 'Syncopate',
+        fontFamily: 'Readex Pro',
         fontSize: 'sm',
       }
     }

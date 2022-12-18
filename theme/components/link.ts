@@ -4,7 +4,7 @@ const Link = defineStyleConfig({
   baseStyle: {
     fontFamily: 'Readex Pro',
     fontWeight: 400,
-    color: "yellow.900",
+    color: "white",
   },
 })
 

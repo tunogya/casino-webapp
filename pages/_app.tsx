@@ -1,7 +1,5 @@
 import '../styles/globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
-import "@fontsource/syncopate/400.css";
-import "@fontsource/syncopate/700.css";
 import "@fontsource/readex-pro/400.css";
 import "@fontsource/readex-pro/700.css";
 import type {AppProps} from 'next/app';

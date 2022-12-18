@@ -7,6 +7,16 @@ import Input from "./components/input";
 import Link from "./components/link";
 
 const overrides = {
+  styles: {
+    global: {
+      'html, body': {
+        backgroundColor: 'black',
+      },
+      a: {
+        color: 'white',
+      }
+    }
+  },
   components: {
     Button,
     Text,

@@ -4,7 +4,7 @@ const Badge = defineStyleConfig({
   baseStyle: {
     fontWeight: 700,
     borderRadius: '12px',
-    fontFamily: 'Syncopate',
+    fontFamily: 'Readex Pro',
     padding: '8px',
   },
   variants: {

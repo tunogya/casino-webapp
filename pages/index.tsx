@@ -4,8 +4,6 @@ import {
   Button,
   HStack,
   Spacer,
-  IconButton,
-  chakra,
   VStack,
   Text,
   DrawerContent,
@@ -23,16 +21,11 @@ import {
   Input, SliderTrack, SliderThumb, Slider, SliderFilledTrack, SliderMark, Wrap, WrapItem,
 } from "@chakra-ui/react";
 import Layout from "../components/layout";
-import {useState} from "react";
-import {useRouter} from "next/router";
 import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 const Home: NextPage = () => {
-  const router = useRouter()
   const {isOpen: isCashMenuOpen, onOpen: onCashMenuOpen, onClose: onCashMenuClose} = useDisclosure()
   const {isOpen: isAddTokenOpen, onOpen: onAddTokenOpen, onClose: onAddTokenClose } = useDisclosure()
-  const [depositSliderValue, setDepositSliderValue] = useState(50)
-  const [withdrawSliderValue, setWithdrawSliderValue] = useState(50)
 
   const cashMenu = [
     {title: 'Recharge'},

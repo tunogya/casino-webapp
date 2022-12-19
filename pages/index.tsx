@@ -25,10 +25,12 @@ import {
 import Layout from "../components/layout";
 import {useState} from "react";
 import {useRouter} from "next/router";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
 
 const Home: NextPage = () => {
   const router = useRouter()
-  const {isOpen, onOpen, onClose} = useDisclosure()
+  const {isOpen: isCashMenuOpen, onOpen: onCashMenuOpen, onClose: onCashMenuClose} = useDisclosure()
+  const {isOpen: isAddTokenOpen, onOpen: onAddTokenOpen, onClose: onAddTokenClose } = useDisclosure()
   const [depositSliderValue, setDepositSliderValue] = useState(50)
   const [withdrawSliderValue, setWithdrawSliderValue] = useState(50)
 
@@ -43,26 +45,20 @@ const Home: NextPage = () => {
       <HStack w={'full'} pt={'10px'} px={'10px'}>
         <Heading fontSize={'20px'}>My Cash</Heading>
         <Spacer/>
-        <IconButton aria-label={'notice'} icon={<chakra.img src={'/svg/bell.svg'} h={'20px'} w={'20px'}/>}
-                    variant={'ghost'} onClick={() => router.push('/notice')}/>
-        <IconButton aria-label={'history'}
-                    icon={<chakra.img src={'/svg/clock.arrow.circlepath.svg'} h={'20px'} w={'20px'}/>}
-                    variant={'ghost'} onClick={() => router.push('/history')}/>
-        <IconButton aria-label={'setting'} icon={<chakra.img src={'/svg/gearshape.svg'} h={'20px'}/>} w={'20px'}
-                    variant={'ghost'} onClick={() => router.push('/setting')}/>
+        <ConnectButton />
       </HStack>
       <VStack w={'full'} px={'10px'} spacing={'20px'}>
-        <Button variant={'outline'} w={'full'} onClick={onOpen}>
+        <Button variant={'outline'} w={'full'} onClick={onCashMenuOpen}>
           200 WUSD
         </Button>
-        <Button variant={'outline'} w={'full'} onClick={onOpen}>
+        <Button variant={'outline'} w={'full'} onClick={onCashMenuOpen}>
           200 WUSD
         </Button>
-        <Button variant={'outline'} w={'full'} onClick={onOpen}>
+        <Button variant={'outline'} w={'full'} onClick={onCashMenuOpen}>
           200 WUSD
         </Button>
       </VStack>
-      <Drawer placement={'bottom'} onClose={onClose} isOpen={isOpen}>
+      <Drawer placement={'bottom'} onClose={onCashMenuClose} isOpen={isCashMenuOpen}>
         <DrawerOverlay/>
         <DrawerContent h={'60vh'} alignItems={"center"} bg={'transparent'}>
           <Stack maxW={'container.sm'} w={'full'} h={'full'} bg={"#1C1C1C"} px={'20px'} borderTopRadius={'20px'}
@@ -150,9 +146,28 @@ const Home: NextPage = () => {
           </Stack>
         </DrawerContent>
       </Drawer>
-      <VStack>
-        <Text></Text>
+      <VStack spacing={0} pt={'20px'}>
+        <Text fontSize={'sm'}>Do not see your token?</Text>
+        <Button variant={'ghost'} fontSize={'sm'} size={'sm'} onClick={onAddTokenOpen}>Add Token</Button>
       </VStack>
+      <Drawer placement={'bottom'} onClose={onAddTokenClose} isOpen={isAddTokenOpen}>
+        <DrawerOverlay/>
+        <DrawerContent h={'60vh'} alignItems={"center"} bg={'transparent'}>
+          <Stack maxW={'container.sm'} w={'full'} h={'full'} bg={"#1C1C1C"} px={'20px'} borderTopRadius={'20px'}
+                 color={"white"} align={"center"} pt={'10px'} spacing={0}>
+            <Box bg={'#59585D'} h={'6px'} w={'48px'} borderRadius={'full'}/>
+            <Heading fontSize={'2xl'} w={'full'} textAlign={"start"} pb={'20px'}>Add Token</Heading>
+            <FormControl>
+              <Input variant={'flushed'} placeholder={'Search token'} _placeholder={{color: '#59585D'}}/>
+            </FormControl>
+            <Stack pt={'40px'}>
+              <Button variant={'ghost'} w={'full'}>
+                Add
+              </Button>
+            </Stack>
+          </Stack>
+        </DrawerContent>
+      </Drawer>
     </Layout>
   );
 };

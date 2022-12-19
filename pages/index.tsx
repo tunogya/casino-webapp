@@ -24,8 +24,10 @@ import {
 } from "@chakra-ui/react";
 import Layout from "../components/layout";
 import {useState} from "react";
+import {useRouter} from "next/router";
 
 const Home: NextPage = () => {
+  const router = useRouter()
   const {isOpen, onOpen, onClose} = useDisclosure()
   const [depositSliderValue, setDepositSliderValue] = useState(50)
   const [withdrawSliderValue, setWithdrawSliderValue] = useState(50)
@@ -42,12 +44,12 @@ const Home: NextPage = () => {
         <Heading fontSize={'20px'}>My Cash</Heading>
         <Spacer/>
         <IconButton aria-label={'notice'} icon={<chakra.img src={'/svg/bell.svg'} h={'20px'} w={'20px'}/>}
-                    variant={'ghost'}/>
+                    variant={'ghost'} onClick={() => router.push('/notice')}/>
         <IconButton aria-label={'history'}
                     icon={<chakra.img src={'/svg/clock.arrow.circlepath.svg'} h={'20px'} w={'20px'}/>}
-                    variant={'ghost'}/>
+                    variant={'ghost'} onClick={() => router.push('/history')}/>
         <IconButton aria-label={'setting'} icon={<chakra.img src={'/svg/gearshape.svg'} h={'20px'}/>} w={'20px'}
-                    variant={'ghost'}/>
+                    variant={'ghost'} onClick={() => router.push('/setting')}/>
       </HStack>
       <VStack w={'full'} px={'10px'} spacing={'20px'}>
         <Button variant={'outline'} w={'full'} onClick={onOpen}>

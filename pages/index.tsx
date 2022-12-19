@@ -101,7 +101,7 @@ const Home: NextPage = () => {
                       </SliderMark>
                     </Slider>
                     <Stack pt={'40px'}>
-                      <Button variant={'outline'} w={'full'}>
+                      <Button variant={'ghost'} w={'full'}>
                         Deposit
                       </Button>
                     </Stack>
@@ -109,8 +109,8 @@ const Home: NextPage = () => {
                 </TabPanel>
                 <TabPanel p={0}>
                   <Wrap spacing={'20px'} pt={'40px'}>
-                    <WrapItem>
-                      <Button variant={"outline"}>
+                    <WrapItem p={'4px'}>
+                      <Button variant={"ghost"}>
                         Stake Ducks
                       </Button>
                     </WrapItem>
@@ -137,7 +137,7 @@ const Home: NextPage = () => {
                       </SliderMark>
                     </Slider>
                     <Stack pt={'40px'}>
-                      <Button variant={'outline'} w={'full'}>
+                      <Button variant={'ghost'} w={'full'}>
                         Withdraw
                       </Button>
                     </Stack>

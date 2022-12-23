@@ -29,8 +29,8 @@ const CashMenu = () => {
           {
             cashMenu.map((item) => (
               <Tab key={item.title} color={'white'} fontSize={'sm'} borderRadius={'0px'}
-                   border={'1px dashed transparent'}
-                   _selected={{color: 'white', border: '1px dashed white'}}>
+                   border={'1px dashed'} borderColor={'transparent'}
+                   _selected={{color: 'white', borderColor: 'white', fontWeight: 'bold'}}>
                 {item.title}
               </Tab>
             ))

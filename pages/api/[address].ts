@@ -56,16 +56,24 @@ export default async function handler(
     }
     updateExpression = updateExpression.slice(0, -2);
 
-    const params = {
+    let params = {
       TableName: 'wizardingpay',
       Key: {
         address: address,
         chainId: Number(chainId),
       },
-      UpdateExpression: updateExpression,
-      ExpressionAttributeValues: expressionAttributeValues,
       ReturnValues: "ALL_NEW",
     }
+
+    if (Object.keys(expressionAttributeNames).length > 0) {
+      // @ts-ignore
+      params['UpdateExpression'] = updateExpression;
+      // @ts-ignore
+      params['ExpressionAttributeValues'] = expressionAttributeValues;
+      // @ts-ignore
+      params['ExpressionAttributeNames'] = expressionAttributeNames;
+    }
+
     const data = await ddbDocClient.send(new UpdateCommand(params));
     res.status(200).json(data);
   }

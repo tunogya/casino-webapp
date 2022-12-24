@@ -1,4 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
+
 const {GetCommand, UpdateCommand, DynamoDBDocumentClient} = require("@aws-sdk/lib-dynamodb");
 const {DynamoDBClient} = require("@aws-sdk/client-dynamodb");
 
@@ -43,7 +44,7 @@ export default async function handler(
     for (const key in req.body) {
       if (req.body.hasOwnProperty(key)) {
         const value = req.body[key];
-        updateExpression += `${key} = :${key}, `;
+        updateExpression += `#${key} = :${key}, `;
         expressionAttributeValues = {
           ...expressionAttributeValues,
           [`:${key}`]: value,
@@ -56,7 +57,7 @@ export default async function handler(
     }
     updateExpression = updateExpression.slice(0, -2);
 
-    let params = {
+    let params: any = {
       TableName: 'wizardingpay',
       Key: {
         address: address,
@@ -66,12 +67,12 @@ export default async function handler(
     }
 
     if (Object.keys(expressionAttributeNames).length > 0) {
-      // @ts-ignore
-      params['UpdateExpression'] = updateExpression;
-      // @ts-ignore
-      params['ExpressionAttributeValues'] = expressionAttributeValues;
-      // @ts-ignore
-      params['ExpressionAttributeNames'] = expressionAttributeNames;
+      params = {
+        ...params,
+        UpdateExpression: updateExpression,
+        ExpressionAttributeValues: expressionAttributeValues,
+        ExpressionAttributeNames: expressionAttributeNames,
+      }
     }
 
     const data = await ddbDocClient.send(new UpdateCommand(params));

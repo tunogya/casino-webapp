@@ -16,16 +16,17 @@ import {ConnectButton} from "@rainbow-me/rainbowkit";
 import AddToken from "../components/AddToken";
 import CashMenu from "../components/CashMenu";
 import {useCallback, useEffect, useState} from "react";
-import {useAccount, useNetwork} from "wagmi";
+import {Address, useAccount, useNetwork} from "wagmi";
 import axios from "axios";
 import CashItem from "../components/CashItem";
 
 const Home: NextPage = () => {
   const {isOpen: isCashMenuOpen, onOpen: onCashMenuOpen, onClose: onCashMenuClose} = useDisclosure()
-  const {isOpen: isAddTokenOpen, onOpen: onAddTokenOpen, onClose: onAddTokenClose } = useDisclosure()
-  const { address } = useAccount()
-  const { chain } = useNetwork()
-  const [tokens, setTokens] = useState<string[]>([])
+  const {isOpen: isAddTokenOpen, onOpen: onAddTokenOpen, onClose: onAddTokenClose} = useDisclosure()
+  const {address} = useAccount()
+  const {chain} = useNetwork()
+  const [tokens, setTokens] = useState<Address[]>([])
+  const [selectedToken, setSelectedToken] = useState<Address | null>(null)
 
   const getMyTokens = useCallback(async () => {
     if (!address || !chain) {
@@ -63,12 +64,15 @@ const Home: NextPage = () => {
       <HStack w={'full'} pt={'10px'} px={'10px'}>
         <Heading fontSize={'20px'}>My Cash</Heading>
         <Spacer/>
-        <ConnectButton />
+        <ConnectButton/>
       </HStack>
       <VStack w={'full'} px={'10px'} spacing={'20px'}>
-        { tokens.map((token, index) => (
-          <CashItem onClick={onCashMenuOpen} key={index} token={token}/>
-        )) }
+        {tokens.map((token: Address, index) => (
+          <CashItem onClick={() => {
+            setSelectedToken(token)
+            onCashMenuOpen()
+          }} key={index} token={token}/>
+        ))}
       </VStack>
       <HStack spacing={0} pt={'20px'}>
         <Text fontSize={'sm'}>Do not see your token?</Text>
@@ -77,7 +81,9 @@ const Home: NextPage = () => {
       <Drawer placement={'bottom'} onClose={onCashMenuClose} isOpen={isCashMenuOpen} autoFocus={false}>
         <DrawerOverlay/>
         <DrawerContent h={'60vh'} alignItems={"center"} bg={'transparent'}>
-          <CashMenu />
+          {
+            selectedToken && <CashMenu token={selectedToken}/>
+          }
         </DrawerContent>
       </Drawer>
       <Drawer placement={'bottom'} onClose={onAddTokenClose} isOpen={isAddTokenOpen} autoFocus={false}>

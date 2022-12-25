@@ -1,6 +1,12 @@
 import {Button, Wrap, WrapItem} from "@chakra-ui/react";
+import {Address} from "wagmi";
+import {FC} from "react";
 
-const Gaming = () => {
+type GamingProps = {
+  token: Address;
+}
+
+const Gaming: FC<GamingProps> = ({token}) => {
   return (
     <Wrap spacing={'20px'} pt={'40px'}>
       <WrapItem p={'4px'}>

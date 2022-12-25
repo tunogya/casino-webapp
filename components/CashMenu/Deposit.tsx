@@ -9,8 +9,14 @@ import {
   SliderTrack,
   Stack
 } from "@chakra-ui/react";
+import {Address} from "wagmi";
+import {FC} from "react";
 
-const Deposit = () => {
+type DepositProps = {
+  token: Address;
+}
+
+const Deposit: FC<DepositProps> = ({token}) => {
   return (
     <Stack spacing={'20px'} pt={'40px'}>
       <FormControl>

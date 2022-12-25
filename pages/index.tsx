@@ -18,6 +18,7 @@ import CashMenu from "../components/CashMenu";
 import {useCallback, useEffect, useState} from "react";
 import {useAccount, useNetwork} from "wagmi";
 import axios from "axios";
+import CashItem from "../components/CashItem";
 
 const Home: NextPage = () => {
   const {isOpen: isCashMenuOpen, onOpen: onCashMenuOpen, onClose: onCashMenuClose} = useDisclosure()
@@ -66,9 +67,7 @@ const Home: NextPage = () => {
       </HStack>
       <VStack w={'full'} px={'10px'} spacing={'20px'}>
         { tokens.map((token, index) => (
-          <Button key={index} variant={'outline'} w={'full'} onClick={onCashMenuOpen}>
-            {token}
-          </Button>
+          <CashItem onClick={onCashMenuOpen} key={index} token={token}/>
         )) }
       </VStack>
       <HStack spacing={0} pt={'20px'}>

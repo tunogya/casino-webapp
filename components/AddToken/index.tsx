@@ -2,7 +2,7 @@ import {Box, Button, FormControl, Heading, Input, Stack} from "@chakra-ui/react"
 import {FC, useState} from "react";
 import {isAddress} from "ethers/lib/utils";
 import axios from "axios";
-import {useAccount, useNetwork} from "wagmi";
+import {useAccount, useNetwork, useToken} from "wagmi";
 
 type AddTokenProps = {
   oldTokens: string[]
@@ -11,9 +11,16 @@ type AddTokenProps = {
 
 const AddToken: FC<AddTokenProps> = ({oldTokens, refresh}) => {
   const [token, setToken] = useState("")
-  const { chain } = useNetwork()
-  const { address } = useAccount()
+  const {chain} = useNetwork()
+  const {address} = useAccount()
   const [addStatus, setAddStatus] = useState("IDLE")
+
+  const {data: tokenData, isLoading: tokenIsLoading, isSuccess: tokenIsSuccess} = useToken({
+    // @ts-ignore
+    address: token,
+    chainId: chain?.id,
+    cacheTime: 30_000,
+  })
 
   const addToken = async () => {
     if (!isAddress(token) || !address || !chain) {
@@ -52,9 +59,10 @@ const AddToken: FC<AddTokenProps> = ({oldTokens, refresh}) => {
                _placeholder={{color: '#59585D'}}/>
       </FormControl>
       <Stack pt={'40px'}>
-        <Button variant={'ghost'} w={'full'} onClick={addToken} isLoading={addStatus === "LOADING"} loadingText={"Adding"}
+        <Button variant={'ghost'} w={'full'} onClick={addToken} isLoading={addStatus === "LOADING" || tokenIsLoading}
+                loadingText={`Adding ${tokenData?.name} (${tokenData?.symbol})`}
                 disabled={!isAddress(token) || !address || !chain}>
-          Add
+          { tokenIsSuccess ? `Add ${tokenData?.name} (${tokenData?.symbol})` : "Add Token" }
         </Button>
       </Stack>
     </Stack>

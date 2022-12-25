@@ -24,8 +24,8 @@ const CashMenu: FC<CashMenuProps> = ({token}) => {
     {title: 'Gaming'},
     {title: 'Redeem'},
   ]
-  const { chain } = useNetwork()
-  const { data: tokenData, isLoading: tokenIsLoading } = useToken({
+  const {chain} = useNetwork()
+  const {data: tokenData, isLoading: tokenIsLoading} = useToken({
     address: token,
     chainId: chain?.id || 5,
   })
@@ -33,15 +33,19 @@ const CashMenu: FC<CashMenuProps> = ({token}) => {
   return (
     <Stack maxW={'container.sm'} w={'full'} h={'full'} bg={"#1C1C1C"} px={'20px'} borderTopRadius={'20px'}
            color={"white"} align={"center"} pt={'10px'} spacing={0}>
-      <Box bg={'#59585D'} h={'6px'} w={'48px'} borderRadius={'full'}/>
-      <Heading fontSize={'2xl'} w={'full'} textAlign={"start"} pb={'20px'}>{tokenData?.name} ({tokenData?.symbol})</Heading>
+      <Box bg={'#59585D'} h={'6px'} w={'48px'} borderRadius={'full'} mb={'10px'}/>
+      {tokenIsLoading ? (
+        <Heading fontSize={'2xl'} w={'full'} textAlign={"start"} pb={'20px'}>Loading...</Heading>
+      ) : (
+        <Heading fontSize={'2xl'} w={'full'} textAlign={"start"}
+                 pb={'20px'}>{tokenData?.name} ({tokenData?.symbol})</Heading>
+      )}
       <Tabs variant='soft-rounded' w={'full'} isLazy>
         <TabList>
           {
             cashMenu.map((item) => (
-              <Tab key={item.title} color={'white'} fontSize={'sm'} borderRadius={'0px'}
-                   border={'1px dashed'} borderColor={'transparent'}
-                   _selected={{color: 'white', borderColor: 'white', fontWeight: 'bold'}}>
+              <Tab key={item.title} color={'white'} fontSize={'xs'}
+                   _selected={{fontWeight: 'bold', fontSize: 'md'}}>
                 {item.title}
               </Tab>
             ))

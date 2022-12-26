@@ -2,8 +2,8 @@ import {Button} from "@chakra-ui/react";
 import {FC} from "react";
 import {Address, useAccount, useContractRead, useNetwork, useToken} from "wagmi";
 import {CASH_ADDRESS} from "../../constant/address";
-import CASH_ABI from "../../abis/CASH.json";
 import {BigNumber, ethers} from "ethers";
+import {CASH_ABI} from "../../constant/abi";
 
 type CashItemProps = {
   onClick: () => void;

@@ -1,4 +1,4 @@
-[
+export const CASH_ABI = [
   {
     "anonymous": false,
     "inputs": [

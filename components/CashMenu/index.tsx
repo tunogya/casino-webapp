@@ -12,21 +12,18 @@ import Deposit from "./Deposit";
 import Gaming from "./Gaming";
 import Withdraw from "./Withdraw";
 import {Address, useNetwork, useToken} from "wagmi";
-import {FC} from "react";
+import {useRouter} from "next/router";
 
-type CashMenuProps = {
-  token: Address;
-}
-
-const CashMenu: FC<CashMenuProps> = ({token}) => {
+const CashMenu= () => {
   const cashMenu = [
     {title: 'Recharge'},
     {title: 'Gaming'},
     {title: 'Redeem'},
   ]
+  const router = useRouter()
   const {chain} = useNetwork()
   const {data: tokenData, isLoading: tokenIsLoading} = useToken({
-    address: token,
+    address: router.query.token as Address,
     chainId: chain?.id || 5,
   })
 
@@ -53,13 +50,13 @@ const CashMenu: FC<CashMenuProps> = ({token}) => {
         </TabList>
         <TabPanels>
           <TabPanel p={0}>
-            <Deposit token={token}/>
+            <Deposit/>
           </TabPanel>
           <TabPanel p={0}>
-            <Gaming token={token}/>
+            <Gaming/>
           </TabPanel>
           <TabPanel p={0}>
-            <Withdraw token={token}/>
+            <Withdraw/>
           </TabPanel>
         </TabPanels>
       </Tabs>

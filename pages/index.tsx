@@ -19,6 +19,7 @@ import {useCallback, useEffect, useState} from "react";
 import {Address, useAccount, useNetwork} from "wagmi";
 import axios from "axios";
 import CashItem from "../components/CashItem";
+import {useRouter} from "next/router";
 
 const Home: NextPage = () => {
   const {isOpen: isCashMenuOpen, onOpen: onCashMenuOpen, onClose: onCashMenuClose} = useDisclosure()
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
   const {address} = useAccount()
   const {chain} = useNetwork()
   const [tokens, setTokens] = useState<Address[]>([])
-  const [selectedToken, setSelectedToken] = useState<Address | null>(null)
+  const router = useRouter()
 
   const getMyTokens = useCallback(async () => {
     if (!address || !chain) {
@@ -69,24 +70,55 @@ const Home: NextPage = () => {
       <VStack w={'full'} px={'10px'} spacing={'20px'}>
         {tokens.map((token: Address, index) => (
           <CashItem onClick={() => {
-            setSelectedToken(token)
+            router.push({
+              pathname: '/',
+              query: {
+                ...router.query,
+                token: token
+              }
+            })
             onCashMenuOpen()
           }} key={index} token={token}/>
         ))}
       </VStack>
       <HStack spacing={0} pt={'20px'}>
         <Text fontSize={'sm'}>Do not see your token?</Text>
-        <Button variant={'ghost'} fontSize={'sm'} size={'sm'} onClick={onAddTokenOpen}>Add Token</Button>
+        <Button variant={'ghost'} fontSize={'sm'} size={'sm'} onClick={() => {
+          onAddTokenOpen()
+          router.push({
+            pathname: '/',
+            query: {
+              ...router.query,
+              action: 'addToken'
+            }
+          })
+        }}>Add Token</Button>
       </HStack>
-      <Drawer placement={'bottom'} onClose={onCashMenuClose} isOpen={isCashMenuOpen} autoFocus={false}>
+      <Drawer placement={'bottom'} onClose={() => {
+        onCashMenuClose()
+        router.push({
+          pathname: '/',
+          query: {
+            ...router.query,
+            token: undefined
+          },
+        })
+      }} isOpen={isCashMenuOpen} autoFocus={false}>
         <DrawerOverlay/>
         <DrawerContent h={'60vh'} alignItems={"center"} bg={'transparent'}>
-          {
-            selectedToken && <CashMenu token={selectedToken}/>
-          }
+          <CashMenu/>
         </DrawerContent>
       </Drawer>
-      <Drawer placement={'bottom'} onClose={onAddTokenClose} isOpen={isAddTokenOpen} autoFocus={false}>
+      <Drawer placement={'bottom'} onClose={() => {
+        onAddTokenClose()
+        router.push({
+          pathname: '/',
+          query: {
+            ...router.query,
+            action: undefined
+          },
+        })
+      }} isOpen={isAddTokenOpen} autoFocus={false}>
         <DrawerOverlay/>
         <DrawerContent h={'60vh'} alignItems={"center"} bg={'transparent'}>
           <AddToken oldTokens={tokens} refresh={getMyTokens}/>

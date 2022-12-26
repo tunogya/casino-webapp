@@ -9,14 +9,11 @@ import {
   SliderTrack,
   Stack
 } from "@chakra-ui/react";
-import {Address} from "wagmi";
-import {FC} from "react";
+import {useRouter} from "next/router";
 
-type DepositProps = {
-  token: Address;
-}
+const Deposit= () => {
+  const router = useRouter()
 
-const Deposit: FC<DepositProps> = ({token}) => {
   return (
     <Stack spacing={'20px'} pt={'40px'}>
       <FormControl>

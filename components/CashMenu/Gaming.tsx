@@ -1,12 +1,9 @@
 import {Button, Wrap, WrapItem} from "@chakra-ui/react";
-import {Address} from "wagmi";
-import {FC} from "react";
+import {useRouter} from "next/router";
 
-type GamingProps = {
-  token: Address;
-}
+const Gaming = () => {
+  const router = useRouter()
 
-const Gaming: FC<GamingProps> = ({token}) => {
   return (
     <Wrap spacing={'20px'} pt={'40px'}>
       <WrapItem p={'4px'}>

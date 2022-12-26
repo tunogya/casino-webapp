@@ -10,13 +10,8 @@ import {
   Stack
 } from "@chakra-ui/react";
 import {Address} from "wagmi";
-import {FC} from "react";
 
-type WithdrawProps = {
-  token: Address;
-}
-
-const Withdraw: FC<WithdrawProps> = ({token}) => {
+const Withdraw = () => {
   return (
     <Stack spacing={'20px'} pt={'40px'}>
       <FormControl>

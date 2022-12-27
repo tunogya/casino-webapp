@@ -20,10 +20,11 @@ const Button = defineStyleConfig({
       },
     },
     solid: {
-      color: 'white',
+      color: 'black',
       border: '1px dashed white',
       _hover: {
         bg: 'transparent',
+        color: 'white',
       },
       _active: {
         bg: 'transparent',

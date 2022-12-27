@@ -9,7 +9,6 @@ import {
   SliderTrack,
   Stack
 } from "@chakra-ui/react";
-import {Address} from "wagmi";
 
 const Withdraw = () => {
   return (
@@ -33,7 +32,7 @@ const Withdraw = () => {
         </SliderMark>
       </Slider>
       <Stack pt={'40px'}>
-        <Button variant={'ghost'} w={'full'}>
+        <Button w={'full'}>
           Withdraw
         </Button>
       </Stack>

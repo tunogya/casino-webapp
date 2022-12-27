@@ -16,9 +16,9 @@ import {useRouter} from "next/router";
 
 const CashMenu= () => {
   const cashMenu = [
-    {title: 'Recharge'},
-    {title: 'Gaming'},
-    {title: 'Redeem'},
+    {title: 'recharge'},
+    {title: 'gaming'},
+    {title: 'redeem'},
   ]
   const router = useRouter()
   const {chain} = useNetwork()
@@ -41,9 +41,17 @@ const CashMenu= () => {
         <TabList>
           {
             cashMenu.map((item) => (
-              <Tab key={item.title} color={'white'} fontSize={'xs'}
+              <Tab key={item.title} color={'white'} fontSize={'xs'} onClick={() => {
+                router.push({
+                  pathname: '/',
+                  query: {
+                    ...router.query,
+                    action: item.title.toLowerCase()
+                  }
+                })
+              }}
                    _selected={{fontWeight: 'bold', fontSize: 'md'}}>
-                {item.title}
+                {item.title.toUpperCase()}
               </Tab>
             ))
           }

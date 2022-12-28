@@ -16,13 +16,13 @@ const CashItem: FC<CashItemProps> = ({onClick, token }) => {
   const { data: tokenData, isLoading: tokenIsLoading } = useToken({
     address: token,
     chainId: chain?.id,
-    cacheTime: 30_000,
   })
   const {data: cashBalance, isLoading: cashIsLoading} = useContractRead({
     address: CASH_ADDRESS[chain?.id || 5],
     abi: CASH_ABI,
     functionName: "balanceOf",
     args: [token, address],
+    cacheTime: 3_000,
   })
 
   return (

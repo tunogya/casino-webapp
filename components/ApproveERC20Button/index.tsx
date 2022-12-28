@@ -1,6 +1,6 @@
 import {Button} from "@chakra-ui/react";
 import {erc20ABI} from '@wagmi/core'
-import {useContractRead, useContractWrite, usePrepareContractWrite} from "wagmi";
+import {useContractRead, useContractWrite, usePrepareContractWrite, useWaitForTransaction} from "wagmi";
 import {BigNumber} from "ethers";
 import {MaxUint256} from "@ethersproject/constants";
 
@@ -10,13 +10,12 @@ const ApproveERC20Button = (props: any) => {
     address: token,
     abi: erc20ABI
   }
-
   const {data: allowanceData} = useContractRead({
     ...tokenContract,
     functionName: 'allowance',
-    args: [owner, spender]
+    args: [owner, spender],
+    cacheTime: 3_000,
   })
-
   const {config} = usePrepareContractWrite({
     ...tokenContract,
     functionName: 'approve',

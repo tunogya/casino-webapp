@@ -19,7 +19,6 @@ const AddToken: FC<AddTokenProps> = ({oldTokens, refresh}) => {
     // @ts-ignore
     address: token,
     chainId: chain?.id,
-    cacheTime: 30_000,
   })
 
   const addToken = async () => {

@@ -10,11 +10,20 @@ import {
   Stack, Text
 } from "@chakra-ui/react";
 import {useRouter} from "next/router";
-import {useState} from "react";
-import {Address, useAccount, useBalance, useNetwork, useToken} from "wagmi";
+import {useEffect, useState} from "react";
+import {
+  Address,
+  useAccount,
+  useBalance,
+  useContractWrite,
+  useNetwork,
+  usePrepareContractWrite,
+  useToken,
+} from "wagmi";
 import {BigNumber} from "ethers";
 import ApproveERC20Button from "../ApproveERC20Button";
 import {CASH_ADDRESS} from "../../constant/address";
+import {CASH_ABI} from "../../constant/abi";
 
 const Deposit= () => {
   const router = useRouter()
@@ -25,7 +34,7 @@ const Deposit= () => {
     address: router.query?.token as Address,
     chainId: chain?.id
   })
-
+  const [sliderValue, setSliderValue] = useState(50)
   // get balance of token
   const {data: balanceData} = useBalance({
     address: address,
@@ -34,16 +43,29 @@ const Deposit= () => {
     formatUnits: tokenData?.decimals || 'ether',
     cacheTime: 3_000,
   })
+  const { config: depositConfig } = usePrepareContractWrite({
+    address: CASH_ADDRESS[chain?.id || 5],
+    abi: CASH_ABI,
+    functionName: 'deposit',
+    args: [router.query?.token as Address, BigNumber.from(amount || 0).mul(BigNumber.from(10).pow(tokenData?.decimals || 18))],
+  })
+  const { write: deposit, status: depositStatus } = useContractWrite(depositConfig)
+
+  useEffect(() => {
+    setAmount(BigNumber.from(balanceData?.value || 0).mul(BigNumber.from(sliderValue)).div(BigNumber.from(10).pow(2)).div(BigNumber.from(10).pow(tokenData?.decimals || 18)).toString())
+  }, [balanceData?.value, sliderValue, tokenData?.decimals])
 
   return (
     <Stack spacing={'20px'} pt={'40px'}>
       <FormControl>
         <Input type={'number'} variant={'flushed'} onChange={(e) => setAmount(e.target.value)}
-               focusBorderColor={'white'}
+               focusBorderColor={'white'} value={amount}
                isInvalid={BigNumber.from(amount || '0').mul(BigNumber.from(10).pow(tokenData?.decimals || 18)).gt(balanceData?.value || '0')}
                placeholder={'Input amount'} _placeholder={{color: '#59585D'}}/>
       </FormControl>
-      <Slider aria-label='slider-ex-1' defaultValue={50} step={25}>
+      <Slider aria-label='slider-ex-1' defaultValue={50} step={25} onChange={(e) => {
+        setSliderValue(e)
+      }}>
         <SliderTrack bg='#59585D' h={'8px'}>
           <SliderFilledTrack bg='white'/>
         </SliderTrack>
@@ -64,8 +86,9 @@ const Deposit= () => {
       <HStack pt={'40px'}>
         <ApproveERC20Button token={router.query.token} owner={address} spender={CASH_ADDRESS[chain?.id || 5]}
                             spendAmount={BigNumber.from(amount || 0).mul(BigNumber.from(10).pow(BigNumber.from(tokenData?.decimals || 18)))} />
-        <Button w={'full'}>
-          Deposit
+        <Button w={'full'} onClick={() => deposit?.()} isDisabled={Number(amount) === 0}
+                isLoading={depositStatus === 'loading'}>
+          Deposit {depositStatus === 'success' && 'Success'} {depositStatus === 'error' && 'Error'}
         </Button>
       </HStack>
     </Stack>
